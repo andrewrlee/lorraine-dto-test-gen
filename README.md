@@ -1,6 +1,9 @@
+##Lorraine Dto Test Gen
 
+This was a library I wrote several 5 years ago to allow me to generate test data. It allows differences between dtos to be declaratively specified through rules.
+It allowed me to play with [fluent interfaces](http://martinfowler.com/bliki/FluentInterface.html). It's kind of lame but I'm saving it from googlecode googlecode closigng as a keepsake.  
 
-===Description
+###Description
 
 This is a library that enables the conversion of a homogeneous collection of objects into a heterogeneous one based on the logic of a set of user defined rules.
 
@@ -12,7 +15,7 @@ These "rules" generally consist of an edit or change that should take place and 
 
 There are many built in conditionals and edits and provision has been made to allow complex conditionals to be built up and multiple edits to be encapsulated in to one rule.
 
-===Examples 1
+###Examples 1
 
 Rules are built using fluent interfaces:
 
