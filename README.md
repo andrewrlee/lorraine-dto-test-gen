@@ -1,7 +1,7 @@
 ##Lorraine Dto Test Gen
 
-This was a library I wrote several 5 years ago to allow me to generate test data. It allows differences between dtos to be declaratively specified through rules.
-It allowed me to play with [fluent interfaces](http://martinfowler.com/bliki/FluentInterface.html). It's kind of lame but I'm saving it from googlecode googlecode closigng as a keepsake.  
+This was a library I wrote 5 years ago to allow me to generate test data. It allows differences between dtos to be declaratively specified through rules.
+It allowed me to play with [fluent interfaces](http://martinfowler.com/bliki/FluentInterface.html). It's kind of lame but I'm saving it from googlecode closing more as a keepsake than anything else.  
 
 ###Description
 
