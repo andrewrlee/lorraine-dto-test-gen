@@ -1,0 +1,44 @@
+2009-10-31			ldto-gen-0.3.0.jar 
+      * Rule utils
+      * Flesh out Javadoc
+      * Improve toStrings
+      * provide a rule wrapper which enables the addition of a description and integrate with the fluent rule builders  
+      * publish javadoc - build script alterations
+
+2009-10-31			ldto-gen-0.2.0.jar  
+      * Incorporated ant build system to build to create a packaged zip including java doc and license  
+
+2009-10-15			ldto-gen-0.1.3.jar  
+      * Abstracted out the how reflection and introspection are carried out by creating a IPropertyAccess interface
+       	- Provided an ognl implementation and a new reflection based implementation.
+  		- This is configured by setting factories on the TestUtilsContext. 
+  		- The currently configured way of property access can be provided by extending the PropertyAccessSupport class.   
+      * Create a flexible interfaces way of building edit rules 
+      * re-named all packages 
+
+2009-08-26			ldto-gen-0.1.0.jar  
+      * Created a AbstractOgnlEdit class that all edits that require ognl can now extend.
+      * created an iterating collection edit that allows a values to be set on a data item to come 
+      	from a collection, each call to edit data item moves the iterator along. 
+      	When values run out you can configure how the iterator will behave
+      * added a combinedMatcher (enable both chaining matchers with ANDs or ORs) and a negationMatcher
+
+
+2009-08-23			ldto-gen-0.0.7.jar  
+      * Instead of using reflection to set/match on data item values, now use ognl.
+
+2009-08-22			ldto-gen-0.0.6.jar  
+      * Changed MultipleEdit to CombinedEdit
+      * Added CombinedEditRule
+      * Altered the simple data editor to use chain method calls instead of varargs to specify rules.
+
+2009-08-21			ldto-gen-0.0.3.jar  
+      * Altering AllMatcher name to EverythingMatcher
+      * Added a editor that enables edit rules that are specific to a type 
+  	    of data and then determines which rules are valid for a specific class.
+      * Fixing error with having the edit rule interface package protected 
+    	  instead of public.
+      * Added a NthPlaceMatcher  
+
+2009-08-20			ldto-gen-0.0.1.jar  
+      * First release.  

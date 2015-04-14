@@ -1,0 +1,16 @@
+LICENSE INFORMATION REGARDING BUNDLED THIRD-PARTY SOFTWARE
+
+The following third party software is distributed with lorraine-dto-test-generation
+ and is provided under other licenses and/or has source 
+available from other locations.
+
+* Javassist
+	License: Mozilla Public License v. 1.1
+    http://www.mozilla.org/MPL/MPL-1.1.txt
+  	Source code availability: http://www.jboss.org/javassist/
+    
+* Ognl
+	License: The OpenSymphony Software License, Version 1.1
+    http://www.opensymphony.com/ognl/license.action
+    Copyright (c) 2001-2004 The OpenSymphony Group. All rights reserved.
+  	Source code availability: http://www.opensymphony.com/ognl/download.action

@@ -1,0 +1,97 @@
+<?xml version="1.0"?>
+
+<project name="test-util" default="make" basedir=".">
+
+	<!-- Properties -->
+	<property name="src.root.dir" value="${basedir}/src/java" />
+	<property name="test.root.dir" value="${basedir}/src/test" />
+	<property name="lib.dir" value="${basedir}/lib" />
+	<property name="dist.dir" value="${basedir}/dist" />
+	<property name="javadoc.dist.dir" value="${basedir}/javadoc" />
+	<property name="build.dir" value="${basedir}/zz_build" />
+	<property name="build.classes.dir" value="${basedir}/zz_build/classes" />
+	<property file="${basedir}/build.properties" />
+	<property name="app.name" value="${name}" />
+	<property name="full.name" value="${app.name}-${version}" />
+
+	<path id="class.path">
+		<fileset dir="${lib.dir}">
+			<include name="*.jar" />
+		</fileset>
+	</path>
+
+	<property name="classPath" refid="class.path" />
+
+	<!-- TARGETS -->
+	<target name="make" depends="clean,prepare,compile,jar,doc,copy">
+		<echo>Building Test Utils! -- Version: ${version}</echo>
+		<zip destfile="${dist.dir}/${full.name}.zip">
+			<fileset dir="${build.dir}" excludes="**/classes/" />
+		</zip>
+	</target>
+
+	<!-- copies src to build dir -->
+	<target name="copy">
+		<copy todir="${build.dir}/src">
+			<fileset dir="${src.root.dir}" />
+		</copy>
+		<copy todir="${build.dir}/test">
+			<fileset dir="${test.root.dir}" />
+		</copy>
+		<copy todir="${build.dir}/lib">
+			<fileset dir="${lib.dir}" />
+		</copy>
+		<copy todir="${build.dir}">
+			<fileset dir="${basedir}">
+				<include name="*.txt" />
+			</fileset>
+		</copy>
+	</target>
+
+	<!-- builds doc to build dir -->
+	<target name="doc">
+		<javadoc destdir="${build.dir}/api" author="true" version="true" use="true" windowtitle="TestUtils API" classpath="${classPath}">
+			<packageset dir="${src.root.dir}">
+				<include name="uk/co/optimisticpanda/gtest/**" />
+			</packageset>
+		</javadoc>
+	</target>
+
+	<target name="deployDoc">
+		<javadoc destdir="${javadoc.dist.dir}" author="true" version="true" use="true" windowtitle="TestUtils API" classpath="${classPath}">
+			<packageset dir="${src.root.dir}">
+				<include name="uk/co/optimisticpanda/gtest/**" />
+			</packageset>
+		</javadoc>
+	</target>
+
+	<!-- builds dist jar to build dir -->
+	<target name="jar">
+		<jar destfile="${build.dir}/${full.name}.jar" basedir="${build.classes.dir}">
+			<manifest>
+				<attribute name="Built-By" value="${user.name}" />
+				<attribute name="Implementation-Vendor" value="optimisticpanda" />
+				<attribute name="Implementation-Title" value="${name}" />
+				<attribute name="Implementation-Version" value="${full.name}" />
+			</manifest>
+		</jar>
+	</target>
+
+	<!-- Compiles source to build dir-->
+	<target name="compile">
+		<echo>ClassPath: ${classPath} </echo>
+		<javac classpath="${classPath}" destdir="${build.classes.dir}" deprecation="on" optimize="off" includes="**" debug="on" srcdir="${src.root.dir}" />
+	</target>
+
+	<!-- =================================================================== -->
+	<!-- Prepares/Cleans the build directory                                        -->
+	<!-- =================================================================== -->
+	<target name="prepare">
+		<mkdir dir="${build.dir}" />
+		<mkdir dir="${build.classes.dir}" />
+	</target>
+	<target name="clean">
+		<delete dir="${build.dir}" />
+	</target>
+
+</project>
