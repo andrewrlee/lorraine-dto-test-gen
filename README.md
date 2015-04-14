@@ -110,11 +110,11 @@ for (SampleDto sampleDto : list) {
 ...would print this:
 
 ```
-   name:sample-0	  date:Tue Nov 03 21:44:56 GMT+00:00 2009
-   name:null	          date:null
-   name:sample-2	  date:Tue Nov 03 21:44:56 GMT+00:00 2009
+   name:sample-0          date:Tue Nov 03 21:44:56 GMT+00:00 2009
+   name:null              date:null
+   name:sample-2          date:Tue Nov 03 21:44:56 GMT+00:00 2009
    name:CHANGED	          date:Tue Nov 03 21:44:56 GMT+00:00 2009
-   name:sample-4	  date:Tue Nov 03 21:44:56 GMT+00:00 2009
+   name:sample-4          date:Tue Nov 03 21:44:56 GMT+00:00 2009
 ```
 ###Examples 2
 
