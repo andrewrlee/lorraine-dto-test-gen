@@ -125,7 +125,7 @@ Use of a default value generator cache when creating dtos:
 TestUtilsContext.useOgnl();
                 
 //Build the generator (which is responsible for creating new dtos of a specific type).
-InstanceGenerator<TestDto3> generator = new InstanceGeneratorBuilder<TestDto3>(TestDto3.class).build();
+InstanceGenerator<TestDto3> generator = InstanceGeneratorBuilder.create(TestDto3.class).build();
                 
 //Create a generation engine that is responsible for producing the dtos and applying visitors to them.
 DtoGenerationEngine<TestDto3> engine = new DtoGenerationEngine<TestDto3>(TestDto3.class, generator);
@@ -157,7 +157,7 @@ IValueGenerator<String> stringGenerator = ValueGeneratorFactory.createStringGene
 cache.registerAPropertyNameAndTypeGenerator("name", String.class, stringGenerator);
                 
 //Build the generator with the custom cache.
-InstanceGenerator<TestDto3> generator = new InstanceGeneratorBuilder<TestDto3>(TestDto3.class, cache).build();
+InstanceGenerator<TestDto3> generator = InstanceGeneratorBuilder.create(TestDto3.class, cache).build();
                 
 //Create a generation engine that is responsible for producing the dtos and applying visitors to them.
 DtoGenerationEngine<TestDto3> engine = new DtoGenerationEngine<TestDto3>(TestDto3.class, generator);
