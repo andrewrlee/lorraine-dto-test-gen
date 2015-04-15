@@ -39,7 +39,7 @@ public class TestUtilsContextTest extends TestCase {
 			TestUtilsContext.getOgnlContext();
 			fail("Should throw exception as not properly intialized");
 		} catch (IllegalStateException e) {
-			String expectedMessage = "Test Utils Context is not initialised correctly. Call TestUtils.useOgnl() or TestUtils.useReflection() before using.";
+			String expectedMessage = "Test Utils Context is not initialised correctly. Call TestUtilsContext.useOgnl() or TestUtilsContext.useReflection() before using.";
 			assertEquals(expectedMessage, e.getMessage());
 
 		}

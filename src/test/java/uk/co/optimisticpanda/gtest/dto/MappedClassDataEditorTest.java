@@ -47,6 +47,7 @@ public class MappedClassDataEditorTest extends TestCase{
     @Override
     protected void setUp() throws Exception {
         super.setUp();
+        TestUtilsContext.useOgnl();
     }
 
     /**

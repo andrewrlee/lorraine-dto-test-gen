@@ -1,0 +1,21 @@
+
+apply plugin: 'java'
+
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile "ognl:ognl:3.0.11"
+    testCompile "junit:junit:4.+"
+}
+
+jar {
+    baseName = 'ldto-gen'
+    version =  '0.4.0'
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.3'
+}

@@ -103,7 +103,7 @@ public enum TestUtilsContext {
 	private static void checkInitialisedCorrectly() {
 		if (propertyAccessFactory == null) {
 			throw new IllegalStateException(
-					"Test Utils Context is not initialised correctly. Call TestUtils.useOgnl() or TestUtils.useReflection() before using.");
+					"Test Utils Context is not initialised correctly. Call TestUtilsContext.useOgnl() or TestUtilsContext.useReflection() before using.");
 		}
 	}
 
