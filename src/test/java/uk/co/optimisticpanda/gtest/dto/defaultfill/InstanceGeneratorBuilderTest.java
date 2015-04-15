@@ -51,9 +51,8 @@ public class InstanceGeneratorBuilderTest extends TestCase {
 		nameGen = ValueGeneratorFactory.createStringGenerator("editedName");
 	}
 
-	@SuppressWarnings("unchecked")
 	private <D> InstanceGeneratorBuilder<D> getInstanceGeneratorBuilder(Class<D> clazz) {
-		return new InstanceGeneratorBuilder(clazz);
+		return InstanceGeneratorBuilder.create(clazz);
 	}
 
 	/**

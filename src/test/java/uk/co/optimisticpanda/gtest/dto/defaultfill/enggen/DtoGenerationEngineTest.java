@@ -48,7 +48,7 @@ public class DtoGenerationEngineTest extends TestCase {
 	protected void setUp() throws Exception {
 		super.setUp();
 		TestUtilsContext.useOgnl();
-		InstanceGeneratorBuilder<TestDto3> builder = new InstanceGeneratorBuilder<TestDto3>(TestDto3.class);
+		InstanceGeneratorBuilder<TestDto3> builder = InstanceGeneratorBuilder.create(TestDto3.class);
 		generator = builder.build();
 		engine = new DtoGenerationEngine<TestDto3>(TestDto3.class, generator);
 	}

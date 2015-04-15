@@ -33,13 +33,17 @@ public class InstanceGeneratorBuilder<D> {
 	private ExclusionHolder exclusions;
 	private Class<D> rootClassToGenerate;
 
+	public static <D> InstanceGeneratorBuilder<D> create(Class<D> rootClassToGenerate){
+		return new InstanceGeneratorBuilder<D>(rootClassToGenerate);
+	}
+	
 	/**
 	 * Create a new instance generator builder
 	 * 
 	 * @param rootClassToGenerate
 	 *            the class to generate an instance of.
 	 */
-	public InstanceGeneratorBuilder(Class<D> rootClassToGenerate) {
+	private InstanceGeneratorBuilder(Class<D> rootClassToGenerate) {
 		this.rootClassToGenerate = rootClassToGenerate;
 		this.generatorCache = new DefaultValueGeneratorCache();
 		this.exclusions = new ExclusionHolder();
