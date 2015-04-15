@@ -27,7 +27,6 @@ public interface IValueGenerator<D> {
 	 * A value generator instance that is used as a null object, it does not generate
 	 * anything and throws an {@link UnsupportedOperationException} if {@link #generate()} is called.
 	 */
-	@SuppressWarnings("unchecked")
 	public static final IValueGenerator NOT_COVERED = new IValueGenerator() {
 
 		@Override
