@@ -15,7 +15,7 @@ These "rules" generally consist of an edit or change that should take place and 
 
 There are many built in conditionals and edits and provision has been made to allow complex conditionals to be built up and multiple edits to be encapsulated in to one rule.
 
-###Examples 1
+###Creating a custom editor.
 
 Rules are built using fluent interfaces:
 
@@ -116,7 +116,7 @@ for (SampleDto sampleDto : list) {
  name:CHANGED           date:Tue Nov 03 21:44:56 GMT+00:00 2009
  name:sample-4          date:Tue Nov 03 21:44:56 GMT+00:00 2009
 ```
-###Examples 2
+###Generating instances:
 
 Use of a default value generator cache when creating dtos:
 
