@@ -15,6 +15,9 @@
  */
 package uk.co.optimisticpanda.gtest.dto.rulebuilder.impl;
 
+import java.util.function.Function;
+
+import uk.co.optimisticpanda.gtest.dto.RuleUtils;
 import uk.co.optimisticpanda.gtest.dto.condition.ICondition;
 import uk.co.optimisticpanda.gtest.dto.edit.IEdit;
 import uk.co.optimisticpanda.gtest.dto.rulebuilder.fluent.IAddEditOrWhereBuilder;
@@ -41,6 +44,17 @@ public enum RuleFactory {
 		return new RuleBuilderImpl<D>(edit);
 	}
 
+	/**
+	 * @param <D>
+	 *            The type that we want to build a rule for.
+	 * @param edit
+	 *            The original edit
+	 * @return an interface to allow chaining to continue building the rule.
+	 */
+	public static <D> IAddEditOrWhereBuilder<D> startRule(Function<RuleUtils, IEdit<D>> edit) {
+		return new RuleBuilderImpl<D>(edit.apply(new RuleUtils()));
+	}
+	
 	/**
 	 * @param <D>
 	 *            The type that we want to build a rule for.

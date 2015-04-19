@@ -15,9 +15,11 @@
  */
 package uk.co.optimisticpanda.gtest.dto;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import java.util.Arrays;
 
-import uk.co.optimisticpanda.gtest.dto.MappedClassDataEditor;
+import junit.framework.TestCase;
 import uk.co.optimisticpanda.gtest.dto.condition.AlwaysCondition;
 import uk.co.optimisticpanda.gtest.dto.edit.IEdit;
 import uk.co.optimisticpanda.gtest.dto.edit.SetValueEdit;
@@ -25,9 +27,6 @@ import uk.co.optimisticpanda.gtest.dto.rule.BaseRule;
 import uk.co.optimisticpanda.gtest.dto.rule.IRule;
 import uk.co.optimisticpanda.gtest.dto.test.utils.TestDto1;
 import uk.co.optimisticpanda.gtest.dto.test.utils.TestDto2;
-
-
-import junit.framework.TestCase;
 
 /**
  * @author Andy Lee
@@ -69,8 +68,8 @@ public class MappedClassDataEditorTest extends TestCase{
         
         editor.edit(Arrays.asList(dto1, dto2));
         
-        assertEquals(CHANGE_FOR_DTO1, dto1.getName());
-        assertEquals(CHANGE_FOR_DTO2, dto2.getName());
+        assertThat(dto1.getName()).isEqualTo(CHANGE_FOR_DTO1);
+        assertThat(dto2.getName()).isEqualTo(CHANGE_FOR_DTO2);
 
     }
    

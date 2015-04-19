@@ -21,7 +21,7 @@ import java.util.List;
 import junit.framework.TestCase;
 import uk.co.optimisticpanda.gtest.dto.TestUtilsContext;
 import uk.co.optimisticpanda.gtest.dto.test.utils.TestDto2;
-
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * @author Andy Lee
@@ -62,8 +62,8 @@ public class CombinedEditTest extends TestCase{
     public void testEmptyCombinedEdit(){
     	CombinedEdit<TestDto2> edit = new CombinedEdit<TestDto2>();
     	edit.edit(0, testDto1);
-    	assertEquals("name1", testDto1.getName());
-    	assertEquals("description1", testDto1.getDescription());
+    	assertThat(testDto1.getName()).isEqualTo("name1");
+    	assertThat(testDto1.getDescription()).isEqualTo("description1");
     }
     
     /**
@@ -71,16 +71,16 @@ public class CombinedEditTest extends TestCase{
      */
     public void testMultipleEdit(){
         nameValueEdit.edit(1, testDto1);
-        assertEquals(EDITED_TEXT, testDto1.getName());
-        assertEquals("description1", testDto1.getDescription());
+        assertThat(testDto1.getName()).isEqualTo(EDITED_TEXT);
+        assertThat(testDto1.getDescription()).isEqualTo("description1");
 
         descriptionValueEdit.edit(1, testDto2);
-        assertEquals("name2", testDto2.getName());
-        assertEquals(EDITED_TEXT, testDto2.getDescription());
+        assertThat(testDto2.getName()).isEqualTo("name2");
+        assertThat(testDto2.getDescription()).isEqualTo(EDITED_TEXT);
 
         multipleEdit.edit(1, testDto3);
-        assertEquals(EDITED_TEXT, testDto3.getName());
-        assertEquals(EDITED_TEXT, testDto3.getDescription());
+        assertThat(testDto3.getName()).isEqualTo(EDITED_TEXT);
+        assertThat(testDto3.getDescription()).isEqualTo(EDITED_TEXT);
     }
 
     /**
@@ -97,7 +97,7 @@ public class CombinedEditTest extends TestCase{
      */
     public void testMultipleEditWithListConstructor(){
         multipleEditWithList.edit(1, testDto3);
-        assertEquals(EDITED_TEXT, testDto3.getName());
-        assertEquals(EDITED_TEXT, testDto3.getDescription());
+        assertThat(testDto3.getName()).isEqualTo(EDITED_TEXT);
+        assertThat(testDto3.getDescription()).isEqualTo(EDITED_TEXT);
     }
 }

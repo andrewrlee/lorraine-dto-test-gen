@@ -27,7 +27,7 @@ import uk.co.optimisticpanda.gtest.dto.edit.IteratingCollectionEdit.CycleBehavio
 import uk.co.optimisticpanda.gtest.dto.test.utils.TestDto1;
 
 import junit.framework.TestCase;
-
+import static org.assertj.core.api.Assertions.assertThat;
 /**
  * @author Andy Lee
  * 
@@ -55,7 +55,7 @@ public class IteratingCollectionEditTest extends TestCase {
 			new IteratingCollectionEdit<TestDto1>("", Collections.EMPTY_LIST, CycleBehaviour.CYCLE);
 			fail("Should fail");
 		} catch (RuntimeException e) {
-			assertEquals(ExpressionSyntaxException.class, e.getCause().getClass());
+			assertThat(e.getCause().getClass()).isEqualTo(ExpressionSyntaxException.class);
 		}
 
 		try {
@@ -78,7 +78,7 @@ public class IteratingCollectionEditTest extends TestCase {
 			nullItemInCollection.edit(-1, null);
 			fail("Should fail");
 		} catch (RuntimeException e) {
-			assertEquals(OgnlException.class, e.getCause().getClass());
+			assertThat(e.getCause().getClass()).isEqualTo(OgnlException.class);
 		}
 	}
 
@@ -87,7 +87,7 @@ public class IteratingCollectionEditTest extends TestCase {
      */
 	public void testBasicExample() {
 		List<String> values = Arrays.asList("newValue1", "newValue2", "newValue3");
-		RuleUtils<TestDto1> utils = new RuleUtils<TestDto1>();
+		RuleUtils utils = new RuleUtils();
 		IEdit<TestDto1> edit = utils.iterate("name", values, CycleBehaviour.CYCLE);
 		checkFirst3Calls(edit, "newValue1", "newValue2", "newValue3");
 		checkSecond3Calls(edit, "newValue1", "newValue2", "newValue3");
@@ -129,19 +129,19 @@ public class IteratingCollectionEditTest extends TestCase {
 
 	private void checkFirst3Calls(IEdit<TestDto1> edit, String expected1, String expected2, String expected3) {
 		edit.edit(-1, list.get(0));
-		assertEquals(expected1, list.get(0).getName());
+		assertThat(list.get(0).getName()).isEqualTo(expected1);
 		edit.edit(-1, list.get(1));
-		assertEquals(expected2, list.get(1).getName());
+		assertThat(list.get(1).getName()).isEqualTo(expected2);
 		edit.edit(-1, list.get(2));
-		assertEquals(expected3, list.get(2).getName());
+		assertThat(list.get(2).getName()).isEqualTo(expected3);
 	}
 
 	private void checkSecond3Calls(IEdit<TestDto1> edit, String expected1, String expected2, String expected3) {
 		edit.edit(-1, list.get(3));
-		assertEquals(expected1, list.get(3).getName());
+		assertThat(list.get(3).getName()).isEqualTo(expected1);
 		edit.edit(-1, list.get(4));
-		assertEquals(expected2, list.get(4).getName());
+		assertThat(list.get(4).getName()).isEqualTo(expected2);
 		edit.edit(-1, list.get(5));
-		assertEquals(expected3, list.get(5).getName());
+		assertThat(list.get(5).getName()).isEqualTo(expected3);
 	}
 }

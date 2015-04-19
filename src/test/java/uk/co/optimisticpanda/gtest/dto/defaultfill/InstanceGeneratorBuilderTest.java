@@ -28,6 +28,7 @@ import uk.co.optimisticpanda.gtest.dto.test.utils.DetailedTestDto;
 import uk.co.optimisticpanda.gtest.dto.test.utils.DetailedTestDtoComposite;
 import uk.co.optimisticpanda.gtest.dto.test.utils.TestDto2;
 import uk.co.optimisticpanda.gtest.dto.test.utils.TestDtoWithoutDefaultConstructor;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Test Instance Generator
@@ -68,7 +69,7 @@ public class InstanceGeneratorBuilderTest extends TestCase {
 		} catch (InstanceGeneratorException e) {
 			String expectedMessage = InstanceGeneratorException.createInstanceCreationMessage("", TestDtoWithoutDefaultConstructor.class, e
 					.getCause());
-			assertEquals(expectedMessage, e.getMessage());
+			assertThat(e.getMessage()).isEqualTo(expectedMessage);
 		}
 	}
 
@@ -80,10 +81,10 @@ public class InstanceGeneratorBuilderTest extends TestCase {
 		InstanceGenerator<DetailedTestDto> generator = getInstanceGeneratorBuilder(DetailedTestDto.class).build();
 
 		DetailedTestDto dto1 = generator.generate();
-		assertNotNull("should create instances", dto1);
+		assertThat(dto1).as("should create instances").isNotNull();
 		DetailedTestDto dto2 = generator.generate();
-		assertNotNull("should create instances", dto2);
-		assertEquals("should both be the same", dto1, dto2);
+		assertThat(dto2).as("should create instances").isNotNull();
+		assertThat(dto2).as("should both be the same").isEqualTo(dto1);
 	}
 
 	/**
@@ -97,12 +98,12 @@ public class InstanceGeneratorBuilderTest extends TestCase {
 
 		Field parentField = findAField(DetailedTestDtoComposite.class, "parent");
 		IValueGenerator<?> foundParentGenerator = generator.lookUpGenerator(new ValueGeneratorCacheKey("", parentField));
-		assertNotNull(foundParentGenerator);
-		assertNull(foundParentGenerator.generate());
+		assertThat(foundParentGenerator).isNotNull();
+		assertThat(foundParentGenerator.generate()).isNull();
 		try {
 			DetailedTestDtoComposite item = generator.generate();
-			assertNotNull(item);
-			assertNull(item.getParent());
+			assertThat(item).isNotNull();
+			assertThat(item.getParent()).isNull();
 		} catch (StackOverflowError e) {
 			fail("shouldn't overflow as there is a registered generator for parent, and just generates an empty list for children");
 		}
@@ -122,12 +123,12 @@ public class InstanceGeneratorBuilderTest extends TestCase {
 
 		Field numberField = findAField(DetailedTestDtoComposite.class, "number");
 		IValueGenerator<?> foundIntegerGenerator = generator.lookUpGenerator(new ValueGeneratorCacheKey("", numberField));
-		assertNotNull(foundIntegerGenerator);
-		assertTrue(foundIntegerGenerator.generate() instanceof Integer);
+		assertThat(foundIntegerGenerator).isNotNull();
+		assertThat(foundIntegerGenerator.generate() instanceof Integer).isTrue();
 
 		DetailedTestDtoComposite item = generator.generate();
-		assertNotNull(item);
-		assertEquals(new Integer(4), item.getNumber());
+		assertThat(item).isNotNull();
+		assertThat(item.getNumber()).isEqualTo(new Integer(4));
 	}
 
 	/**
@@ -144,12 +145,12 @@ public class InstanceGeneratorBuilderTest extends TestCase {
 
 		Field numberField = findAField(DetailedTestDtoComposite.class, "number");
 		IValueGenerator<?> foundIntegerGenerator = generator.lookUpGenerator(new ValueGeneratorCacheKey("", numberField));
-		assertNotNull(foundIntegerGenerator);
-		assertEquals(new Integer(4), foundIntegerGenerator.generate());
+		assertThat(foundIntegerGenerator).isNotNull();
+		assertThat(foundIntegerGenerator.generate()).isEqualTo(new Integer(4));
 
 		DetailedTestDtoComposite item = generator.generate();
-		assertNotNull(item);
-		assertEquals(new Integer(4), item.getNumber());
+		assertThat(item).isNotNull();
+		assertThat(item.getNumber()).isEqualTo(new Integer(4));
 	}
 
 	/**
@@ -166,13 +167,13 @@ public class InstanceGeneratorBuilderTest extends TestCase {
 
 		Field numberField = findAField(DetailedTestDtoComposite.class, "primitiveNumber");
 		IValueGenerator<?> foundIntegerGenerator = generator.lookUpGenerator(new ValueGeneratorCacheKey("", numberField));
-		assertNotNull(foundIntegerGenerator);
-		assertEquals(new Integer(4), foundIntegerGenerator.generate());
+		assertThat(foundIntegerGenerator).isNotNull();
+		assertThat(foundIntegerGenerator.generate()).isEqualTo(new Integer(4));
 
 		DetailedTestDtoComposite item = generator.generate();
-		assertNotNull(item);
-		assertNull(item.getParent());
-		assertEquals(4, item.getPrimitiveNumber());
+		assertThat(item).isNotNull();
+		assertThat(item.getParent()).isNull();
+		assertThat(item.getPrimitiveNumber()).isEqualTo(4);
 	}
 
 	/**
@@ -189,11 +190,11 @@ public class InstanceGeneratorBuilderTest extends TestCase {
 
 		Field numberField = findAField(DetailedTestDtoComposite.class, "primitiveNumber");
 		IValueGenerator<?> foundIntegerGenerator = generator.lookUpGenerator(new ValueGeneratorCacheKey("", numberField));
-		assertNotNull(foundIntegerGenerator);
-		assertEquals(new Integer(4), foundIntegerGenerator.generate());
+		assertThat(foundIntegerGenerator).isNotNull();
+		assertThat(foundIntegerGenerator.generate()).isEqualTo(new Integer(4));
 		DetailedTestDtoComposite item = generator.generate();
-		assertNotNull(item);
-		assertEquals(4, item.getPrimitiveNumber());
+		assertThat(item).isNotNull();
+		assertThat(item.getPrimitiveNumber()).isEqualTo(4);
 	}
 
 	/**
@@ -213,17 +214,17 @@ public class InstanceGeneratorBuilderTest extends TestCase {
 
 		Field numberField = findAField(DetailedTestDtoComposite.class, "name");
 		IValueGenerator<?> foundNameGenerator = generator.lookUpGenerator(new ValueGeneratorCacheKey("", numberField));
-		assertNotNull(foundNameGenerator);
-		assertEquals("editedName", foundNameGenerator.generate());
+		assertThat(foundNameGenerator).isNotNull();
+		assertThat(foundNameGenerator.generate()).isEqualTo("editedName");
 		DetailedTestDto item = generator.generate();
-		assertEquals("editedName", item.getName());
-		assertNotNull(item);
+		assertThat(item.getName()).isEqualTo("editedName");
+		assertThat(item).isNotNull();
 
 		InstanceGeneratorBuilder<TestDto2> generatorBuilder = instanceGeneratorBuilder.getBuilderForClass(TestDto2.class);
 		InstanceGenerator<TestDto2> testDto1Generator = generatorBuilder.build();
 		TestDto2 testDto2 = testDto1Generator.generate();
-		assertNotNull(testDto2);
-		assertEquals("editedName", testDto2.getName());
+		assertThat(testDto2).isNotNull();
+		assertThat(testDto2.getName()).isEqualTo("editedName");
 	}
 
 	/**
@@ -239,8 +240,8 @@ public class InstanceGeneratorBuilderTest extends TestCase {
 		InstanceGenerator<DetailedTestDto> generator = instanceGeneratorBuilder.build();
 
 		DetailedTestDto item = generator.generate();
-		assertNotNull(item);
-		assertEquals("editedName", item.getName());
+		assertThat(item).isNotNull();
+		assertThat(item.getName()).isEqualTo("editedName");
 
 		generator.clear();
 
@@ -249,7 +250,7 @@ public class InstanceGeneratorBuilderTest extends TestCase {
 			fail("Should not be able to generate the item as its empty");
 		} catch (Exception e) {
 			String expectedMsg = InstanceGeneratorException.createInstanceCreationMessage("name.value", char[].class, e.getCause());
-			assertEquals(expectedMsg, e.getMessage());
+			assertThat(e.getMessage()).isEqualTo(expectedMsg);
 		}
 
 	}
@@ -267,7 +268,7 @@ public class InstanceGeneratorBuilderTest extends TestCase {
 
 		try {
 			DetailedTestDtoComposite item = generator.generate();
-			assertNotNull(item);
+			assertThat(item).isNotNull();
 		} catch (StackOverflowError e) {
 			fail("shouldn't overflow as the parent path is excluded");
 		}

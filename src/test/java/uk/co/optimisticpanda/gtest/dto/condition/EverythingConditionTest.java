@@ -18,7 +18,7 @@ package uk.co.optimisticpanda.gtest.dto.condition;
 import uk.co.optimisticpanda.gtest.dto.condition.AlwaysCondition;
 
 import junit.framework.TestCase;
-
+import static org.assertj.core.api.Assertions.assertThat;
 /**
  * @author Andy Lee
  *
@@ -45,7 +45,7 @@ public class EverythingConditionTest extends TestCase{
         }catch(NullPointerException e){
             //do nothing
         }
-        assertTrue(instance.isValid(1, null));
+        assertThat(instance.isValid(1, null)).isTrue();
     }
     
 }

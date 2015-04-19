@@ -42,7 +42,7 @@ public class ExampleTest extends TestCase {
 		TestUtilsContext.useOgnl();
 
 		// RuleUtils provide easy access to built in edit and conditions
-		RuleUtils<SampleDto> utils = new RuleUtils<SampleDto>();
+		RuleUtils utils = new RuleUtils();
 
 		// Rules are created from a rule factory and need an edit to start.
 		RuleFactory.startRule(utils.increment("name", "sample-"));
@@ -54,13 +54,13 @@ public class ExampleTest extends TestCase {
 
 		// --------------------------------------------------------------------
 		// Define some rules.
-		IRule<SampleDto> rule1 = RuleFactory.startRule(utils.increment("name", "sample-")) //
+		IRule<SampleDto> rule1 = RuleFactory.startRule(utils.<SampleDto>increment("name", "sample-")) //
 				.and(utils.set("date", new Date(System.currentTimeMillis()))) //
 				.where(utils.index(3)) //
 				.orNot(utils.odd()) //
 				.build();
 
-		IRule<SampleDto> rule2 = RuleFactory.startRule(utils.set("name", "CHANGED")) //
+		IRule<SampleDto> rule2 = RuleFactory.startRule(utils.<SampleDto>set("name", "CHANGED")) //
 				.where(utils.eq("name", "sample-3")) //
 				.build();
 

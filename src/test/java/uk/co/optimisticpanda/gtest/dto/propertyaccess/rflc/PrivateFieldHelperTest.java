@@ -19,7 +19,7 @@ import uk.co.optimisticpanda.gtest.dto.propertyaccess.PropertyAccessException;
 import uk.co.optimisticpanda.gtest.dto.test.utils.TestDto1;
 import uk.co.optimisticpanda.gtest.dto.util.PrivateFieldHelper;
 import junit.framework.TestCase;
-
+import static org.assertj.core.api.Assertions.assertThat;
 /**
  * @author Andy Lee
  * 
@@ -37,7 +37,7 @@ public class PrivateFieldHelperTest extends TestCase {
 	public void testGetField() throws Exception {
 		PrivateFieldHelper helper = new PrivateFieldHelper("name");
 		Object retrievedValue = helper.get(new TestDto1("nameValue"));
-		assertEquals("nameValue", retrievedValue);
+		assertThat(retrievedValue).isEqualTo("nameValue");
 	}
 
 	/**
@@ -49,7 +49,7 @@ public class PrivateFieldHelperTest extends TestCase {
 			helper.get(new TestDto1("nameValue"));
 			fail("Expected an exception as there is no property named fielddoesnotexist");
 		} catch (PropertyAccessException e) {
-			assertEquals("Could not find field name called:fielddoesntexist", e.getMessage());
+			assertThat(e.getMessage()).isEqualTo("Could not find field name called:fielddoesntexist");
 		}
 	}
 
@@ -60,7 +60,7 @@ public class PrivateFieldHelperTest extends TestCase {
 		PrivateFieldHelper helper = new PrivateFieldHelper("name");
 		TestDto1 testDto1 = new TestDto1("nameValue");
 		helper.set(testDto1, "newNameValue");
-		assertEquals("newNameValue", testDto1.getName());
+		assertThat(testDto1.getName()).isEqualTo("newNameValue");
 	}
 
 	/**
@@ -73,7 +73,7 @@ public class PrivateFieldHelperTest extends TestCase {
 			helper.set(testDto1, "newNameValue");
 			fail("Expected an exception as there is no property named fielddoesnotexist");
 		} catch (PropertyAccessException e) {
-			assertEquals("Could not find field name called:fielddoesntexist", e.getMessage());
+			assertThat(e.getMessage()).isEqualTo("Could not find field name called:fielddoesntexist");
 		}
 	}
 

@@ -15,12 +15,9 @@
  */
 package uk.co.optimisticpanda.gtest.dto.condition;
 
-import uk.co.optimisticpanda.gtest.dto.RuleUtils;
-import uk.co.optimisticpanda.gtest.dto.condition.NthPlaceCondition;
-import uk.co.optimisticpanda.gtest.dto.test.utils.TestDto1;
-
+import static org.assertj.core.api.Assertions.assertThat;
 import junit.framework.TestCase;
-
+import uk.co.optimisticpanda.gtest.dto.RuleUtils;
 /**
  * @author Andy Lee
  *
@@ -34,30 +31,23 @@ public class NthPlaceConditionTest extends TestCase{
         super.setUp();
     }
     
-    /**
-     * 
-     */
     public void testNthPlaceCondition2(){
         NthPlaceCondition condition = new NthPlaceCondition(2);
-        assertTrue(condition.isValid(0, null));
-        assertFalse(condition.isValid(1, null));
-        assertTrue(condition.isValid(2, null));
-        assertFalse(condition.isValid(3, null));
-        assertTrue(condition.isValid(4, null));
+        assertThat(condition.isValid(0, null)).isTrue();
+        assertThat(condition.isValid(1, null)).isFalse();
+        assertThat(condition.isValid(2, null)).isTrue();
+        assertThat(condition.isValid(3, null)).isFalse();
+        assertThat(condition.isValid(4, null)).isTrue();
     }
 
-    /**
-     * 
-     */
     public void testNthPlaceCondition3(){
-        RuleUtils<TestDto1> utils =new RuleUtils<TestDto1>();
-    	ICondition condition = utils.nth(3);
-        assertTrue(condition.isValid(0, null));
-        assertFalse(condition.isValid(1, null));
-        assertFalse(condition.isValid(2, null));
-        assertTrue(condition.isValid(3, null));
-        assertFalse(condition.isValid(5, null));
-        assertTrue(condition.isValid(9, null));
+    	ICondition condition = new RuleUtils().nth(3);
+        assertThat(condition.isValid(0, null)).isTrue();
+        assertThat(condition.isValid(1, null)).isFalse();
+        assertThat(condition.isValid(2, null)).isFalse();
+        assertThat(condition.isValid(3, null)).isTrue();
+        assertThat(condition.isValid(5, null)).isFalse();
+        assertThat(condition.isValid(9, null)).isTrue();
     }
 
 }

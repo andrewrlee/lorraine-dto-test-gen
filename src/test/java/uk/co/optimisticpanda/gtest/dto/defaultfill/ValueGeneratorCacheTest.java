@@ -22,7 +22,8 @@ import uk.co.optimisticpanda.gtest.dto.defaultfill.defaultgens.DefaultValueGener
 import uk.co.optimisticpanda.gtest.dto.test.utils.DetailedTestDtoComposite;
 import uk.co.optimisticpanda.gtest.dto.test.utils.TestDto1;
 import uk.co.optimisticpanda.gtest.dto.test.utils.TestDto2;
-
+import static org.assertj.core.api.Assertions.assertThat;
+import static uk.co.optimisticpanda.gtest.dto.defaultfill.IValueGenerator.NOT_COVERED;
 /**
  * @author Andy Lee
  * 
@@ -62,26 +63,27 @@ public class ValueGeneratorCacheTest extends TestCase {
 		// Based on a path
 		ValueGeneratorCacheKey key = createKey("complexPath", DetailedTestDtoComposite.class, "name");
 		IValueGenerator<?> generator = valueGeneratorCache.lookUpGenerator(key);
-		assertEquals(generator1.generate(), generator.generate());
+		assertThat(generator.generate()).isEqualTo(generator1.generate());
 
 		// Based on owning class and property name
 		key = createKey("", DetailedTestDtoComposite.class, "name");
 		generator = valueGeneratorCache.lookUpGenerator(key);
-		assertEquals(generator2.generate(), generator.generate());
+		assertThat(generator.generate()).isEqualTo(generator2.generate());
 
 		// Based on property name and property type
 		key = createKey("", TestDto1.class, "name");
 		generator = valueGeneratorCache.lookUpGenerator(key);
-		assertEquals(generator3.generate(), generator.generate());
+		assertThat(generator.generate()).isEqualTo(generator3.generate());
 
 		// Based on property name and property type
 		key = createKey("", TestDto2.class, "description");
 		generator = valueGeneratorCache.lookUpGenerator(key);
-		assertEquals(generator4.generate(), generator.generate());
+		assertThat(generator.generate()).isEqualTo(generator4.generate());
 
 		// Not Registered
 		Field field = findAField(DetailedTestDtoComposite.class, "parent");
-		assertEquals(IValueGenerator.NOT_COVERED, valueGeneratorCache.lookUpGenerator(new ValueGeneratorCacheKey("", field)));
+		key = new ValueGeneratorCacheKey("", field);
+		assertThat(valueGeneratorCache.lookUpGenerator(key)).isEqualTo(NOT_COVERED);
 	}
 
 	/**
@@ -90,10 +92,10 @@ public class ValueGeneratorCacheTest extends TestCase {
 	public void testClearCache() throws Exception {
 		valueGeneratorCache.clear();
 		ValueGeneratorCacheImpl cache = (ValueGeneratorCacheImpl)valueGeneratorCache;
-		assertTrue(cache.classAndPropertyNameAndTypeCache.isEmpty());
-		assertTrue(cache.propertyDepthCache.isEmpty());
-		assertTrue(cache.propertyNameAndTypeCache.isEmpty());
-		assertTrue(cache.typeCache.isEmpty());
+		assertThat(cache.classAndPropertyNameAndTypeCache.isEmpty()).isTrue();
+		assertThat(cache.propertyDepthCache.isEmpty()).isTrue();
+		assertThat(cache.propertyNameAndTypeCache.isEmpty()).isTrue();
+		assertThat(cache.typeCache.isEmpty()).isTrue();
 	}
 
 	/**
@@ -105,7 +107,7 @@ public class ValueGeneratorCacheTest extends TestCase {
 			notCoveredGenerator.generate();
 			fail("should throw an exception!");
 		} catch (UnsupportedOperationException e) {
-			assertEquals("This generator does not generate values", e.getMessage());
+			assertThat(e.getMessage()).isEqualTo("This generator does not generate values");
 		}
 	}
 

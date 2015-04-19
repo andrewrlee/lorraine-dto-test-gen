@@ -40,7 +40,7 @@ import uk.co.optimisticpanda.gtest.dto.propertyaccess.IPropertyAccessFactory;
  *            The data type of the item that the rule is being made for.
  * @author Andy Lee
  */
-public class RuleUtils<D> {
+public class RuleUtils {
 
 	/**
 	 * Create a new instance of a rules utils.
@@ -115,7 +115,7 @@ public class RuleUtils<D> {
 	 *            the string label that will used as the prefix.
 	 * @return a new {@link IncrementingNameEdit} instance.
 	 */
-	public IEdit<D> increment(Object context, String baseNameValue) {
+	public <D> IEdit<D> increment(Object context, String baseNameValue) {
 		return new IncrementingNameEdit<D>(context, baseNameValue);
 	}
 
@@ -129,7 +129,7 @@ public class RuleUtils<D> {
 	 *            will behave when reaches the end of its list of values
 	 * @return a new {@link IteratingCollectionEdit} instance.
 	 */
-	public IEdit<D> iterate(Object context, List<?> values, CycleBehaviour cycleBehaviour) {
+	public <D> IEdit<D> iterate(Object context, List<?> values, CycleBehaviour cycleBehaviour) {
 		return new IteratingCollectionEdit<D>(context, values, cycleBehaviour);
 	}
 
@@ -142,7 +142,7 @@ public class RuleUtils<D> {
 	 *            the value to set
 	 * @return a new {@link SetValueEdit} instance.
 	 */
-	public IEdit<D> set(Object context, Object value) {
+	public <D> IEdit<D> set(Object context, Object value) {
 		return new SetValueEdit<D>(context, value);
 	}
 }

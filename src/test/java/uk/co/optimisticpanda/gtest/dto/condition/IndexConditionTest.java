@@ -18,7 +18,7 @@ package uk.co.optimisticpanda.gtest.dto.condition;
 import uk.co.optimisticpanda.gtest.dto.condition.IndexCondition;
 
 import junit.framework.TestCase;
-
+import static org.assertj.core.api.Assertions.assertThat;
 /**
  * @author Andy Lee
  *
@@ -50,14 +50,14 @@ public class IndexConditionTest extends TestCase {
      */
     public void testIndexPrimVsClass() throws Exception {
         IndexCondition classIndexCondition = new IndexCondition(111);
-        assertFalse(classIndexCondition.isValid(110, null));
-        assertTrue(classIndexCondition.isValid(111, null));
-        assertTrue(classIndexCondition.isValid(111, null));
+        assertThat(classIndexCondition.isValid(110, null)).isFalse();
+        assertThat(classIndexCondition.isValid(111, null)).isTrue();
+        assertThat(classIndexCondition.isValid(111, null)).isTrue();
 
         IndexCondition primIndexCondition = new IndexCondition(111);
-        assertFalse(primIndexCondition.isValid(110, null));
-        assertTrue(primIndexCondition.isValid(111, null));
-        assertTrue(primIndexCondition.isValid(111, null));
+        assertThat(primIndexCondition.isValid(110, null)).isFalse();
+        assertThat(primIndexCondition.isValid(111, null)).isTrue();
+        assertThat(primIndexCondition.isValid(111, null)).isTrue();
     }
 
     // Above 128 to see if there is cache differences
@@ -66,14 +66,14 @@ public class IndexConditionTest extends TestCase {
      */
     public void testIndexPrimVsClassAboveCache() throws Exception {
         IndexCondition classIndexCondition = new IndexCondition(567);
-        assertFalse(classIndexCondition.isValid(566, null));
-        assertTrue(classIndexCondition.isValid(567, null));
-        assertTrue(classIndexCondition.isValid(567, null));
+        assertThat(classIndexCondition.isValid(566, null)).isFalse();
+        assertThat(classIndexCondition.isValid(567, null)).isTrue();
+        assertThat(classIndexCondition.isValid(567, null)).isTrue();
 
         IndexCondition primIndexCondition = new IndexCondition(567);
-        assertFalse(primIndexCondition.isValid(566, null));
-        assertTrue(primIndexCondition.isValid(567, null));
-        assertTrue(primIndexCondition.isValid(567, null));
+        assertThat(primIndexCondition.isValid(566, null)).isFalse();
+        assertThat(primIndexCondition.isValid(567, null)).isTrue();
+        assertThat(primIndexCondition.isValid(567, null)).isTrue();
     }
 
 }

@@ -24,7 +24,7 @@ import uk.co.optimisticpanda.gtest.dto.test.utils.TestDto1;
 
 
 import junit.framework.TestCase;
-
+import static org.assertj.core.api.Assertions.assertThat;
 /**
  * @author Andy Lee
  *
@@ -58,22 +58,22 @@ public class CombinedRuleTest extends TestCase{
         
         TestDto1 dto1 = createTestDto();
         combinedRule.edit(1, dto1);
-        assertEquals(ODD_BASE_NAME + 1, dto1.getName());
+        assertThat(dto1.getName()).isEqualTo(ODD_BASE_NAME + 1);
 
         TestDto1 dto2 = createTestDto();
         combinedRule.edit(2, dto2);
-        assertEquals(UNCHANGED , dto2.getName() );
+        assertThat(dto2.getName() ).isEqualTo(UNCHANGED );
 
         //Add second rule
         combinedRule.addEditRule(evenRule);
         
         TestDto1 dto3 = createTestDto();
         combinedRule.edit(1, dto3);
-        assertEquals(ODD_BASE_NAME + 1, dto3.getName());
+        assertThat(dto3.getName()).isEqualTo(ODD_BASE_NAME + 1);
         
         TestDto1 dto4 = createTestDto();
         combinedRule.edit(2, dto4);
-        assertEquals(EVEN_BASE_NAME + 2, dto4.getName() );
+        assertThat(dto4.getName() ).isEqualTo(EVEN_BASE_NAME + 2);
         
     }
     

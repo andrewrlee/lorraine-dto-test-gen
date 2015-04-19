@@ -18,7 +18,7 @@ package uk.co.optimisticpanda.gtest.dto.condition;
 import uk.co.optimisticpanda.gtest.dto.condition.EvenOddCondition;
 
 import junit.framework.TestCase;
-
+import static org.assertj.core.api.Assertions.assertThat;
 /**
  * @author Andy Lee
  *
@@ -40,8 +40,8 @@ public class EvenOddConditionTest extends TestCase {
      */
     @SuppressWarnings("boxing")
 	public void testEven() throws Exception {
-        assertTrue(even.isValid(0, "a"));
-        assertTrue(even.isValid(0, null));
+        assertThat(even.isValid(0, "a")).isTrue();
+        assertThat(even.isValid(0, null)).isTrue();
         try {
             Integer a = null;
             even.isValid(a, null);
@@ -49,9 +49,9 @@ public class EvenOddConditionTest extends TestCase {
         } catch (NullPointerException e) {
             // do nothing
         }
-        assertFalse(even.isValid(1, null));
-        assertTrue(even.isValid(2, null));
-        assertFalse(even.isValid(3, null));
+        assertThat(even.isValid(1, null)).isFalse();
+        assertThat(even.isValid(2, null)).isTrue();
+        assertThat(even.isValid(3, null)).isFalse();
     }
 
     /**
@@ -59,8 +59,8 @@ public class EvenOddConditionTest extends TestCase {
      */
     @SuppressWarnings("boxing")
 	public void testOdd() throws Exception {
-        assertFalse(odd.isValid(0, "a"));
-        assertFalse(odd.isValid(0, null));
+        assertThat(odd.isValid(0, "a")).isFalse();
+        assertThat(odd.isValid(0, null)).isFalse();
         try {
             Integer a = null;
             even.isValid(a, null);
@@ -68,9 +68,9 @@ public class EvenOddConditionTest extends TestCase {
         } catch (NullPointerException e) {
             // do nothing
         }
-        assertTrue(odd.isValid(1, null));
-        assertFalse(odd.isValid(2, null));
-        assertTrue(odd.isValid(3, null));
+        assertThat(odd.isValid(1, null)).isTrue();
+        assertThat(odd.isValid(2, null)).isFalse();
+        assertThat(odd.isValid(3, null)).isTrue();
     }
 
 }

@@ -18,6 +18,7 @@ package uk.co.optimisticpanda.gtest.dto;
 import java.util.ArrayList;
 import java.util.List;
 
+import uk.co.optimisticpanda.gtest.dto.defaultfill.insgen.InstanceGeneratorBuilder;
 import uk.co.optimisticpanda.gtest.dto.rule.IRule;
 
 /**
@@ -56,6 +57,10 @@ public class SimpleDataEditor<D> implements IDataEditor<D> {
 
 	private final List<IRule<D>> rules;
 
+	
+	public static <D> SimpleDataEditor<D> create(Class<D> rootClassToGenerate){
+		return new SimpleDataEditor<D>();
+	}
 	/**
 	 * Create a new SimpleDataEditor with no rules.
 	 */

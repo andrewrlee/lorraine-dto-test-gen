@@ -14,14 +14,15 @@
  * the License.
  */
 package uk.co.optimisticpanda.gtest.dto.condition;
+import static org.assertj.core.api.Assertions.assertThat;
+import static uk.co.optimisticpanda.gtest.dto.condition.CombinedCondition.BoolOp.AND;
+import static uk.co.optimisticpanda.gtest.dto.condition.CombinedCondition.BoolOp.OR;
 
-import uk.co.optimisticpanda.gtest.dto.condition.AlwaysCondition;
-import uk.co.optimisticpanda.gtest.dto.condition.CombinedCondition;
-import uk.co.optimisticpanda.gtest.dto.condition.ICondition;
-import uk.co.optimisticpanda.gtest.dto.condition.NotCondition;
-import uk.co.optimisticpanda.gtest.dto.condition.CombinedCondition.BoolOp;
+import org.assertj.core.api.AbstractBooleanAssert;
+import org.assertj.core.api.BooleanAssert;
 
 import junit.framework.TestCase;
+import uk.co.optimisticpanda.gtest.dto.condition.CombinedCondition.BoolOp;
 
 /**
  * @author Andy Lee
@@ -43,27 +44,27 @@ public class CombinedConditionTest extends TestCase {
      * @throws Exception
      */
     public void testCombinedAndCondition() throws Exception {
-        checkCondition(true, BoolOp.AND,  trueCondition);
-        checkCondition(false, BoolOp.AND,  falseCondition);
-        checkCondition(false, BoolOp.AND,  falseCondition, falseCondition);
-        checkCondition(false, BoolOp.AND,  trueCondition, falseCondition);
-        checkCondition(false, BoolOp.AND,  trueCondition, trueCondition, falseCondition);
+        check(AND,  trueCondition).isTrue();
+        check(AND,  falseCondition).isFalse();
+        check(AND,  falseCondition, falseCondition).isFalse();
+        check(AND,  trueCondition, falseCondition).isFalse();
+        check(AND,  trueCondition, trueCondition, falseCondition).isFalse();
     }
     
     /**
      * @throws Exception
      */
     public void testCombinedOrCondition() throws Exception {
-        checkCondition(true, BoolOp.OR,  trueCondition);
-        checkCondition(false, BoolOp.OR,  falseCondition);
-        checkCondition(false, BoolOp.OR,  falseCondition, falseCondition);
-        checkCondition(true, BoolOp.OR,  trueCondition, falseCondition);
-        checkCondition(true, BoolOp.OR,  trueCondition, trueCondition, falseCondition);
+        check(OR,  trueCondition).isTrue();
+        check(OR,  falseCondition).isFalse();
+        check(OR,  falseCondition, falseCondition).isFalse();
+        check(OR,  trueCondition, falseCondition).isTrue();
+        check(OR,  trueCondition, trueCondition, falseCondition).isTrue();
     }
 
-    private void checkCondition(boolean expectedResult, CombinedCondition.BoolOp opp, ICondition... conditions) {
+    private AbstractBooleanAssert<?> check(CombinedCondition.BoolOp opp, ICondition... conditions) {
         CombinedCondition condition = new CombinedCondition(opp, conditions);
-        assertEquals(expectedResult, condition.isValid(-1, null));
+        return assertThat(condition.isValid(-1, null));
     }
     
 }

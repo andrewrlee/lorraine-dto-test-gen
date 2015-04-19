@@ -21,7 +21,7 @@ import uk.co.optimisticpanda.gtest.dto.TestUtilsContext;
 import uk.co.optimisticpanda.gtest.dto.condition.ICondition;
 import uk.co.optimisticpanda.gtest.dto.rulebuilder.fluent.IWhereClauseBuilder;
 import uk.co.optimisticpanda.gtest.dto.test.utils.TestDto1;
-
+import static org.assertj.core.api.Assertions.assertThat;
 /**
  * @author Andy Lee
  * 
@@ -30,13 +30,13 @@ import uk.co.optimisticpanda.gtest.dto.test.utils.TestDto1;
  */
 public class WhereClauseBuilderTest extends TestCase {
 
-	private RuleUtils<TestDto1> ruleUtils;
+	private RuleUtils ruleUtils;
 
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
 		TestUtilsContext.useOgnl();
-		ruleUtils = new RuleUtils<TestDto1>();
+		ruleUtils = new RuleUtils();
 	}
 
 	/**
@@ -47,12 +47,12 @@ public class WhereClauseBuilderTest extends TestCase {
 				.or(ruleUtils.even())//
 				.and(ruleUtils.not(ruleUtils.eq("name", "notValue")))//
 				.getCondition();//
-		assertFalse(condition.isValid(3, new TestDto1("notValue")));
-		assertTrue(condition.isValid(3, new TestDto1("vvvvvvvv")));
-		assertFalse(condition.isValid(5, new TestDto1("vvvvvvvv")));
-		assertFalse(condition.isValid(5, new TestDto1("notValue")));
-		assertTrue(condition.isValid(2, new TestDto1("vvvvvvvv")));
-		assertFalse(condition.isValid(2, new TestDto1("notValue")));
+		assertThat(condition.isValid(3, new TestDto1("notValue"))).isFalse();
+		assertThat(condition.isValid(3, new TestDto1("vvvvvvvv"))).isTrue();
+		assertThat(condition.isValid(5, new TestDto1("vvvvvvvv"))).isFalse();
+		assertThat(condition.isValid(5, new TestDto1("notValue"))).isFalse();
+		assertThat(condition.isValid(2, new TestDto1("vvvvvvvv"))).isTrue();
+		assertThat(condition.isValid(2, new TestDto1("notValue"))).isFalse();
 	}
 
 	/**
@@ -63,12 +63,12 @@ public class WhereClauseBuilderTest extends TestCase {
 				.or(ruleUtils.even())//
 				.andNot(ruleUtils.eq("name", "notValue"))//
 				.getCondition();//
-		assertFalse(condition.isValid(3, new TestDto1("notValue")));
-		assertTrue(condition.isValid(3, new TestDto1("vvvvvvvv")));
-		assertFalse(condition.isValid(5, new TestDto1("vvvvvvvv")));
-		assertFalse(condition.isValid(5, new TestDto1("notValue")));
-		assertTrue(condition.isValid(2, new TestDto1("vvvvvvvv")));
-		assertFalse(condition.isValid(2, new TestDto1("notValue")));
+		assertThat(condition.isValid(3, new TestDto1("notValue"))).isFalse();
+		assertThat(condition.isValid(3, new TestDto1("vvvvvvvv"))).isTrue();
+		assertThat(condition.isValid(5, new TestDto1("vvvvvvvv"))).isFalse();
+		assertThat(condition.isValid(5, new TestDto1("notValue"))).isFalse();
+		assertThat(condition.isValid(2, new TestDto1("vvvvvvvv"))).isTrue();
+		assertThat(condition.isValid(2, new TestDto1("notValue"))).isFalse();
 	}
 
 	/**
@@ -79,12 +79,12 @@ public class WhereClauseBuilderTest extends TestCase {
 				.or(ruleUtils.even())//
 				.andNot(getClauseBuilder(ruleUtils.eq("name", "notValue")))//
 				.getCondition();//
-		assertFalse(condition.isValid(3, new TestDto1("notValue")));
-		assertTrue(condition.isValid(3, new TestDto1("vvvvvvvv")));
-		assertFalse(condition.isValid(5, new TestDto1("vvvvvvvv")));
-		assertFalse(condition.isValid(5, new TestDto1("notValue")));
-		assertTrue(condition.isValid(2, new TestDto1("vvvvvvvv")));
-		assertFalse(condition.isValid(2, new TestDto1("notValue")));
+		assertThat(condition.isValid(3, new TestDto1("notValue"))).isFalse();
+		assertThat(condition.isValid(3, new TestDto1("vvvvvvvv"))).isTrue();
+		assertThat(condition.isValid(5, new TestDto1("vvvvvvvv"))).isFalse();
+		assertThat(condition.isValid(5, new TestDto1("notValue"))).isFalse();
+		assertThat(condition.isValid(2, new TestDto1("vvvvvvvv"))).isTrue();
+		assertThat(condition.isValid(2, new TestDto1("notValue"))).isFalse();
 	}
 
 	/**
@@ -95,12 +95,12 @@ public class WhereClauseBuilderTest extends TestCase {
 				.or(ruleUtils.even())//
 				.orNot(ruleUtils.eq("name", "notValue"))//
 				.getCondition();//
-		assertTrue(condition.isValid(3, new TestDto1("notValue")));
-		assertTrue(condition.isValid(3, new TestDto1("vvvvvvvv")));
-		assertTrue(condition.isValid(5, new TestDto1("vvvvvvvv")));
-		assertFalse(condition.isValid(5, new TestDto1("notValue")));
-		assertTrue(condition.isValid(2, new TestDto1("vvvvvvvv")));
-		assertTrue(condition.isValid(2, new TestDto1("notValue")));
+		assertThat(condition.isValid(3, new TestDto1("notValue"))).isTrue();
+		assertThat(condition.isValid(3, new TestDto1("vvvvvvvv"))).isTrue();
+		assertThat(condition.isValid(5, new TestDto1("vvvvvvvv"))).isTrue();
+		assertThat(condition.isValid(5, new TestDto1("notValue"))).isFalse();
+		assertThat(condition.isValid(2, new TestDto1("vvvvvvvv"))).isTrue();
+		assertThat(condition.isValid(2, new TestDto1("notValue"))).isTrue();
 	}
 
 	/**
@@ -111,12 +111,12 @@ public class WhereClauseBuilderTest extends TestCase {
 				.or(ruleUtils.even())//
 				.orNot(getClauseBuilder(ruleUtils.eq("name", "notValue")))//
 				.getCondition();//
-		assertTrue(condition.isValid(3, new TestDto1("notValue")));
-		assertTrue(condition.isValid(3, new TestDto1("vvvvvvvv")));
-		assertTrue(condition.isValid(5, new TestDto1("vvvvvvvv")));
-		assertFalse(condition.isValid(5, new TestDto1("notValue")));
-		assertTrue(condition.isValid(2, new TestDto1("vvvvvvvv")));
-		assertTrue(condition.isValid(2, new TestDto1("notValue")));
+		assertThat(condition.isValid(3, new TestDto1("notValue"))).isTrue();
+		assertThat(condition.isValid(3, new TestDto1("vvvvvvvv"))).isTrue();
+		assertThat(condition.isValid(5, new TestDto1("vvvvvvvv"))).isTrue();
+		assertThat(condition.isValid(5, new TestDto1("notValue"))).isFalse();
+		assertThat(condition.isValid(2, new TestDto1("vvvvvvvv"))).isTrue();
+		assertThat(condition.isValid(2, new TestDto1("notValue"))).isTrue();
 	}
 
 	/**
@@ -127,12 +127,12 @@ public class WhereClauseBuilderTest extends TestCase {
 				.or(ruleUtils.even())//
 				.or(ruleUtils.eq("name", "notValue"))//
 				.getCondition();//
-		assertTrue(condition.isValid(3, new TestDto1("notValue")));
-		assertTrue(condition.isValid(3, new TestDto1("vvvvvvvv")));
-		assertFalse(condition.isValid(5, new TestDto1("vvvvvvvv")));
-		assertTrue(condition.isValid(5, new TestDto1("notValue")));
-		assertTrue(condition.isValid(2, new TestDto1("vvvvvvvv")));
-		assertTrue(condition.isValid(2, new TestDto1("notValue")));
+		assertThat(condition.isValid(3, new TestDto1("notValue"))).isTrue();
+		assertThat(condition.isValid(3, new TestDto1("vvvvvvvv"))).isTrue();
+		assertThat(condition.isValid(5, new TestDto1("vvvvvvvv"))).isFalse();
+		assertThat(condition.isValid(5, new TestDto1("notValue"))).isTrue();
+		assertThat(condition.isValid(2, new TestDto1("vvvvvvvv"))).isTrue();
+		assertThat(condition.isValid(2, new TestDto1("notValue"))).isTrue();
 	}
 
 	/**
@@ -143,12 +143,12 @@ public class WhereClauseBuilderTest extends TestCase {
 				.or(ruleUtils.even())//
 				.or(getClauseBuilder(ruleUtils.eq("name", "notValue")))//
 				.getCondition();//
-		assertTrue(condition.isValid(3, new TestDto1("notValue")));
-		assertTrue(condition.isValid(3, new TestDto1("vvvvvvvv")));
-		assertFalse(condition.isValid(5, new TestDto1("vvvvvvvv")));
-		assertTrue(condition.isValid(5, new TestDto1("notValue")));
-		assertTrue(condition.isValid(2, new TestDto1("vvvvvvvv")));
-		assertTrue(condition.isValid(2, new TestDto1("notValue")));
+		assertThat(condition.isValid(3, new TestDto1("notValue"))).isTrue();
+		assertThat(condition.isValid(3, new TestDto1("vvvvvvvv"))).isTrue();
+		assertThat(condition.isValid(5, new TestDto1("vvvvvvvv"))).isFalse();
+		assertThat(condition.isValid(5, new TestDto1("notValue"))).isTrue();
+		assertThat(condition.isValid(2, new TestDto1("vvvvvvvv"))).isTrue();
+		assertThat(condition.isValid(2, new TestDto1("notValue"))).isTrue();
 	}
 	
 	/**
@@ -159,12 +159,12 @@ public class WhereClauseBuilderTest extends TestCase {
 				.or(ruleUtils.even())//
 				.and(ruleUtils.eq("name", "notValue"))//
 				.getCondition();//
-		assertTrue(condition.isValid(3, new TestDto1("notValue")));
-		assertFalse(condition.isValid(3, new TestDto1("vvvvvvvv")));
-		assertFalse(condition.isValid(5, new TestDto1("vvvvvvvv")));
-		assertFalse(condition.isValid(5, new TestDto1("notValue")));
-		assertFalse(condition.isValid(2, new TestDto1("vvvvvvvv")));
-		assertTrue(condition.isValid(2, new TestDto1("notValue")));
+		assertThat(condition.isValid(3, new TestDto1("notValue"))).isTrue();
+		assertThat(condition.isValid(3, new TestDto1("vvvvvvvv"))).isFalse();
+		assertThat(condition.isValid(5, new TestDto1("vvvvvvvv"))).isFalse();
+		assertThat(condition.isValid(5, new TestDto1("notValue"))).isFalse();
+		assertThat(condition.isValid(2, new TestDto1("vvvvvvvv"))).isFalse();
+		assertThat(condition.isValid(2, new TestDto1("notValue"))).isTrue();
 	}
 
 	/**
@@ -175,12 +175,12 @@ public class WhereClauseBuilderTest extends TestCase {
 				.or(ruleUtils.even())//
 				.and(getClauseBuilder(ruleUtils.eq("name", "notValue")))//
 				.getCondition();//
-		assertTrue(condition.isValid(3, new TestDto1("notValue")));
-		assertFalse(condition.isValid(3, new TestDto1("vvvvvvvv")));
-		assertFalse(condition.isValid(5, new TestDto1("vvvvvvvv")));
-		assertFalse(condition.isValid(5, new TestDto1("notValue")));
-		assertFalse(condition.isValid(2, new TestDto1("vvvvvvvv")));
-		assertTrue(condition.isValid(2, new TestDto1("notValue")));
+		assertThat(condition.isValid(3, new TestDto1("notValue"))).isTrue();
+		assertThat(condition.isValid(3, new TestDto1("vvvvvvvv"))).isFalse();
+		assertThat(condition.isValid(5, new TestDto1("vvvvvvvv"))).isFalse();
+		assertThat(condition.isValid(5, new TestDto1("notValue"))).isFalse();
+		assertThat(condition.isValid(2, new TestDto1("vvvvvvvv"))).isFalse();
+		assertThat(condition.isValid(2, new TestDto1("notValue"))).isTrue();
 	}
 	
 	// Both these two methods return the same type of object but it replicates

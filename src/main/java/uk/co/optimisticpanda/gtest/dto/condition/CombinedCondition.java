@@ -50,14 +50,7 @@ public class CombinedCondition implements ICondition {
 		OR;
 
 		private boolean getDefaultResultValue() {
-			switch (this) {
-			case AND:
-				return true;
-			case OR:
-				return false;
-			default:
-				throw new IllegalStateException("no option for enum type:" + this.name());
-			}
+			return this == AND;
 		}
 	}
 

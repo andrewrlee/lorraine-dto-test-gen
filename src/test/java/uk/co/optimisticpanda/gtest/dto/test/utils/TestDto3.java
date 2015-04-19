@@ -15,61 +15,32 @@
  */
 package uk.co.optimisticpanda.gtest.dto.test.utils;
 
-/**
- * @author Andy Lee
- * 
- */
 public class TestDto3 {
 
-	/**
-	 * @param name
-	 * @param description
-	 */
 	public TestDto3(String name, String description) {
 		this.name = name;
 		this.description = description;
 	}
 
-	/**
-     * 
-     */
 	public TestDto3() {
 		// Default constructor
 	}
 
-	/**
-         * 
-         */
 	public String name;
-	/**
-         * 
-         */
 	public String description;
 
-	/**
-	 * @return name
-	 */
 	public String getName() {
 		return name;
 	}
 
-	/**
-	 * @return description
-	 */
 	public String getDescription() {
 		return description;
 	}
 
-	/**
-	 * @param description
-	 */
 	public void setDescription(String description) {
 		this.description = description;
 	}
 	
-	/**
-	 * @param name
-	 */
 	public void setName(String name) {
 		this.name = name;
 	}

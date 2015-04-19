@@ -22,7 +22,7 @@ import uk.co.optimisticpanda.gtest.dto.test.utils.DetailedTestDto;
 
 
 import junit.framework.TestCase;
-
+import static org.assertj.core.api.Assertions.assertThat;
 /**
  * @author Andy Lee
  *
@@ -46,10 +46,10 @@ public class SetValueEditTest extends TestCase {
     public void testPublicFieldWithGetterEquals(){
         SetValueEdit<DetailedTestDto> valueEdit = new SetValueEdit<DetailedTestDto>("name", "newValue");
         valueEdit.edit(1, testDto1);
-        assertEquals("newValue", testDto1.getName());
+        assertThat(testDto1.getName()).isEqualTo("newValue");
 
         valueEdit.edit(1, testDto3);
-        assertEquals("newValue", testDto1.getName());
+        assertThat(testDto1.getName()).isEqualTo("newValue");
         
     }
 }

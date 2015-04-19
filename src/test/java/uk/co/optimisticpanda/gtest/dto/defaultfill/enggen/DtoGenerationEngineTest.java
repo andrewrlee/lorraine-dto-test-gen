@@ -33,6 +33,7 @@ import uk.co.optimisticpanda.gtest.dto.defaultfill.insgen.InstanceGeneratorBuild
 import uk.co.optimisticpanda.gtest.dto.rule.IRule;
 import uk.co.optimisticpanda.gtest.dto.rulebuilder.impl.RuleFactory;
 import uk.co.optimisticpanda.gtest.dto.test.utils.TestDto3;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * the type of dto to generate
@@ -71,9 +72,9 @@ public class DtoGenerationEngineTest extends TestCase {
 		IValueGenerator<String> gen = ValueGeneratorFactory.createStringGenerator(expectedName);
 		generator.registerAPropertyDepthGenerator("name", gen);
 		List<TestDto3> generatedEntities = engine.collect(2);
-		assertEquals(2, generatedEntities.size());
-		assertEquals(expectedName, generatedEntities.get(0).getName());
-		assertEquals(expectedName, generatedEntities.get(1).getName());
+		assertThat(generatedEntities).hasSize(2);
+		assertThat(generatedEntities.get(0).getName()).isEqualTo(expectedName);
+		assertThat(generatedEntities.get(1).getName()).isEqualTo(expectedName);
 	}
 
 	/**
@@ -85,9 +86,9 @@ public class DtoGenerationEngineTest extends TestCase {
 		generator.registerAPropertyDepthGenerator("name", gen);
 		IEngineVisitor<TestDto3> visitor = appendIndexToDescriptionVisitor();
 		List<TestDto3> generatedEntities = engine.collectAndVisit(visitor, 2);
-		assertEquals(2, generatedEntities.size());
-		assertEquals(expectedName + "-0", generatedEntities.get(0).getDescription());
-		assertEquals(expectedName + "-1", generatedEntities.get(1).getDescription());
+		assertThat(generatedEntities).hasSize(2);
+		assertThat(generatedEntities.get(0).getDescription()).isEqualTo(expectedName + "-0");
+		assertThat(generatedEntities.get(1).getDescription()).isEqualTo(expectedName + "-1");
 	}
 
 	/**
@@ -100,9 +101,9 @@ public class DtoGenerationEngineTest extends TestCase {
 		
 		IDataEditor<TestDto3> editor = getEditor(expectedName);
 		List<TestDto3> generatedEntities = engine.collectAndEdit(editor, 2);
-		assertEquals(2, generatedEntities.size());
-		assertEquals("base0", generatedEntities.get(0).getName());
-		assertEquals("base1", generatedEntities.get(1).getName());
+		assertThat(generatedEntities).hasSize(2);
+		assertThat(generatedEntities.get(0).getName()).isEqualTo("base0");
+		assertThat(generatedEntities.get(1).getName()).isEqualTo("base1");
 	}
 
 	/**
@@ -135,7 +136,7 @@ public class DtoGenerationEngineTest extends TestCase {
 		return new IEngineVisitor<TestDto3>() {
 			@Override
 			public void visit(int index, TestDto3 dto) {
-				assertEquals(expectedName, dto.getName());
+				assertThat(dto.getName()).isEqualTo(expectedName);
 			}
 		};
 	}
@@ -145,11 +146,10 @@ public class DtoGenerationEngineTest extends TestCase {
 	}
 	
 	private IDataEditor<TestDto3> getEditor(final String baseName) {
-		RuleUtils<TestDto3> utils = new RuleUtils<TestDto3>();
+		RuleUtils utils = new RuleUtils();
 		IRule<TestDto3> rule = RuleFactory.startRule(//
-				utils.increment("name", baseName))//
+				utils.<TestDto3>increment("name", baseName))//
 				.where(utils.all()).build();
 		return new SimpleDataEditor<TestDto3>().addRule(rule);
 	}
-	
 }

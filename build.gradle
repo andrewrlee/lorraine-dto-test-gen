@@ -8,8 +8,8 @@ repositories {
 
 dependencies {
     compile "ognl:ognl:3.0.11"
-    testCompile "junit:junit:4.+"
-		"org.assertj-core:assertj-core:3.0.0"	
+    testCompile(["junit:junit:4.+"],
+    		    ["org.assertj:assertj-core:3.0.0"])	
 }
 
 jar {

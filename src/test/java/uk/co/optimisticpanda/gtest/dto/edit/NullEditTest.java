@@ -18,7 +18,7 @@ package uk.co.optimisticpanda.gtest.dto.edit;
 import uk.co.optimisticpanda.gtest.dto.test.utils.TestDto1;
 import uk.co.optimisticpanda.gtest.dto.test.utils.TestDto2;
 import junit.framework.TestCase;
-
+import static org.assertj.core.api.Assertions.assertThat;
 /**
  * @author Andy Lee
  */
@@ -38,9 +38,9 @@ public class NullEditTest extends TestCase{
 	 * @throws Exception
 	 */
 	public void testNullEdit() throws Exception {
-		assertEquals("name1", testDto1.getName());
+		assertThat(testDto1.getName()).isEqualTo("name1");
 		nullEdit.edit(0, testDto1);
-		assertEquals(null, testDto1.getName());
+		assertThat(testDto1.getName()).isEqualTo(null);
 	}
 	
 }

@@ -19,7 +19,7 @@ import uk.co.optimisticpanda.gtest.dto.condition.AlwaysCondition;
 import uk.co.optimisticpanda.gtest.dto.condition.NotCondition;
 
 import junit.framework.TestCase;
-
+import static org.assertj.core.api.Assertions.assertThat;
 /**
  * @author Andy Lee
  *
@@ -36,7 +36,7 @@ public class NotConditionTest extends TestCase {
      */
     public void testNotCondition(){
         NotCondition notCondition = new NotCondition(AlwaysCondition.INSTANCE);
-        assertFalse(notCondition.isValid(-1, null));
+        assertThat(notCondition.isValid(-1, null)).isFalse();
     }
 
 }

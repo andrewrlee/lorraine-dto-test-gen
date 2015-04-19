@@ -22,7 +22,7 @@ import java.util.Set;
 
 import uk.co.optimisticpanda.gtest.dto.defaultfill.IValueGenerator;
 import junit.framework.TestCase;
-
+import static org.assertj.core.api.Assertions.assertThat;
 /**
  * @author Andy Lee
  */
@@ -39,8 +39,8 @@ public class DefaultValueGeneratorFactoryTest extends TestCase {
 	public void testBoolGen() throws Exception {
 		IValueGenerator<Boolean> booleanGenerator = ValueGeneratorFactory.createBooleanGenerator(Boolean.TRUE);
 		Boolean generatedBoolean = booleanGenerator.generate();
-		assertNotNull(generatedBoolean);
-		assertEquals(generatedBoolean.booleanValue(), true);
+		assertThat(generatedBoolean).isNotNull();
+		assertThat(true).isEqualTo(generatedBoolean.booleanValue());
 	}
 
 	/**
@@ -49,9 +49,9 @@ public class DefaultValueGeneratorFactoryTest extends TestCase {
 	public void testIntGen() throws Exception {
 		IValueGenerator<Integer> integerGenerator = ValueGeneratorFactory.createIntegerGenerator(new Integer(4));
 		Integer generatedInteger = integerGenerator.generate();
-		assertNotNull(generatedInteger);
-		assertEquals(generatedInteger, new Integer(4));
-		assertFalse(generatedInteger == new Integer(4));
+		assertThat(generatedInteger).isNotNull();
+		assertThat(new Integer(4)).isEqualTo(generatedInteger);
+		assertThat(generatedInteger == new Integer(4)).isFalse();
 		}
 	
 	/**
@@ -60,9 +60,9 @@ public class DefaultValueGeneratorFactoryTest extends TestCase {
 	public void testCharGen() throws Exception {
 		IValueGenerator<Character> charGenerator = ValueGeneratorFactory.createCharacterGenerator(new Character('c'));
 		Character generatedCharacter = charGenerator.generate();
-		assertNotNull(generatedCharacter);
-		assertEquals(new Character('c'),generatedCharacter);
-		assertFalse(generatedCharacter == new Character('c'));
+		assertThat(generatedCharacter).isNotNull();
+		assertThat(generatedCharacter).isEqualTo(new Character('c'));
+		assertThat(generatedCharacter == new Character('c')).isFalse();
 	}
 	
 	/**
@@ -71,9 +71,9 @@ public class DefaultValueGeneratorFactoryTest extends TestCase {
 	public void testStringGen() throws Exception {
 		IValueGenerator<String> stringGenerator = ValueGeneratorFactory.createStringGenerator("test");
 		String generatedString = stringGenerator.generate();
-		assertNotNull(generatedString);
-		assertEquals("test",generatedString);
-		assertFalse(generatedString == "test");
+		assertThat(generatedString).isNotNull();
+		assertThat(generatedString).isEqualTo("test");
+		assertThat(generatedString == "test").isFalse();
 	}
 	
 	/**
@@ -82,7 +82,7 @@ public class DefaultValueGeneratorFactoryTest extends TestCase {
 	public void testNullGen() throws Exception {
 		IValueGenerator<?> nullGenerator = ValueGeneratorFactory.createNullGenerator();
 		Object generatedNull= nullGenerator.generate();
-		assertNull(generatedNull);
+		assertThat(generatedNull).isNull();
 	}
 	
 	/**
@@ -91,9 +91,9 @@ public class DefaultValueGeneratorFactoryTest extends TestCase {
 	public void testDoubleGen() throws Exception {
 		IValueGenerator<Double> doubleGenerator = ValueGeneratorFactory.createDoubleGenerator(new Double(4.4));
 		Object generatedDouble= doubleGenerator.generate();
-		assertNotNull(generatedDouble);
-		assertEquals(new Double(4.4), generatedDouble);
-		assertFalse(generatedDouble == new Double(4.4));
+		assertThat(generatedDouble).isNotNull();
+		assertThat(generatedDouble).isEqualTo(new Double(4.4));
+		assertThat(generatedDouble == new Double(4.4)).isFalse();
 	}
 	
 	/**
@@ -102,9 +102,9 @@ public class DefaultValueGeneratorFactoryTest extends TestCase {
 	public void testLongGen() throws Exception {
 		IValueGenerator<Long> longGenerator = ValueGeneratorFactory.createLongGenerator(new Long(4L));
 		Object generatedLong= longGenerator.generate();
-		assertNotNull(generatedLong);
-		assertEquals(new Long(4L), generatedLong);
-		assertFalse(generatedLong == new Long(4));
+		assertThat(generatedLong).isNotNull();
+		assertThat(generatedLong).isEqualTo(new Long(4L));
+		assertThat(generatedLong == new Long(4)).isFalse();
 	}
 	
 	/**
@@ -113,8 +113,8 @@ public class DefaultValueGeneratorFactoryTest extends TestCase {
 	public void testClassGen() throws Exception {
 		IValueGenerator<Class<?>> classGenerator = ValueGeneratorFactory.createClassGenerator(Integer.class);
 		Object generatedClass= classGenerator.generate();
-		assertNotNull(generatedClass);
-		assertEquals(Integer.class, generatedClass);
+		assertThat(generatedClass).isNotNull();
+		assertThat(generatedClass).isEqualTo(Integer.class);
 	}
 
 	/**
@@ -123,8 +123,8 @@ public class DefaultValueGeneratorFactoryTest extends TestCase {
 	public void testByteGen() throws Exception {
 		IValueGenerator<Byte> classGenerator = ValueGeneratorFactory.createByteGenerator(new Byte(Byte.MAX_VALUE));
 		Byte generatedByte= classGenerator.generate();
-		assertNotNull(generatedByte);
-		assertEquals(new Byte(Byte.MAX_VALUE), generatedByte);
+		assertThat(generatedByte).isNotNull();
+		assertThat(generatedByte).isEqualTo(new Byte(Byte.MAX_VALUE));
 	}
 
 	/**
@@ -134,9 +134,9 @@ public class DefaultValueGeneratorFactoryTest extends TestCase {
 		long currentTimeMillis = System.currentTimeMillis();
 		IValueGenerator<Date> dateGenerator = ValueGeneratorFactory.createDateGenerator(new Date(currentTimeMillis));
 		Date generatedDate = dateGenerator.generate();
-		assertNotNull(generatedDate );
-		assertEquals(new Date(currentTimeMillis), generatedDate );
-		assertFalse(generatedDate == new Date(currentTimeMillis));
+		assertThat(generatedDate ).isNotNull();
+		assertThat(generatedDate ).isEqualTo(new Date(currentTimeMillis));
+		assertThat(generatedDate == new Date(currentTimeMillis)).isFalse();
 	}
 	
 	/**
@@ -147,9 +147,9 @@ public class DefaultValueGeneratorFactoryTest extends TestCase {
 		List<?> generatedList = listGenerator.generate();
 		List<?> generatedList2 = listGenerator.generate();
 		
-		assertNotNull(generatedList );
-		assertEquals(generatedList2, generatedList );
-		assertFalse(generatedList == generatedList2);
+		assertThat(generatedList ).isNotNull();
+		assertThat(generatedList ).isEqualTo(generatedList2);
+		assertThat(generatedList == generatedList2).isFalse();
 	}
 	
 	/**
@@ -160,9 +160,9 @@ public class DefaultValueGeneratorFactoryTest extends TestCase {
 		Set<?> generatedSet = setGenerator.generate();
 		Set<?> generatedSet2 = setGenerator.generate();
 		
-		assertNotNull(generatedSet );
-		assertEquals(generatedSet, generatedSet2 );
-		assertFalse(generatedSet == generatedSet2);
+		assertThat(generatedSet ).isNotNull();
+		assertThat(generatedSet2 ).isEqualTo(generatedSet);
+		assertThat(generatedSet == generatedSet2).isFalse();
 	}
 	
 	/**
@@ -173,8 +173,8 @@ public class DefaultValueGeneratorFactoryTest extends TestCase {
 		Map<?, ?> generatedMap = mapGenerator.generate();
 		Map<?, ?> generatedMap2 = mapGenerator.generate();
 		
-		assertNotNull(generatedMap );
-		assertEquals(generatedMap, generatedMap2 );
-		assertFalse(generatedMap == generatedMap2);
+		assertThat(generatedMap ).isNotNull();
+		assertThat(generatedMap2 ).isEqualTo(generatedMap);
+		assertThat(generatedMap == generatedMap2).isFalse();
 	}
 }

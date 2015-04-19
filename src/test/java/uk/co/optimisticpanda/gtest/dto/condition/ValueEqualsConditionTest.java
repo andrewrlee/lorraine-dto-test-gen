@@ -22,7 +22,7 @@ import uk.co.optimisticpanda.gtest.dto.test.utils.DetailedTestDto;
 
 
 import junit.framework.TestCase;
-
+import static org.assertj.core.api.Assertions.assertThat;
 /**
  * @author Andy Lee
  *
@@ -62,14 +62,14 @@ public class ValueEqualsConditionTest extends TestCase {
      */
     public void testPublicFieldWithGetterEquals(){
         ValueEqualsCondition valueEqualsCondition = new ValueEqualsCondition("name", "1");
-        assertTrue(valueEqualsCondition.isValid(0, testDto1));
-        assertFalse(valueEqualsCondition.isValid(0, testDto2));
-        assertFalse(valueEqualsCondition.isValid(0, testDto3));
+        assertThat(valueEqualsCondition.isValid(0, testDto1)).isTrue();
+        assertThat(valueEqualsCondition.isValid(0, testDto2)).isFalse();
+        assertThat(valueEqualsCondition.isValid(0, testDto3)).isFalse();
         
         ValueEqualsCondition nullValueEqualsCondition = new ValueEqualsCondition("name", null);
-        assertFalse(nullValueEqualsCondition.isValid(0, testDto1));
-        assertFalse(nullValueEqualsCondition.isValid(0, testDto2));
-        assertTrue(nullValueEqualsCondition.isValid(0, testDto3));
+        assertThat(nullValueEqualsCondition.isValid(0, testDto1)).isFalse();
+        assertThat(nullValueEqualsCondition.isValid(0, testDto2)).isFalse();
+        assertThat(nullValueEqualsCondition.isValid(0, testDto3)).isTrue();
     }
     
     /**
@@ -77,19 +77,19 @@ public class ValueEqualsConditionTest extends TestCase {
      */
     public void testPublicFieldWithoutGetterEquals(){
         ValueEqualsCondition valueEqualsCondition = new ValueEqualsCondition("date", DATE_1);
-        assertTrue(valueEqualsCondition.isValid(0, testDto1));
-        assertFalse(valueEqualsCondition.isValid(0, testDto2));
-        assertFalse(valueEqualsCondition.isValid(0, testDto3));
+        assertThat(valueEqualsCondition.isValid(0, testDto1)).isTrue();
+        assertThat(valueEqualsCondition.isValid(0, testDto2)).isFalse();
+        assertThat(valueEqualsCondition.isValid(0, testDto3)).isFalse();
 
         ValueEqualsCondition valueEqualsCondition1 = new ValueEqualsCondition("date", DATE_2);
-        assertFalse(valueEqualsCondition1.isValid(0, testDto1));
-        assertTrue(valueEqualsCondition1.isValid(0, testDto2));
-        assertFalse(valueEqualsCondition1.isValid(0, testDto3));
+        assertThat(valueEqualsCondition1.isValid(0, testDto1)).isFalse();
+        assertThat(valueEqualsCondition1.isValid(0, testDto2)).isTrue();
+        assertThat(valueEqualsCondition1.isValid(0, testDto3)).isFalse();
         
         ValueEqualsCondition nullValueEqualsCondition = new ValueEqualsCondition("date", null);
-        assertFalse(nullValueEqualsCondition.isValid(0, testDto1));
-        assertFalse(nullValueEqualsCondition.isValid(0, testDto2));
-        assertTrue(nullValueEqualsCondition.isValid(0, testDto3));
+        assertThat(nullValueEqualsCondition.isValid(0, testDto1)).isFalse();
+        assertThat(nullValueEqualsCondition.isValid(0, testDto2)).isFalse();
+        assertThat(nullValueEqualsCondition.isValid(0, testDto3)).isTrue();
     }
 
     /**
@@ -97,12 +97,12 @@ public class ValueEqualsConditionTest extends TestCase {
      */
     public void testPrivateFieldWithoutGetterEquals(){
         ValueEqualsCondition valueEqualsCondition = new ValueEqualsCondition("number", new Integer(4));
-        assertTrue(valueEqualsCondition.isValid(0, testDto1));
-        assertFalse(valueEqualsCondition.isValid(0, testDto2));
+        assertThat(valueEqualsCondition.isValid(0, testDto1)).isTrue();
+        assertThat(valueEqualsCondition.isValid(0, testDto2)).isFalse();
         
         ValueEqualsCondition nullValueEqualsCondition = new ValueEqualsCondition("date", null);
-        assertFalse(nullValueEqualsCondition.isValid(0, testDto1));
-        assertFalse(nullValueEqualsCondition.isValid(0, testDto2));
+        assertThat(nullValueEqualsCondition.isValid(0, testDto1)).isFalse();
+        assertThat(nullValueEqualsCondition.isValid(0, testDto2)).isFalse();
     }
   
 

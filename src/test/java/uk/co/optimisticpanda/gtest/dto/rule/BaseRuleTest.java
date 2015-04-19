@@ -21,7 +21,7 @@ import uk.co.optimisticpanda.gtest.dto.edit.IncrementingNameEdit;
 import uk.co.optimisticpanda.gtest.dto.rule.BaseRule;
 import uk.co.optimisticpanda.gtest.dto.test.utils.TestDto1;
 import junit.framework.TestCase;
-
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * @author Andy Lee
@@ -55,11 +55,11 @@ public class BaseRuleTest extends TestCase{
      */
     public void testSimpleRule() throws Exception {
         TestDto1 dto = new TestDto1(null);
-        assertFalse(rule.isValid(1, dto));
-        assertTrue(rule.isValid(2, dto));
+        assertThat(rule.isValid(1, dto)).isFalse();
+        assertThat(rule.isValid(2, dto)).isTrue();
 
         rule.edit(2, dto);
-        assertEquals("basename-" + 2, dto.getName());
+        assertThat(dto.getName()).isEqualTo("basename-" + 2);
     }
     
 }

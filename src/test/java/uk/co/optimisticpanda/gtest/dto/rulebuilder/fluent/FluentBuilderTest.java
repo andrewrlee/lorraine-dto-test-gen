@@ -23,7 +23,7 @@ import uk.co.optimisticpanda.gtest.dto.rule.IRule;
 import uk.co.optimisticpanda.gtest.dto.rulebuilder.impl.RuleFactory;
 import uk.co.optimisticpanda.gtest.dto.test.utils.TestDto2;
 import junit.framework.TestCase;
-
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * @author Andy Lee
@@ -48,6 +48,6 @@ public class FluentBuilderTest extends TestCase {
 				.build();
 		TestDto2 testDto = new TestDto2();
 		editRule.edit(0, testDto);
-		assertEquals("nameValue-0", testDto.getName());
+		assertThat(testDto.getName()).isEqualTo("nameValue-0");
 	}
 }

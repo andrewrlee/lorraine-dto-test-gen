@@ -26,7 +26,7 @@ import uk.co.optimisticpanda.gtest.dto.test.utils.TestDto1;
 import uk.co.optimisticpanda.gtest.dto.util.PrivateFieldHelper;
 
 import junit.framework.TestCase;
-
+import static org.assertj.core.api.Assertions.assertThat;
 /**
  * @author Andy Lee
  * 
@@ -52,7 +52,7 @@ public class ReflectionExpressionTest extends TestCase {
 		TestDto1 dto = new TestDto1(STARTING_STRING_VALUE);
 		IPropertyAccess propertyAccess = propertyAccessFactory.createPropertyAccess("name");
 		Object value = propertyAccess.getValue(dto);
-		assertEquals(STARTING_STRING_VALUE, value);
+		assertThat(value).isEqualTo(STARTING_STRING_VALUE);
 	}
 
 	/**
@@ -68,7 +68,7 @@ public class ReflectionExpressionTest extends TestCase {
 		IPropertyAccess timePropertyAccess = propertyAccessFactory.createPropertyAccess("fastTime");
 		Long fastTime = (Long) timePropertyAccess.getValue(value);
 
-		assertEquals(date.getTime(), fastTime.longValue());
+		assertThat(fastTime.longValue()).isEqualTo(date.getTime());
 	}
 
 	/**
@@ -78,7 +78,7 @@ public class ReflectionExpressionTest extends TestCase {
 		TestDto1 dto = new TestDto1(STARTING_STRING_VALUE);
 		IPropertyAccess propertyAccess = propertyAccessFactory.createPropertyAccess("name");
 		propertyAccess.setValue(dto, CHANGED_STRING_VALUE);
-		assertEquals(CHANGED_STRING_VALUE, dto.getName());
+		assertThat(dto.getName()).isEqualTo(CHANGED_STRING_VALUE);
 	}
 
 	/**
@@ -96,7 +96,7 @@ public class ReflectionExpressionTest extends TestCase {
 
 		PrivateFieldHelper helper = new PrivateFieldHelper("date");
 		Date changedDate = (Date) helper.get(dto2);
-		assertEquals(CHANGED_DATE_VALUE, changedDate);
+		assertThat(changedDate).isEqualTo(CHANGED_DATE_VALUE);
 	}
 
 	/**

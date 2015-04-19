@@ -20,7 +20,7 @@ import uk.co.optimisticpanda.gtest.dto.test.utils.TestDto1;
 
 
 import junit.framework.TestCase;
-
+import static org.assertj.core.api.Assertions.assertThat;
 /**
  * @author Andy Lee
  *
@@ -43,14 +43,14 @@ public class IncrementingNameEditTest extends TestCase{
     public void testIncrementingNameEdit() throws Exception {
         TestDto1 testDto1 = new TestDto1(null);
         incrementingNameEdit.edit(1, testDto1);
-        assertEquals("myName-1", testDto1.getName());
+        assertThat(testDto1.getName()).isEqualTo("myName-1");
 
         TestDto1 testDto2 = new TestDto1("test1");
         incrementingNameEdit.edit(1, testDto2);
-        assertEquals("myName-1", testDto2.getName());
+        assertThat(testDto2.getName()).isEqualTo("myName-1");
 
         TestDto1 testDto3 = new TestDto1("test1");
         incrementingNameEdit.edit(2, testDto3);
-        assertEquals("myName-2", testDto3.getName());
+        assertThat(testDto3.getName()).isEqualTo("myName-2");
     }
 }

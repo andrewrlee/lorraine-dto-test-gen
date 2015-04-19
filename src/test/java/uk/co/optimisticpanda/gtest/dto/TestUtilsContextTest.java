@@ -14,10 +14,10 @@
  * the License.
  */
 package uk.co.optimisticpanda.gtest.dto;
-
+import static org.assertj.core.api.Assertions.assertThat;
+import junit.framework.TestCase;
 import uk.co.optimisticpanda.gtest.dto.propertyaccess.ognl.OgnlPropertyAccessFactory;
 import uk.co.optimisticpanda.gtest.dto.propertyaccess.rflc.ReflectionPropertyAccessFactory;
-import junit.framework.TestCase;
 
 /**
  * @author Andy Lee
@@ -40,7 +40,7 @@ public class TestUtilsContextTest extends TestCase {
 			fail("Should throw exception as not properly intialized");
 		} catch (IllegalStateException e) {
 			String expectedMessage = "Test Utils Context is not initialised correctly. Call TestUtilsContext.useOgnl() or TestUtilsContext.useReflection() before using.";
-			assertEquals(expectedMessage, e.getMessage());
+			assertThat(e.getMessage()).isEqualTo(expectedMessage);
 
 		}
 	}
@@ -51,9 +51,9 @@ public class TestUtilsContextTest extends TestCase {
 	public void testUseOgnl() throws Exception {
 		TestUtilsContext.clearContext();
 		TestUtilsContext.useOgnl();
-		assertNotNull(TestUtilsContext.getOgnlContext());
-		assertNotNull(TestUtilsContext.getPropertyAccessFactory());
-		assertTrue(TestUtilsContext.getPropertyAccessFactory() instanceof OgnlPropertyAccessFactory);
+		assertThat(TestUtilsContext.getOgnlContext()).isNotNull();
+		assertThat(TestUtilsContext.getPropertyAccessFactory()).isNotNull();
+		assertThat(TestUtilsContext.getPropertyAccessFactory() instanceof OgnlPropertyAccessFactory).isTrue();
 	}
 	
 	/**
@@ -62,8 +62,8 @@ public class TestUtilsContextTest extends TestCase {
 	public void testUseReflection() throws Exception {
 		TestUtilsContext.clearContext();
 		TestUtilsContext.useReflection();
-		assertNull(TestUtilsContext.getOgnlContext());
-		assertNotNull(TestUtilsContext.getPropertyAccessFactory());
-		assertTrue(TestUtilsContext.getPropertyAccessFactory() instanceof ReflectionPropertyAccessFactory);
+		assertThat(TestUtilsContext.getOgnlContext()).isNull();
+		assertThat(TestUtilsContext.getPropertyAccessFactory()).isNotNull();
+		assertThat(TestUtilsContext.getPropertyAccessFactory() instanceof ReflectionPropertyAccessFactory).isTrue();
 	}
 }

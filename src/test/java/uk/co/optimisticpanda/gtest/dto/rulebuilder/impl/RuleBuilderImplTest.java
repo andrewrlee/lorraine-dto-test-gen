@@ -26,7 +26,7 @@ import uk.co.optimisticpanda.gtest.dto.rule.IRule;
 import uk.co.optimisticpanda.gtest.dto.rule.LabeledRule;
 import uk.co.optimisticpanda.gtest.dto.rulebuilder.fluent.IAddEditOrWhereBuilder;
 import uk.co.optimisticpanda.gtest.dto.test.utils.TestDto2;
-
+import static org.assertj.core.api.Assertions.assertThat;
 /**
  * This indirectly tests the rulebuilder impl tests
  * 
@@ -35,15 +35,15 @@ import uk.co.optimisticpanda.gtest.dto.test.utils.TestDto2;
 public class RuleBuilderImplTest extends TestCase {
 
 	private static final String EDITTED_VALUE = "_editted_";
-	private RuleUtils<TestDto2> utils;
+	private RuleUtils utils;
 	private IAddEditOrWhereBuilder<TestDto2> ruleBuilder;
 	private List<TestDto2> dtos;
 
 	@Override
 	protected void setUp() throws Exception {
 		TestUtilsContext.useOgnl();
-		utils = new RuleUtils<TestDto2>();
-		ruleBuilder = new RuleBuilderImpl<TestDto2>(utils.set("name", EDITTED_VALUE));
+		utils = new RuleUtils();
+		ruleBuilder = new RuleBuilderImpl<TestDto2>(utils.<TestDto2>set("name", EDITTED_VALUE));
 		TestDto2 testDto1 = new TestDto2("name1", "description1");
 		TestDto2 testDto2 = new TestDto2("name2", "description2");
 		TestDto2 testDto3 = new TestDto2("name3", "description3");
@@ -137,30 +137,30 @@ public class RuleBuilderImplTest extends TestCase {
 		IRule<TestDto2> rule1 = ruleBuilder//
 				.where(utils.all())//
 				.build();
-		assertFalse(rule1 instanceof LabeledRule<?>);
+		assertThat(rule1 instanceof LabeledRule<?>).isFalse();
 
 		IRule<TestDto2> rule2 = ruleBuilder//
 				.where(utils.all())//
 				.setLabel("this is the rules label")//
 				.build();
-		assertTrue(rule2 instanceof LabeledRule<?>);
+		assertThat(rule2 instanceof LabeledRule<?>).isTrue();
 		LabeledRule<?> labledRule = (LabeledRule<?>) rule2;
-		assertEquals("this is the rules label", labledRule.getLabel());
-		assertEquals("this is the rules label [SET ['name' to '_editted_'] WHERE ALWAYS]",labledRule.toString());
+		assertThat(labledRule.getLabel()).isEqualTo("this is the rules label");
+		assertThat(labledRule.toString()).isEqualTo("this is the rules label [SET ['name' to '_editted_'] WHERE ALWAYS]");
 
 		IRule<TestDto2> rule3 = ruleBuilder//
 				.where(utils.all())//
 				.setLabel("this is the rules label")//
 				.setLabel("changed label")//
 				.build();
-		assertTrue(rule3 instanceof LabeledRule<?>);
+		assertThat(rule3 instanceof LabeledRule<?>).isTrue();
 		LabeledRule<?> labledRule2 = (LabeledRule<?>) rule3;
-		assertFalse("this is the rules label".equals(labledRule2.getLabel()));
+		assertThat("this is the rules label".equals(labledRule2.getLabel())).isFalse();
 		
 	}
 
 	private void checkDto(TestDto2 dto, String expectedName, String expectedDescription) {
-		assertEquals(expectedName, dto.getName());
-		assertEquals(expectedDescription, dto.getDescription());
+		assertThat(dto.getName()).isEqualTo(expectedName);
+		assertThat(dto.getDescription()).isEqualTo(expectedDescription);
 	}
 }
