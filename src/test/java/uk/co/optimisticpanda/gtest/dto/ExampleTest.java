@@ -81,9 +81,7 @@ public class ExampleTest extends TestCase {
 		}
 
 		// See the output
-		for (SampleDto sampleDto : list) {
-			System.out.println(sampleDto);
-		}
+		list.forEach(System.out::println);
 
 	}
 

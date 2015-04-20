@@ -15,14 +15,15 @@
  */
 package uk.co.optimisticpanda.gtest.dto.defaultfill.insgen;
 
+import static uk.co.optimisticpanda.gtest.dto.util.FunctionUtils.NOT_COVERED;
+
 import java.lang.reflect.Field;
+import java.util.function.Supplier;
 
 import uk.co.optimisticpanda.gtest.dto.TestUtilsContext;
-import uk.co.optimisticpanda.gtest.dto.defaultfill.IValueGenerator;
-import uk.co.optimisticpanda.gtest.dto.defaultfill.ValueGeneratorCache;
 import uk.co.optimisticpanda.gtest.dto.defaultfill.RegisterTypeMode;
+import uk.co.optimisticpanda.gtest.dto.defaultfill.ValueGeneratorCache;
 import uk.co.optimisticpanda.gtest.dto.defaultfill.ValueGeneratorCacheImpl;
-import uk.co.optimisticpanda.gtest.dto.defaultfill.ValueGeneratorCacheKey;
 import uk.co.optimisticpanda.gtest.dto.defaultfill.insgen.excl.ExclusionHolder;
 import uk.co.optimisticpanda.gtest.dto.propertyaccess.IPropertyAccess;
 import uk.co.optimisticpanda.gtest.dto.propertyaccess.IPropertyAccessFactory;
@@ -30,13 +31,13 @@ import uk.co.optimisticpanda.gtest.dto.propertyaccess.IPropertyAccessFactory;
 /**
  *This creates populated instances of a specific class. Strategies are
  * registered for the generation of values of specific properties via
- * {@link IValueGenerator}s. These are registered in {@link ValueGeneratorCacheImpl}
+ * {@link Supplier}s. These are registered in {@link ValueGeneratorCacheImpl}
  * </p> <em>NOTE:</em>
  * <ul>
  * <li/>An InstanceGenerator with an empty value generator cache will cycle
  * through the entire object tree and return an un-populated instance.
  * <li/>An InstanceGenerator with an value generator cache filled with just
- * {@link IValueGenerator} that generate primitives and Strings will traverse
+ * {@link Supplier} that generate primitives and Strings will traverse
  * the entire object tree and should return a mostly populated instance.
  * <li/>It is possible to register strategies against user defined classes to
  * deal with larger parts of the tree.
@@ -95,12 +96,11 @@ class InstanceGeneratorImpl<D> implements InstanceGenerator<D> {
 	}
 
 	private Object processField(Field field, String propertyPath) {
-		ValueGeneratorCacheKey key = new ValueGeneratorCacheKey(propertyPath, field);
-		IValueGenerator<?> generator = generatorCache.lookUpGenerator(key);
-		if (generator == IValueGenerator.NOT_COVERED) {
+		Supplier<?> generator = generatorCache.lookUpGenerator(propertyPath, field);
+		if (generator == NOT_COVERED) {
 			return processClass(propertyPath, field.getType());
 		}
-		return generator.generate();
+		return generator.get();
 	}
 
 	private <E> E createInstance(String path, Class<E> classToCreate) {
@@ -133,32 +133,32 @@ class InstanceGeneratorImpl<D> implements InstanceGenerator<D> {
 	}
 
 	@Override
-	public IValueGenerator<?> lookUpGenerator(ValueGeneratorCacheKey key) {
-		return generatorCache.lookUpGenerator(key);
+	public Supplier<?> lookUpGenerator(String propertyPath, Field field) {
+		return generatorCache.lookUpGenerator(propertyPath, field );
 	}
 
 	@Override
-	public void registerAClassNamePropertyNameGenerator(Class<?> owningClass, String propertyName, IValueGenerator<?> valueGenerator) {
+	public void registerAClassNamePropertyNameGenerator(Class<?> owningClass, String propertyName, Supplier<?> valueGenerator) {
 		generatorCache.registerAClassNamePropertyNameGenerator(owningClass, propertyName, valueGenerator);
 	}
 
 	@Override
-	public void registerAPropertyDepthGenerator(String propertyDepth, IValueGenerator<?> valueGen) {
+	public void registerAPropertyDepthGenerator(String propertyDepth, Supplier<?> valueGen) {
 		generatorCache.registerAPropertyDepthGenerator(propertyDepth, valueGen);
 	}
 
 	@Override
-	public void registerAPropertyNameAndTypeGenerator(String propertyName, Class<?> propertyType, IValueGenerator<?> valueGenerator) {
+	public void registerAPropertyNameAndTypeGenerator(String propertyName, Class<?> propertyType, Supplier<?> valueGenerator) {
 		generatorCache.registerAPropertyNameAndTypeGenerator(propertyName, propertyType, valueGenerator);
 	}
 
 	@Override
-	public void registerATypeGenerator(RegisterTypeMode mode, Class<?> propertyType, IValueGenerator<?> valueGenerator) {
+	public void registerATypeGenerator(RegisterTypeMode mode, Class<?> propertyType, Supplier<?> valueGenerator) {
 		generatorCache.registerATypeGenerator(mode, propertyType, valueGenerator);
 	}
 
 	@Override
-	public void registerATypeGenerator(Class<?> propertyType, IValueGenerator<?> valueGenerator) {
+	public void registerATypeGenerator(Class<?> propertyType, Supplier<?> valueGenerator) {
 		generatorCache.registerATypeGenerator(propertyType, valueGenerator);
 	}
 

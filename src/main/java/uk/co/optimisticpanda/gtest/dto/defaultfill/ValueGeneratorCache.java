@@ -15,6 +15,9 @@
  */
 package uk.co.optimisticpanda.gtest.dto.defaultfill;
 
+import java.lang.reflect.Field;
+import java.util.function.Supplier;
+
 /**
  *An interface for caches that hold value generators.
  * 
@@ -31,7 +34,7 @@ public interface ValueGeneratorCache {
 	 * @param valueGen
 	 *            the value generator to register with this path
 	 * */
-	public void registerAPropertyDepthGenerator(String propertyDepth, IValueGenerator<?> valueGen);
+	public void registerAPropertyDepthGenerator(String propertyDepth, Supplier<?> valueGen);
 
 	/**
 	 * Register a generator for all named properties with the specified parent class
@@ -46,7 +49,7 @@ public interface ValueGeneratorCache {
 	 * @param valueGenerator
 	 *            the value generator being registered
 	 * */
-	public void registerAClassNamePropertyNameGenerator(Class<?> owningClass, String propertyName, IValueGenerator<?> valueGenerator);
+	public void registerAClassNamePropertyNameGenerator(Class<?> owningClass, String propertyName, Supplier<?> valueGenerator);
 
 	/**
 	 * Register a generator for all properties of a specific name and type.
@@ -58,7 +61,7 @@ public interface ValueGeneratorCache {
 	 * @param valueGenerator
 	 *            the value generator to register
 	 * */
-	public void registerAPropertyNameAndTypeGenerator(String propertyName, Class<?> propertyType, IValueGenerator<?> valueGenerator);
+	public void registerAPropertyNameAndTypeGenerator(String propertyName, Class<?> propertyType, Supplier<?> valueGenerator);
 
 	/**
 	 * Register a value generator for all properties of a specific type.
@@ -70,7 +73,7 @@ public interface ValueGeneratorCache {
 	 * @param valueGenerator
 	 *            the value generator to register
 	 * */
-	public void registerATypeGenerator(RegisterTypeMode mode, Class<?> propertyType, IValueGenerator<?> valueGenerator);
+	public void registerATypeGenerator(RegisterTypeMode mode, Class<?> propertyType, Supplier<?> valueGenerator);
 
 	/**
 	 * Register a value generator for all properties of a specific type.
@@ -79,7 +82,7 @@ public interface ValueGeneratorCache {
 	 * @param valueGenerator
 	 *            the value generator to register
 	 * */
-	public void registerATypeGenerator(Class<?> propertyType, IValueGenerator<?> valueGenerator);
+	public void registerATypeGenerator(Class<?> propertyType, Supplier<?> valueGenerator);
 
 	/**
 	 * Return the value generator applicable for this key. See class javadoc for
@@ -90,7 +93,7 @@ public interface ValueGeneratorCache {
 	 * @return a valueGenerator
 	 * 
 	 * */
-	public IValueGenerator<?> lookUpGenerator(ValueGeneratorCacheKey key);
+	public Supplier<?> lookUpGenerator(String propertyPath, Field field);
 
 	/**
 	 * Clears the cache of all registered property values

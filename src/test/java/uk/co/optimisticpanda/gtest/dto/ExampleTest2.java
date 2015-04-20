@@ -18,10 +18,8 @@ package uk.co.optimisticpanda.gtest.dto;
 import java.util.List;
 
 import junit.framework.TestCase;
-import uk.co.optimisticpanda.gtest.dto.defaultfill.IValueGenerator;
 import uk.co.optimisticpanda.gtest.dto.defaultfill.ValueGeneratorCache;
 import uk.co.optimisticpanda.gtest.dto.defaultfill.defaultgens.DefaultValueGeneratorCache;
-import uk.co.optimisticpanda.gtest.dto.defaultfill.defaultgens.ValueGeneratorFactory;
 import uk.co.optimisticpanda.gtest.dto.defaultfill.enggen.DtoGenerationEngine;
 import uk.co.optimisticpanda.gtest.dto.defaultfill.insgen.InstanceGenerator;
 import uk.co.optimisticpanda.gtest.dto.defaultfill.insgen.InstanceGeneratorBuilder;
@@ -71,12 +69,9 @@ public class ExampleTest2 extends TestCase {
 		//Create a custom value generator cache
 		ValueGeneratorCache cache = new DefaultValueGeneratorCache(); //
 		
-		//Create a valueGenerator that generates strings
-		IValueGenerator<String> stringGenerator = ValueGeneratorFactory.createStringGenerator("DEFAULT_EXAMPLE_NAME");
-		
 		//register the string generator against properties of type string called name.
 		//Note you can register generators against different criteria (See ValueGeneratorCache.java) 
-		cache.registerAPropertyNameAndTypeGenerator("name", String.class, stringGenerator);
+		cache.registerAPropertyNameAndTypeGenerator("name", String.class, () -> "DEFAULT_EXAMPLE_NAME");
 		
 		//Build the generator with the custom cache.
 		InstanceGenerator<TestDto3> generator = new InstanceGeneratorBuilder<TestDto3>(TestDto3.class, cache).build();

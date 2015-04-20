@@ -50,5 +50,5 @@ public interface IDataEditor<D> {
 	 * @param dataItem
 	 *            the dto to apply the rule(s) to.
 	 */
-	public void edit(int index, D dataItem);
+	public D edit(int index, D dataItem);
 }

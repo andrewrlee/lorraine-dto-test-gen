@@ -15,12 +15,14 @@
  */
 package uk.co.optimisticpanda.gtest.dto.defaultfill;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import java.lang.reflect.Field;
+import java.util.function.Supplier;
 
 import junit.framework.TestCase;
 import uk.co.optimisticpanda.gtest.dto.TestUtilsContext;
 import uk.co.optimisticpanda.gtest.dto.defaultfill.defaultgens.DefaultValueGeneratorCache;
-import uk.co.optimisticpanda.gtest.dto.defaultfill.defaultgens.ValueGeneratorFactory;
 import uk.co.optimisticpanda.gtest.dto.defaultfill.insgen.InstanceGenerator;
 import uk.co.optimisticpanda.gtest.dto.defaultfill.insgen.InstanceGeneratorBuilder;
 import uk.co.optimisticpanda.gtest.dto.defaultfill.insgen.InstanceGeneratorException;
@@ -28,7 +30,6 @@ import uk.co.optimisticpanda.gtest.dto.test.utils.DetailedTestDto;
 import uk.co.optimisticpanda.gtest.dto.test.utils.DetailedTestDtoComposite;
 import uk.co.optimisticpanda.gtest.dto.test.utils.TestDto2;
 import uk.co.optimisticpanda.gtest.dto.test.utils.TestDtoWithoutDefaultConstructor;
-import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Test Instance Generator
@@ -36,20 +37,20 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @author Andy Lee
  */
 public class InstanceGeneratorBuilderTest extends TestCase {
-	private IValueGenerator<Integer> integerGen;
-	private IValueGenerator<?> primitiveGen;
-	private IValueGenerator<?> nullGen;
-	private IValueGenerator<?> nameGen;
+	private Supplier<Integer> integerGen;
+	private Supplier<?> primitiveGen;
+	private Supplier<?> nullGen;
+	private Supplier<?> nameGen;
 
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
 		TestUtilsContext.useOgnl();
 
-		integerGen = ValueGeneratorFactory.createIntegerGenerator(new Integer(4));
-		primitiveGen = createPrimitiveIntGen();
-		nullGen = ValueGeneratorFactory.createNullGenerator();
-		nameGen = ValueGeneratorFactory.createStringGenerator("editedName");
+		integerGen = () -> new Integer(4);
+		primitiveGen = () -> 4;
+		nullGen = () -> null ;
+		nameGen = () -> "editedName";
 	}
 
 	private <D> InstanceGeneratorBuilder<D> getInstanceGeneratorBuilder(Class<D> clazz) {
@@ -97,9 +98,9 @@ public class InstanceGeneratorBuilderTest extends TestCase {
 		generator.registerAClassNamePropertyNameGenerator(DetailedTestDtoComposite.class, "parent", nullGen);
 
 		Field parentField = findAField(DetailedTestDtoComposite.class, "parent");
-		IValueGenerator<?> foundParentGenerator = generator.lookUpGenerator(new ValueGeneratorCacheKey("", parentField));
+		Supplier<?> foundParentGenerator = generator.lookUpGenerator("", parentField);
 		assertThat(foundParentGenerator).isNotNull();
-		assertThat(foundParentGenerator.generate()).isNull();
+		assertThat(foundParentGenerator.get()).isNull();
 		try {
 			DetailedTestDtoComposite item = generator.generate();
 			assertThat(item).isNotNull();
@@ -122,9 +123,9 @@ public class InstanceGeneratorBuilderTest extends TestCase {
 		generator.registerAClassNamePropertyNameGenerator(DetailedTestDtoComposite.class, "parent", nullGen);
 
 		Field numberField = findAField(DetailedTestDtoComposite.class, "number");
-		IValueGenerator<?> foundIntegerGenerator = generator.lookUpGenerator(new ValueGeneratorCacheKey("", numberField));
+		Supplier<?> foundIntegerGenerator = generator.lookUpGenerator("", numberField);
 		assertThat(foundIntegerGenerator).isNotNull();
-		assertThat(foundIntegerGenerator.generate() instanceof Integer).isTrue();
+		assertThat(foundIntegerGenerator.get() instanceof Integer).isTrue();
 
 		DetailedTestDtoComposite item = generator.generate();
 		assertThat(item).isNotNull();
@@ -144,9 +145,9 @@ public class InstanceGeneratorBuilderTest extends TestCase {
 		generator.registerAClassNamePropertyNameGenerator(DetailedTestDtoComposite.class, "parent", nullGen);
 
 		Field numberField = findAField(DetailedTestDtoComposite.class, "number");
-		IValueGenerator<?> foundIntegerGenerator = generator.lookUpGenerator(new ValueGeneratorCacheKey("", numberField));
+		Supplier<?> foundIntegerGenerator = generator.lookUpGenerator("", numberField);
 		assertThat(foundIntegerGenerator).isNotNull();
-		assertThat(foundIntegerGenerator.generate()).isEqualTo(new Integer(4));
+		assertThat(foundIntegerGenerator.get()).isEqualTo(new Integer(4));
 
 		DetailedTestDtoComposite item = generator.generate();
 		assertThat(item).isNotNull();
@@ -166,9 +167,9 @@ public class InstanceGeneratorBuilderTest extends TestCase {
 		generator.registerAClassNamePropertyNameGenerator(DetailedTestDtoComposite.class, "parent", nullGen);
 
 		Field numberField = findAField(DetailedTestDtoComposite.class, "primitiveNumber");
-		IValueGenerator<?> foundIntegerGenerator = generator.lookUpGenerator(new ValueGeneratorCacheKey("", numberField));
+		Supplier<?> foundIntegerGenerator = generator.lookUpGenerator("", numberField);
 		assertThat(foundIntegerGenerator).isNotNull();
-		assertThat(foundIntegerGenerator.generate()).isEqualTo(new Integer(4));
+		assertThat(foundIntegerGenerator.get()).isEqualTo(new Integer(4));
 
 		DetailedTestDtoComposite item = generator.generate();
 		assertThat(item).isNotNull();
@@ -189,9 +190,9 @@ public class InstanceGeneratorBuilderTest extends TestCase {
 		generator.registerAClassNamePropertyNameGenerator(DetailedTestDtoComposite.class, "parent", nullGen);
 
 		Field numberField = findAField(DetailedTestDtoComposite.class, "primitiveNumber");
-		IValueGenerator<?> foundIntegerGenerator = generator.lookUpGenerator(new ValueGeneratorCacheKey("", numberField));
+		Supplier<?> foundIntegerGenerator = generator.lookUpGenerator("", numberField);
 		assertThat(foundIntegerGenerator).isNotNull();
-		assertThat(foundIntegerGenerator.generate()).isEqualTo(new Integer(4));
+		assertThat(foundIntegerGenerator.get()).isEqualTo(new Integer(4));
 		DetailedTestDtoComposite item = generator.generate();
 		assertThat(item).isNotNull();
 		assertThat(item.getPrimitiveNumber()).isEqualTo(4);
@@ -213,9 +214,9 @@ public class InstanceGeneratorBuilderTest extends TestCase {
 		InstanceGenerator<DetailedTestDto> generator = instanceGeneratorBuilder.build();
 
 		Field numberField = findAField(DetailedTestDtoComposite.class, "name");
-		IValueGenerator<?> foundNameGenerator = generator.lookUpGenerator(new ValueGeneratorCacheKey("", numberField));
+		Supplier<?> foundNameGenerator = generator.lookUpGenerator("", numberField);
 		assertThat(foundNameGenerator).isNotNull();
-		assertThat(foundNameGenerator.generate()).isEqualTo("editedName");
+		assertThat(foundNameGenerator.get()).isEqualTo("editedName");
 		DetailedTestDto item = generator.generate();
 		assertThat(item.getName()).isEqualTo("editedName");
 		assertThat(item).isNotNull();
@@ -280,18 +281,6 @@ public class InstanceGeneratorBuilderTest extends TestCase {
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
-	}
-
-	private IValueGenerator<?> createPrimitiveIntGen() {
-		return new IValueGenerator<Object>() {
-
-			// boxing by nature..
-			@SuppressWarnings("boxing")
-			@Override
-			public Object generate() {
-				return 4;
-			}
-		};
 	}
 
 }

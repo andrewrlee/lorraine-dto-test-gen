@@ -15,17 +15,18 @@
  */
 package uk.co.optimisticpanda.gtest.dto.defaultfill.enggen;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.List;
+import java.util.function.Supplier;
 
 import junit.framework.TestCase;
 import uk.co.optimisticpanda.gtest.dto.IDataEditor;
 import uk.co.optimisticpanda.gtest.dto.RuleUtils;
 import uk.co.optimisticpanda.gtest.dto.SimpleDataEditor;
 import uk.co.optimisticpanda.gtest.dto.TestUtilsContext;
-import uk.co.optimisticpanda.gtest.dto.defaultfill.IValueGenerator;
-import uk.co.optimisticpanda.gtest.dto.defaultfill.defaultgens.ValueGeneratorFactory;
 import uk.co.optimisticpanda.gtest.dto.defaultfill.enggen.visit.IEngineVisitor;
 import uk.co.optimisticpanda.gtest.dto.defaultfill.enggen.visit.PrintVisitor;
 import uk.co.optimisticpanda.gtest.dto.defaultfill.insgen.InstanceGenerator;
@@ -33,7 +34,6 @@ import uk.co.optimisticpanda.gtest.dto.defaultfill.insgen.InstanceGeneratorBuild
 import uk.co.optimisticpanda.gtest.dto.rule.IRule;
 import uk.co.optimisticpanda.gtest.dto.rulebuilder.impl.RuleFactory;
 import uk.co.optimisticpanda.gtest.dto.test.utils.TestDto3;
-import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * the type of dto to generate
@@ -59,7 +59,7 @@ public class DtoGenerationEngineTest extends TestCase {
 	 */
 	public void testGenerate() {
 		String expectedName = "GENVALUE";
-		IValueGenerator<String> gen = ValueGeneratorFactory.createStringGenerator(expectedName);
+		Supplier<String> gen = () -> expectedName;
 		generator.registerAPropertyDepthGenerator("name", gen);
 		engine.generate(assertNameVisitor(expectedName), 2);
 	}
@@ -69,7 +69,7 @@ public class DtoGenerationEngineTest extends TestCase {
 	 */
 	public void testCollect() {
 		String expectedName = "GENVALUE";
-		IValueGenerator<String> gen = ValueGeneratorFactory.createStringGenerator(expectedName);
+		Supplier<String> gen = () -> expectedName;
 		generator.registerAPropertyDepthGenerator("name", gen);
 		List<TestDto3> generatedEntities = engine.collect(2);
 		assertThat(generatedEntities).hasSize(2);
@@ -82,7 +82,7 @@ public class DtoGenerationEngineTest extends TestCase {
 	 */
 	public void testCollectAndVisit() {
 		String expectedName = "GENVALUE";
-		IValueGenerator<String> gen = ValueGeneratorFactory.createStringGenerator(expectedName);
+		Supplier<String> gen = () -> expectedName;
 		generator.registerAPropertyDepthGenerator("name", gen);
 		IEngineVisitor<TestDto3> visitor = appendIndexToDescriptionVisitor();
 		List<TestDto3> generatedEntities = engine.collectAndVisit(visitor, 2);
@@ -96,7 +96,7 @@ public class DtoGenerationEngineTest extends TestCase {
 	 */
 	public void testCollectAndEdit() {
 		String expectedName = "base";
-		IValueGenerator<String> gen = ValueGeneratorFactory.createStringGenerator(expectedName);
+		Supplier<String> gen = () -> expectedName;
 		generator.registerAPropertyDepthGenerator("name", gen);
 		
 		IDataEditor<TestDto3> editor = getEditor(expectedName);
@@ -111,7 +111,7 @@ public class DtoGenerationEngineTest extends TestCase {
 	 */
 	public void testPrintVisitor() {
 		String expectedName = "base";
-		IValueGenerator<String> gen = ValueGeneratorFactory.createStringGenerator(expectedName);
+		Supplier<String> gen = () -> expectedName;
 		generator.registerAPropertyDepthGenerator("name", gen);
 		
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();

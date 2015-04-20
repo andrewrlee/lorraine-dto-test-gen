@@ -18,6 +18,7 @@ package uk.co.optimisticpanda.gtest.dto;
 import java.util.List;
 
 import uk.co.optimisticpanda.gtest.dto.rule.IRule;
+import uk.co.optimisticpanda.gtest.dto.util.FunctionUtils;
 import uk.co.optimisticpanda.gtest.dto.util.MapOfLists;
 
 /**
@@ -28,7 +29,7 @@ import uk.co.optimisticpanda.gtest.dto.util.MapOfLists;
  */
 public class MappedClassDataEditor implements IDataEditor<Object> {
 
-	MapOfLists<Class<?>, IRule<?>> map = new MapOfLists<Class<?>, IRule<?>>();
+	MapOfLists<Class<?>, IRule<? extends Object>> map = new MapOfLists<Class<?>, IRule<? extends Object>>();
 
 	/**
 	 * Create a new MappedClassDataEditor
@@ -44,10 +45,9 @@ public class MappedClassDataEditor implements IDataEditor<Object> {
 	 *            the collection of dtos to apply the rules to.
 	 */
 	public void edit(List<Object> testData) {
-		for (int index = 0; index < testData.size(); index++) {
-			Object dataItem = testData.get(index);
-			edit(index, dataItem);
-		}
+		testData.stream()
+					.map(FunctionUtils.indexed())
+					.forEach(i -> edit(i.index, i.item));
 	}
 
 	/**
@@ -59,12 +59,13 @@ public class MappedClassDataEditor implements IDataEditor<Object> {
 	 *            the dto to apply the rule to.
 	 */
 	@SuppressWarnings("unchecked")
-	public void edit(int index, Object dataItem) {
-		for (IRule rule : getRules(dataItem)) {
-			if (rule.isValid(index, dataItem)) {
-				rule.edit(index, dataItem);
-			}
-		}
+	public Object edit(int index, Object dataItem) {
+		List<IRule<? extends Object>> rules = getRules(dataItem);
+		rules.stream()
+			.map(r -> ((IRule<Object>) r))
+			.filter(r -> r.isValid(index, dataItem))
+			.forEach(r-> r.edit(index, dataItem));
+		return dataItem;
 	}
 
 	/**
@@ -75,7 +76,7 @@ public class MappedClassDataEditor implements IDataEditor<Object> {
 	 *            the dto that the returned rules will be applicable for.
 	 * @return The applicable rules for this dto.
 	 * */
-	protected List<IRule<?>> getRules(Object dataItem) {
+	protected List<IRule<? extends Object>> getRules(Object dataItem) {
 		return map.get(dataItem.getClass());
 	}
 

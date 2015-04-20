@@ -15,11 +15,15 @@
  */
 package uk.co.optimisticpanda.gtest.dto.defaultfill;
 
+import static uk.co.optimisticpanda.gtest.dto.util.FunctionUtils.NOT_COVERED;
+import static uk.co.optimisticpanda.gtest.dto.util.Suppliers.of;
+
+import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Supplier;
 
 import uk.co.optimisticpanda.gtest.dto.edit.IEdit;
-
 /**
  * This is used to store {@link IEdit}s used for filling newly created dtos with
  * default data
@@ -31,7 +35,7 @@ import uk.co.optimisticpanda.gtest.dto.edit.IEdit;
  * <li>The class, the name and the property type
  * <li>The property name and the property type.
  * <li>The property type
- * <li>{@link IValueGenerator#NOT_COVERED}
+ * <li>{@link Supplier#NOT_COVERED}
  * </ol>
  * </p>
  * 
@@ -39,19 +43,19 @@ import uk.co.optimisticpanda.gtest.dto.edit.IEdit;
  * */
 public class ValueGeneratorCacheImpl implements ValueGeneratorCache {
 
-	protected final Map<String, IValueGenerator<?>> propertyDepthCache;
-	protected final Map<ClassPropertyNameKey, IValueGenerator<?>> classAndPropertyNameAndTypeCache;
-	protected final Map<PropertyNameAndPropertyTypeKey, IValueGenerator<?>> propertyNameAndTypeCache;
-	protected final Map<String, IValueGenerator<?>> typeCache;
+	protected final Map<String, Supplier<?>> propertyDepthCache;
+	protected final Map<ClassPropertyNameKey, Supplier<?>> classAndPropertyNameAndTypeCache;
+	protected final Map<PropertyNameAndPropertyTypeKey, Supplier<?>> propertyNameAndTypeCache;
+	protected final Map<String, Supplier<?>> typeCache;
 
 	/**
 	 * A default constructor that initialises all the caches
 	 * */
 	public ValueGeneratorCacheImpl() {
-		propertyDepthCache = new HashMap<String, IValueGenerator<?>>();
-		classAndPropertyNameAndTypeCache = new HashMap<ClassPropertyNameKey, IValueGenerator<?>>();
-		propertyNameAndTypeCache = new HashMap<PropertyNameAndPropertyTypeKey, IValueGenerator<?>>();
-		typeCache = new HashMap<String, IValueGenerator<?>>();
+		propertyDepthCache = new HashMap<String, Supplier<?>>();
+		classAndPropertyNameAndTypeCache = new HashMap<ClassPropertyNameKey, Supplier<?>>();
+		propertyNameAndTypeCache = new HashMap<PropertyNameAndPropertyTypeKey, Supplier<?>>();
+		typeCache = new HashMap<String, Supplier<?>>();
 	}
 
 	/**
@@ -63,8 +67,8 @@ public class ValueGeneratorCacheImpl implements ValueGeneratorCache {
 	 * @param valueGen
 	 *            the value generator to register with this path
 	 * */
-	public void registerAPropertyDepthGenerator(String propertyDepth, IValueGenerator<?> valueGen) {
-		propertyDepthCache.put(propertyDepth, valueGen);
+	public void registerAPropertyDepthGenerator(String propertyDepth, Supplier<?> valueGen) {
+		propertyDepthCache.put(propertyDepth, of(valueGen));
 	}
 
 	/**
@@ -80,9 +84,9 @@ public class ValueGeneratorCacheImpl implements ValueGeneratorCache {
 	 * @param valueGenerator
 	 *            the value generator being registered
 	 * */
-	public void registerAClassNamePropertyNameGenerator(Class<?> owningClass, String propertyName, IValueGenerator<?> valueGenerator) {
+	public void registerAClassNamePropertyNameGenerator(Class<?> owningClass, String propertyName, Supplier<?> valueGenerator) {
 		ClassPropertyNameKey key = new ClassPropertyNameKey(owningClass, propertyName);
-		classAndPropertyNameAndTypeCache.put(key, valueGenerator);
+		classAndPropertyNameAndTypeCache.put(key, of(valueGenerator));
 	}
 
 	/**
@@ -95,9 +99,9 @@ public class ValueGeneratorCacheImpl implements ValueGeneratorCache {
 	 * @param valueGenerator
 	 *            the value generator to register
 	 * */
-	public void registerAPropertyNameAndTypeGenerator(String propertyName, Class<?> propertyType, IValueGenerator<?> valueGenerator) {
+	public void registerAPropertyNameAndTypeGenerator(String propertyName, Class<?> propertyType, Supplier<?> valueGenerator) {
 		PropertyNameAndPropertyTypeKey key = new PropertyNameAndPropertyTypeKey(propertyName, propertyType);
-		propertyNameAndTypeCache.put(key, valueGenerator);
+		propertyNameAndTypeCache.put(key, of(valueGenerator));
 	}
 
 	/**
@@ -110,8 +114,8 @@ public class ValueGeneratorCacheImpl implements ValueGeneratorCache {
 	 * @param valueGenerator
 	 *            the value generator to register
 	 * */
-	public void registerATypeGenerator(RegisterTypeMode mode, Class<?> propertyType, IValueGenerator<?> valueGenerator) {
-		typeCache.put(propertyType.getName(), valueGenerator);
+	public void registerATypeGenerator(RegisterTypeMode mode, Class<?> propertyType, Supplier<?> valueGenerator) {
+		typeCache.put(propertyType.getName(), of(valueGenerator));
 		switch (mode) {
 		case ALL_INTERFACES:
 			registerInterfacesAgainstCache(propertyType, valueGenerator);
@@ -134,23 +138,23 @@ public class ValueGeneratorCacheImpl implements ValueGeneratorCache {
 	 * Register a generator against a single type 
 	 */
 	@Override
-	public void registerATypeGenerator(Class<?> propertyType, IValueGenerator<?> valueGenerator) {
+	public void registerATypeGenerator(Class<?> propertyType, Supplier<?> valueGenerator) {
 		registerATypeGenerator(RegisterTypeMode.SINGLE_TYPE, propertyType, valueGenerator);
 	}
 
-	private void registerParentsAgainstCache(Class<?> propertyType, IValueGenerator<?> generator) {
+	private void registerParentsAgainstCache(Class<?> propertyType, Supplier<?> generator) {
 		if (propertyType != null && propertyType.getSuperclass() != null) {
 			Class<?> parentClass = propertyType.getSuperclass();
-			typeCache.put(parentClass.getName(), generator);
+			typeCache.put(parentClass.getName(), of(generator));
 			registerParentsAgainstCache(parentClass, generator);
 		}
 	}
 
-	private void registerInterfacesAgainstCache(Class<?> propertyType, IValueGenerator<?> generator) {
+	private void registerInterfacesAgainstCache(Class<?> propertyType, Supplier<?> generator) {
 		if (propertyType != null && propertyType.getInterfaces() != null) {
 			Class<?>[] interfaces = propertyType.getInterfaces();
 			for (Class<?> interfaceClass: interfaces) {
-				typeCache.put(interfaceClass.getName(), generator);
+				typeCache.put(interfaceClass.getName(), of(generator));
 				registerParentsAgainstCache(interfaceClass, generator);
 			}
 		}
@@ -159,15 +163,17 @@ public class ValueGeneratorCacheImpl implements ValueGeneratorCache {
 	/**
 	 * Return the value generator applicable for this key. See class javadoc for
 	 * the strategy used to retrieve the value generator.
+	 * @param path 
+	 * @param field 
 	 * 
 	 * @param key
 	 *            the key to look up a generator for
 	 * @return a valueGenerator
 	 * 
 	 * */
-	public IValueGenerator<?> lookUpGenerator(ValueGeneratorCacheKey key) {
-
-		IValueGenerator<?> valueGenerator = propertyDepthCache.get(key.getPropertyPath());
+	public Supplier<?> lookUpGenerator(String path, Field field) {
+		ValueGeneratorCacheKey key = new ValueGeneratorCacheKey(path, field);
+		Supplier<?> valueGenerator = propertyDepthCache.get(key.getPropertyPath());
 		if (valueGenerator != null)
 			return valueGenerator;
 
@@ -183,7 +189,7 @@ public class ValueGeneratorCacheImpl implements ValueGeneratorCache {
 		if (valueGenerator != null)
 			return valueGenerator;
 
-		return IValueGenerator.NOT_COVERED;
+		return NOT_COVERED;
 	}
 
 	/**

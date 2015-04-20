@@ -15,15 +15,16 @@
  */
 package uk.co.optimisticpanda.gtest.dto.defaultfill.defaultgens;
 
+import static java.lang.Boolean.FALSE;
+import static uk.co.optimisticpanda.gtest.dto.defaultfill.RegisterTypeMode.ALL_INTERFACES;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 
 import uk.co.optimisticpanda.gtest.dto.defaultfill.ValueGeneratorCache;
-import uk.co.optimisticpanda.gtest.dto.defaultfill.RegisterTypeMode;
 import uk.co.optimisticpanda.gtest.dto.defaultfill.ValueGeneratorCacheImpl;
-import static uk.co.optimisticpanda.gtest.dto.defaultfill.defaultgens.ValueGeneratorFactory.*;
 
 /**
  *An {@link ValueGeneratorCache} that has generators registered for most
@@ -37,30 +38,31 @@ public class DefaultValueGeneratorCache extends ValueGeneratorCacheImpl {
 	 * Create a Default Value Generator Cache.
 	 */
 	public DefaultValueGeneratorCache() {
-		registerATypeGenerator(String.class, createStringGenerator("DEFAULT"));
-		registerATypeGenerator(Class.class, createClassGenerator(Class.class));
-		registerATypeGenerator(Date.class, createDateGenerator(new Date()));
+		registerATypeGenerator(String.class, () -> "DEFAULT");
+		registerATypeGenerator(Class.class, () -> Class.class);
+		
+		Date date = new Date();
+		registerATypeGenerator(Date.class, () -> new Date(date.getTime()));
 
-		registerATypeGenerator(Character.class, createCharacterGenerator(new Character('A')));
-		registerATypeGenerator(char.class, createCharacterGenerator(new Character('A')));
+		registerATypeGenerator(Character.class, () -> Character.valueOf('A'));
+		registerATypeGenerator(char.class, () -> 'A');
 		
-		registerATypeGenerator(Integer.class, createIntegerGenerator(new Integer(0)));
-		registerATypeGenerator(int.class, createIntegerGenerator(new Integer(0)));
+		registerATypeGenerator(Integer.class, () -> Integer.valueOf(0));
+		registerATypeGenerator(int.class, () -> 0);
 		
-		registerATypeGenerator(Double.class, createDoubleGenerator(new Double(0.00)));
-		registerATypeGenerator(double.class, createDoubleGenerator(new Double(0.00)));
+		registerATypeGenerator(Double.class, () -> Double.valueOf(0.00d));
+		registerATypeGenerator(double.class, () -> 0.00d);
 		
-		registerATypeGenerator(Boolean.class, createBooleanGenerator(Boolean.FALSE));
-		registerATypeGenerator(boolean.class, createBooleanGenerator(Boolean.FALSE));
+		registerATypeGenerator(Boolean.class, () -> FALSE);
+		registerATypeGenerator(boolean.class, () -> FALSE);
 		
-		registerATypeGenerator(Byte.class, createByteGenerator(new Byte(Byte.MIN_VALUE)));
-		registerATypeGenerator(byte.class, createByteGenerator(new Byte(Byte.MIN_VALUE)));
+		registerATypeGenerator(Byte.class, () -> Byte.valueOf(Byte.MIN_VALUE));
+		registerATypeGenerator(byte.class, () -> Byte.MIN_VALUE);
 
-		registerATypeGenerator(RegisterTypeMode.ALL_INTERFACES, ArrayList.class, createListGenerator());
-		registerATypeGenerator(RegisterTypeMode.ALL_INTERFACES, HashSet.class, createSetGenerator());
-		registerATypeGenerator(RegisterTypeMode.ALL_INTERFACES, HashMap.class, createMapGenerator());
+		registerATypeGenerator(ALL_INTERFACES, ArrayList.class, () -> new ArrayList<>());
+		registerATypeGenerator(ALL_INTERFACES, HashSet.class, () -> new HashSet<>());
+		registerATypeGenerator(ALL_INTERFACES, HashMap.class, () -> new HashMap<>());
 		
-		registerATypeGenerator(Object.class, createNullGenerator());
+		registerATypeGenerator(Object.class, () -> null);
 	}
-
 }

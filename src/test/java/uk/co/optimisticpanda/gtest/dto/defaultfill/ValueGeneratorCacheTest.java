@@ -15,15 +15,19 @@
  */
 package uk.co.optimisticpanda.gtest.dto.defaultfill;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static uk.co.optimisticpanda.gtest.dto.util.FunctionUtils.NOT_COVERED;
+
 import java.lang.reflect.Field;
+import java.util.function.Supplier;
 
 import junit.framework.TestCase;
 import uk.co.optimisticpanda.gtest.dto.defaultfill.defaultgens.DefaultValueGeneratorCache;
 import uk.co.optimisticpanda.gtest.dto.test.utils.DetailedTestDtoComposite;
 import uk.co.optimisticpanda.gtest.dto.test.utils.TestDto1;
 import uk.co.optimisticpanda.gtest.dto.test.utils.TestDto2;
-import static org.assertj.core.api.Assertions.assertThat;
-import static uk.co.optimisticpanda.gtest.dto.defaultfill.IValueGenerator.NOT_COVERED;
+import uk.co.optimisticpanda.gtest.dto.util.Suppliers;
+
 /**
  * @author Andy Lee
  * 
@@ -31,25 +35,25 @@ import static uk.co.optimisticpanda.gtest.dto.defaultfill.IValueGenerator.NOT_CO
 public class ValueGeneratorCacheTest extends TestCase {
 
 	private ValueGeneratorCache valueGeneratorCache;
-	private IValueGenerator<Object> generator1;
-	private IValueGenerator<Object> generator2;
-	private IValueGenerator<Object> generator3;
-	private IValueGenerator<Object> generator4;
+	private Supplier<Object> generator1;
+	private Supplier<Object> generator2;
+	private Supplier<Object> generator3;
+	private Supplier<Object> generator4;
 
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
 		valueGeneratorCache = new DefaultValueGeneratorCache();
 
-		generator1 = createValueGenerator("1");
-		generator2 = createValueGenerator("2");
-		generator3 = createValueGenerator("3");
-		generator4 = createValueGenerator("4");
+		generator1 = Suppliers.of("1");
+		generator2 = Suppliers.of("2");
+		generator3 = Suppliers.of("3");
+		generator4 = Suppliers.of("4");
 
-		valueGeneratorCache.registerAPropertyDepthGenerator("complexPath", generator1);
-		valueGeneratorCache.registerAClassNamePropertyNameGenerator(DetailedTestDtoComposite.class, "name", generator2);
-		valueGeneratorCache.registerAPropertyNameAndTypeGenerator("name", String.class, generator3);
-		valueGeneratorCache.registerATypeGenerator(String.class, generator4);
+		valueGeneratorCache.registerAPropertyDepthGenerator("complexPath", () -> "1");
+		valueGeneratorCache.registerAClassNamePropertyNameGenerator(DetailedTestDtoComposite.class, "name", () -> "2");
+		valueGeneratorCache.registerAPropertyNameAndTypeGenerator("name", String.class, () -> "3");
+		valueGeneratorCache.registerATypeGenerator(String.class, () -> "4");
 
 	}
 
@@ -61,29 +65,24 @@ public class ValueGeneratorCacheTest extends TestCase {
 	 */
 	public void testFindValueGeneratorStrategies() throws Exception {
 		// Based on a path
-		ValueGeneratorCacheKey key = createKey("complexPath", DetailedTestDtoComposite.class, "name");
-		IValueGenerator<?> generator = valueGeneratorCache.lookUpGenerator(key);
-		assertThat(generator.generate()).isEqualTo(generator1.generate());
+		Supplier<?> generator = valueGeneratorCache.lookUpGenerator("complexPath", field(DetailedTestDtoComposite.class, "name"));
+		assertThat(generator.get()).isEqualTo(generator1.get());
 
 		// Based on owning class and property name
-		key = createKey("", DetailedTestDtoComposite.class, "name");
-		generator = valueGeneratorCache.lookUpGenerator(key);
-		assertThat(generator.generate()).isEqualTo(generator2.generate());
+		generator = valueGeneratorCache.lookUpGenerator("", field(DetailedTestDtoComposite.class, "name"));
+		assertThat(generator.get()).isEqualTo(generator2.get());
 
 		// Based on property name and property type
-		key = createKey("", TestDto1.class, "name");
-		generator = valueGeneratorCache.lookUpGenerator(key);
-		assertThat(generator.generate()).isEqualTo(generator3.generate());
+		generator = valueGeneratorCache.lookUpGenerator("", field(TestDto1.class, "name"));
+		assertThat(generator.get()).isEqualTo(generator3.get());
 
 		// Based on property name and property type
-		key = createKey("", TestDto2.class, "description");
-		generator = valueGeneratorCache.lookUpGenerator(key);
-		assertThat(generator.generate()).isEqualTo(generator4.generate());
+		generator = valueGeneratorCache.lookUpGenerator("", field(TestDto2.class, "description"));
+		assertThat(generator.get()).isEqualTo(generator4.get());
 
 		// Not Registered
-		Field field = findAField(DetailedTestDtoComposite.class, "parent");
-		key = new ValueGeneratorCacheKey("", field);
-		assertThat(valueGeneratorCache.lookUpGenerator(key)).isEqualTo(NOT_COVERED);
+		generator = valueGeneratorCache.lookUpGenerator("", field(DetailedTestDtoComposite.class, "parent"));
+		assertThat(generator).isEqualTo(NOT_COVERED);
 	}
 
 	/**
@@ -91,7 +90,7 @@ public class ValueGeneratorCacheTest extends TestCase {
 	 */
 	public void testClearCache() throws Exception {
 		valueGeneratorCache.clear();
-		ValueGeneratorCacheImpl cache = (ValueGeneratorCacheImpl)valueGeneratorCache;
+		ValueGeneratorCacheImpl cache = (ValueGeneratorCacheImpl) valueGeneratorCache;
 		assertThat(cache.classAndPropertyNameAndTypeCache.isEmpty()).isTrue();
 		assertThat(cache.propertyDepthCache.isEmpty()).isTrue();
 		assertThat(cache.propertyNameAndTypeCache.isEmpty()).isTrue();
@@ -102,41 +101,21 @@ public class ValueGeneratorCacheTest extends TestCase {
 	 * 
 	 */
 	public void testNotCoveredValueGenerator() {
-		IValueGenerator<?> notCoveredGenerator = IValueGenerator.NOT_COVERED;
+		Supplier<?> notCoveredGenerator = NOT_COVERED;
 		try {
-			notCoveredGenerator.generate();
+			notCoveredGenerator.get();
 			fail("should throw an exception!");
 		} catch (UnsupportedOperationException e) {
 			assertThat(e.getMessage()).isEqualTo("This generator does not generate values");
 		}
 	}
 
-	private ValueGeneratorCacheKey createKey(String path, Class<?> clazz, String propertyName) {
-		return new ValueGeneratorCacheKey(path, findAField(clazz, propertyName));
-	}
-
-	private Field findAField(Class<?> clazz, String propertyName) {
+	private Field field(Class<?> clazz, String propertyName) {
 		try {
 			return clazz.getDeclaredField(propertyName);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
-	}
-
-	/**
-	 * test registering a value generator for class/propertyname/propertytype:
-	 * on primitive to type
-	 * 
-	 * @throws Exception
-	 */
-	private IValueGenerator<Object> createValueGenerator(final Object valueToSet) {
-		return new IValueGenerator<Object>() {
-
-			@Override
-			public Object generate() {
-				return valueToSet;
-			}
-		};
 	}
 
 }

@@ -100,5 +100,11 @@ public class DetailedTestDto {
 				return false;
 			return true;
 		}
+
+		@Override
+		public String toString() {
+			return "DetailedTestDto [name=" + name + ", date=" + date + ", number=" + number + "]";
+		}
+		
     }
 

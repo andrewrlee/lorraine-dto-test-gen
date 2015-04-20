@@ -15,39 +15,17 @@
  */
 package uk.co.optimisticpanda.gtest.dto;
 
+import static uk.co.optimisticpanda.gtest.dto.util.FunctionUtils.indexed;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import uk.co.optimisticpanda.gtest.dto.defaultfill.insgen.InstanceGeneratorBuilder;
 import uk.co.optimisticpanda.gtest.dto.rule.IRule;
-
 /**
  * <p>
  * This is a basic {@link IDataEditor} that takes a list of dtos and then calls
  * {@link IDataEditor#edit(int, Object)} on each item passed in.
  * </p>
- * <p>
- * The idea is that the user of the library would create helper methods that
- * would create varied sized lists of generic entities and also pass in a
- * {@link SimpleDataEditor}. The SimpleDataEditor will act a bit like a callback
- * to alter the list in ways defined by the rules.
- * </p>
- * 
- * <pre>
- * public List<Dto> getList(int numberOfDtosToBeCreated, TestDataEditor editor){ 
- *      List<Dto> dtos = new ArrayList<Dto>(); 
- *      for( int i=0; i< * numberOfDtosToBeCreated ; i++){ 
- *          Dto dto = createDto(); 
- *          editor.edit(i, dto); 
- *          store(dto); 
- *          dtos.add(dto); 
- *      } 
- *      return dtos;
- * }
- * </pre>
- * 
- * <i>NOTE - It is intended for future releases to provide increased user
- * support in this area -so these types of method will not be needed</i>
  * 
  * @author Andy Lee
  * @param <D>
@@ -87,10 +65,7 @@ public class SimpleDataEditor<D> implements IDataEditor<D> {
 	 *            the collection of dtos to apply the rules to.
 	 */
 	public void edit(List<D> testData) {
-		for (int index = 0; index < testData.size(); index++) {
-			D dataItem = testData.get(index);
-			edit(index, dataItem);
-		}
+		testData.stream().map(indexed()).forEach(i -> edit(i.index, i.item));
 	}
 
 	/**
@@ -101,13 +76,11 @@ public class SimpleDataEditor<D> implements IDataEditor<D> {
 	 * @param dataItem
 	 *            the dto to apply the rule to.
 	 */
-	@SuppressWarnings("unchecked")
-	public void edit(int index, D dataItem) {
-		for (IRule rule : rules) {
-			if (rule.isValid(index, dataItem)) {
-				rule.edit(index, dataItem);
-			}
-		}
+	public D edit(int index, D dataItem) {
+		rules.stream()
+				.filter(r -> r.isValid(index, dataItem))
+				.forEach(r-> r.edit(index, dataItem));
+		return dataItem;
 	}
 
 }
