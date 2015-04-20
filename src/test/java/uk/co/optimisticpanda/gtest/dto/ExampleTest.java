@@ -48,7 +48,7 @@ public class ExampleTest extends TestCase {
 		RuleFactory.startRule(utils.increment("name", "sample-"));
 
 		// Each subsequent chained method call return interfaces that only
-		// allows the writer to //call methods in the correct order.
+		// allows the writer to call methods in the correct order.
 		RuleFactory.startRule(utils.increment("name", "sample-")) // 
 				.and(utils.set("date", new Date(System.currentTimeMillis())));
 
@@ -82,7 +82,6 @@ public class ExampleTest extends TestCase {
 
 		// See the output
 		list.forEach(System.out::println);
-
 	}
 
 	static class SampleDto {

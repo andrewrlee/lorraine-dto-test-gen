@@ -17,6 +17,9 @@ package uk.co.optimisticpanda.gtest.dto.rulebuilder.impl;
 
 import static uk.co.optimisticpanda.gtest.dto.condition.CombinedCondition.BoolOp.AND;
 import static uk.co.optimisticpanda.gtest.dto.condition.CombinedCondition.BoolOp.OR;
+
+import java.util.Objects;
+
 import uk.co.optimisticpanda.gtest.dto.condition.CombinedCondition;
 import uk.co.optimisticpanda.gtest.dto.condition.ICondition;
 import uk.co.optimisticpanda.gtest.dto.condition.NotCondition;

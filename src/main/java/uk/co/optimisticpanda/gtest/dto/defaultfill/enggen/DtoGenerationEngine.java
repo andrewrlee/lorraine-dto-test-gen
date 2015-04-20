@@ -16,6 +16,7 @@
 package uk.co.optimisticpanda.gtest.dto.defaultfill.enggen;
 
 import java.util.List;
+import java.util.stream.IntStream;
 
 import uk.co.optimisticpanda.gtest.dto.IDataEditor;
 import uk.co.optimisticpanda.gtest.dto.defaultfill.enggen.visit.CombinedVisitor;
@@ -53,10 +54,10 @@ public class DtoGenerationEngine<D> {
 	 * @param numberToCreate
 	 */
 	public void generate(IEngineVisitor<D> visitor, int numberToCreate) {
-		for (int i = 0; i < numberToCreate; i++) {
+		IntStream.range(0, numberToCreate).forEach(i -> {
 			D dto = generator.generate();
 			visitor.visit(i, dto);
-		}
+		});
 	}
 
 	/**
@@ -76,7 +77,7 @@ public class DtoGenerationEngine<D> {
 	 */
 	public List<D> collectAndVisit(IEngineVisitor<D> visitor, int numberToCreate) {
 		ListVisitor<D> listVisitor = new ListVisitor<D>(clazz);
-		CombinedVisitor<D> combinedVisitor = new CombinedVisitor<D>(visitor)// 
+		CombinedVisitor<D> combinedVisitor = new CombinedVisitor<D>(visitor)//
 				.add(listVisitor); //
 		generate(combinedVisitor, numberToCreate);
 		return listVisitor.getDtos();

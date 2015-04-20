@@ -21,6 +21,7 @@ import static uk.co.optimisticpanda.gtest.dto.util.Suppliers.of;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Supplier;
 
 import uk.co.optimisticpanda.gtest.dto.edit.IEdit;
@@ -173,6 +174,7 @@ public class ValueGeneratorCacheImpl implements ValueGeneratorCache {
 	 * */
 	public Supplier<?> lookUpGenerator(String path, Field field) {
 		ValueGeneratorCacheKey key = new ValueGeneratorCacheKey(path, field);
+		
 		Supplier<?> valueGenerator = propertyDepthCache.get(key.getPropertyPath());
 		if (valueGenerator != null)
 			return valueGenerator;

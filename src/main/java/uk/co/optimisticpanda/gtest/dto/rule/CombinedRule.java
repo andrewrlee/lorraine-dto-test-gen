@@ -47,11 +47,8 @@ public class CombinedRule<D> implements IRule<D> {
 	 */
 	@Override
 	public void edit(int index, D data) {
-		for (IRule<D> rule : list) {
-			if (rule.isValid(index, data)) {
-				rule.edit(index, data);
-			}
-		}
+		list.stream().filter(r -> r.isValid(index, data))
+					 .forEach(r -> r.edit(index, data));
 	}
 
 	/**

@@ -94,10 +94,9 @@ public class CombinedEdit<D> implements IEdit<D> {
 	 * @return a human readable representation of the changes that are to take
 	 *         place.
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
 	public String toString() {
-		Iterator iterator = edits.iterator();
+		Iterator<IEdit<D>> iterator = edits.iterator();
 
 		StringBuilder builder = new StringBuilder(iterator.next().toString());
 		while (iterator.hasNext()) {

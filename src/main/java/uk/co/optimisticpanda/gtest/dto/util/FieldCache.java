@@ -23,14 +23,7 @@ import java.util.Map;
  * @author Andy Lee A reflection helper
  */
 public class FieldCache {
-	Map<FieldInfo, Field> cache;
-
-	/**
-	 * Create a cache.
-	 */
-	public FieldCache() {
-		cache = new HashMap<FieldInfo, Field>();
-	}
+	Map<FieldInfo, Field> cache = new HashMap<>();
 
 	/**
 	 * Store a new field in the cache. The field is keyed upon the class and

@@ -16,6 +16,7 @@
 package uk.co.optimisticpanda.gtest.dto.defaultfill.enggen.visit;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -32,7 +33,7 @@ public class CombinedVisitor<D> implements IEngineVisitor<D> {
 	 * Create a new combined visitor
 	 */
 	public CombinedVisitor() {
-		visitors = new ArrayList<IEngineVisitor<D>>();
+		this.visitors = new ArrayList<IEngineVisitor<D>>();
 	}
 
 	/**
@@ -42,7 +43,12 @@ public class CombinedVisitor<D> implements IEngineVisitor<D> {
 	 */
 	public CombinedVisitor(IEngineVisitor<D> visitor) {
 		this();
-		visitors.add(visitor);
+		this.visitors.add(visitor);
+	}
+
+	public CombinedVisitor(IEngineVisitor<D>... visitor) {
+		this();
+		this.visitors.addAll(Arrays.<IEngineVisitor<D>>asList(visitor));
 	}
 
 	/**
@@ -62,9 +68,7 @@ public class CombinedVisitor<D> implements IEngineVisitor<D> {
 	 */
 	@Override
 	public void visit(int index, D dto) {
-		for (IEngineVisitor<D> visitor : visitors) {
-			visitor.visit(index, dto);
-		}
+		visitors.forEach(v -> v.visit(index, dto));
 	}
 
 }
