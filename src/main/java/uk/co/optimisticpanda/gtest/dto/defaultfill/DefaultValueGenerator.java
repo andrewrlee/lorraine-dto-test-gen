@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package uk.co.optimisticpanda.gtest.dto.defaultfill.defaultgens;
+package uk.co.optimisticpanda.gtest.dto.defaultfill;
 
 import static java.lang.Boolean.FALSE;
 import static uk.co.optimisticpanda.gtest.dto.defaultfill.RegisterTypeMode.ALL_INTERFACES;
@@ -23,27 +23,24 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 
-import uk.co.optimisticpanda.gtest.dto.defaultfill.ValueGeneratorCache;
-import uk.co.optimisticpanda.gtest.dto.defaultfill.ValueGeneratorCacheImpl;
-
 /**
- *An {@link ValueGeneratorCache} that has generators registered for most
+ *An {@link ValueGenerator} that has generators registered for most
  * simple properties
  * 
  * @author Andy Lee
  */
-public class DefaultValueGeneratorCache extends ValueGeneratorCacheImpl {
+public class DefaultValueGenerator extends ValueGenerator {
 
 	/**
 	 * Create a Default Value Generator Cache.
 	 */
-	public DefaultValueGeneratorCache() {
+	public DefaultValueGenerator() {
+		super();
+		
+		//Immutable types.
 		registerATypeGenerator(String.class, () -> "DEFAULT");
 		registerATypeGenerator(Class.class, () -> Class.class);
 		
-		Date date = new Date();
-		registerATypeGenerator(Date.class, () -> new Date(date.getTime()));
-
 		registerATypeGenerator(Character.class, () -> Character.valueOf('A'));
 		registerATypeGenerator(char.class, () -> 'A');
 		
@@ -58,7 +55,11 @@ public class DefaultValueGeneratorCache extends ValueGeneratorCacheImpl {
 		
 		registerATypeGenerator(Byte.class, () -> Byte.valueOf(Byte.MIN_VALUE));
 		registerATypeGenerator(byte.class, () -> Byte.MIN_VALUE);
-
+		
+		//Mutable types.
+		Date date = new Date();
+		registerATypeGenerator(Date.class, () -> new Date(date.getTime()));
+		
 		registerATypeGenerator(ALL_INTERFACES, ArrayList.class, () -> new ArrayList<>());
 		registerATypeGenerator(ALL_INTERFACES, HashSet.class, () -> new HashSet<>());
 		registerATypeGenerator(ALL_INTERFACES, HashMap.class, () -> new HashMap<>());

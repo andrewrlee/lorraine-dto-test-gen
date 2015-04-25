@@ -32,48 +32,11 @@ public interface IWhereClauseBuilder<D> {
 	 */
 	IWhereClauseBuilder<D> and(ICondition condition);
 
-	
-	/**
-	 * @param condition
-	 * @return this to allow chaining
-	 */
-	IWhereClauseBuilder<D> andNot(ICondition condition);
-
 	/**
 	 * @param condition
 	 * @return this to allow chaining
 	 */
 	IWhereClauseBuilder<D> or(ICondition condition);
-
-	/**
-	 * @param condition
-	 * @return this to allow chaining
-	 */
-	IWhereClauseBuilder<D> orNot(ICondition condition);
-
-	/**
-	 * @param builder an IWhereClauseBuilder that has been built separately
-	 * @return this to allow chaining
-	 */
-	IWhereClauseBuilder<D> and(IWhereClauseBuilder<D> builder);
-
-	/**
-	 * @param builder an IWhereClauseBuilder that has been built separately
-	 * @return this to allow chaining
-	 */
-	IWhereClauseBuilder<D> andNot(IWhereClauseBuilder<D> builder);
-
-	/**
-	 * @param builder an IWhereClauseBuilder that has been built separately
-	 * @return this to allow chaining
-	 */
-	IWhereClauseBuilder<D> or(IWhereClauseBuilder<D> builder);
-
-	/**
-	 * @param builder an IWhereClauseBuilder that has been built separately
-	 * @return this to allow chaining
-	 */
-	IWhereClauseBuilder<D> orNot(IWhereClauseBuilder<D> builder);
 
 	/**
 	 * @return the {@link ICondition} that has been built up.

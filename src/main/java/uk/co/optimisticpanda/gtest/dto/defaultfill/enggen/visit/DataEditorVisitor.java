@@ -27,19 +27,10 @@ public class DataEditorVisitor<D> implements IEngineVisitor<D> {
 
 	private final IDataEditor<D> editor;
 
-	/**
-	 * Creates a data editor
-	 * 
-	 * @param editor
-	 */
 	public DataEditorVisitor(IDataEditor<D> editor) {
 		this.editor = editor;
 	}
 
-	/**
-	 * @see uk.co.optimisticpanda.gtest.dto.defaultfill.enggen.visit.IEngineVisitor#visit(int,
-	 *      java.lang.Object)
-	 */
 	@Override
 	public void visit(int index, D dto) {
 		editor.edit(index, dto);

@@ -16,15 +16,15 @@
 package uk.co.optimisticpanda.gtest.dto.rule;
 
 import uk.co.optimisticpanda.gtest.dto.condition.ICondition;
-import uk.co.optimisticpanda.gtest.dto.edit.IEdit;
+import uk.co.optimisticpanda.gtest.dto.edit.Editor;
 
 
 /**
- * This wraps a {@link BaseRule} to provide a description for the rule
+ * This decorates a {@link BaseEdit} to provide a description for the rule
  * @param <D> the type that is applicable for this rule 
  * @author Andy Lee
  */
-public class LabeledRule<D> extends BaseRule<D>{
+public class LabeledEdit<D> extends BaseEdit<D>{
 
 	private final String label;
 
@@ -34,19 +34,19 @@ public class LabeledRule<D> extends BaseRule<D>{
 	 * @param edit the edit that occurs when the rule fires 
 	 * @param conditions the conditions that determine if the rule should fire
 	 */
-	public LabeledRule(String label,IEdit<D> edit, ICondition[] conditions) {
-		super(edit, conditions);
+	private LabeledEdit(String label, Editor<D> edit, ICondition condition) {
+		super(edit, condition);
 		this.label = label;
 	}
 	
 	/**
 	 * Creates a labeled rule which wraps a base rule
 	 * @param label a label that describes the rule
-	 * @param rule a base rule to wrap
+	 * @param edit a base rule to wrap
 	 */
-	public LabeledRule(String label, BaseRule<D> rule){
-		this(label, rule.edit, rule.conditions);
-		
+	public LabeledEdit(String label, BaseEdit<D> edit){
+		super(edit.edit, edit.conditions);
+		this.label = label;
 	}
 
 	/**

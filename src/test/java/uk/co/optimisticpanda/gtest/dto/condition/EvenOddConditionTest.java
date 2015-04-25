@@ -38,7 +38,7 @@ public class EvenOddConditionTest extends TestCase {
     /**
      * @throws Exception
      */
-    @SuppressWarnings("boxing")
+    @SuppressWarnings({ "boxing", "null" })
 	public void testEven() throws Exception {
         assertThat(even.isValid(0, "a")).isTrue();
         assertThat(even.isValid(0, null)).isTrue();
@@ -57,7 +57,7 @@ public class EvenOddConditionTest extends TestCase {
     /**
      * @throws Exception
      */
-    @SuppressWarnings("boxing")
+    @SuppressWarnings({ "boxing", "null" })
 	public void testOdd() throws Exception {
         assertThat(odd.isValid(0, "a")).isFalse();
         assertThat(odd.isValid(0, null)).isFalse();

@@ -20,7 +20,7 @@ import static uk.co.optimisticpanda.gtest.dto.util.FunctionUtils.indexed;
 import java.util.ArrayList;
 import java.util.List;
 
-import uk.co.optimisticpanda.gtest.dto.rule.IRule;
+import uk.co.optimisticpanda.gtest.dto.rule.Edit;
 /**
  * <p>
  * This is a basic {@link IDataEditor} that takes a list of dtos and then calls
@@ -33,7 +33,7 @@ import uk.co.optimisticpanda.gtest.dto.rule.IRule;
  */
 public class SimpleDataEditor<D> implements IDataEditor<D> {
 
-	private final List<IRule<D>> rules;
+	private final List<Edit<D>> edits;
 
 	
 	public static <D> SimpleDataEditor<D> create(Class<D> rootClassToGenerate){
@@ -43,7 +43,7 @@ public class SimpleDataEditor<D> implements IDataEditor<D> {
 	 * Create a new SimpleDataEditor with no rules.
 	 */
 	public SimpleDataEditor() {
-		rules = new ArrayList<IRule<D>>();
+		edits = new ArrayList<Edit<D>>();
 	}
 
 	/**
@@ -53,8 +53,8 @@ public class SimpleDataEditor<D> implements IDataEditor<D> {
 	 *            the rule to add.
 	 * @return the current {@link SimpleDataEditor} to allow chaining.
 	 */
-	public SimpleDataEditor<D> addRule(IRule<D> rule) {
-		rules.add(rule);
+	public SimpleDataEditor<D> addEdit(Edit<D> rule) {
+		edits.add(rule);
 		return this;
 	}
 
@@ -77,7 +77,7 @@ public class SimpleDataEditor<D> implements IDataEditor<D> {
 	 *            the dto to apply the rule to.
 	 */
 	public D edit(int index, D dataItem) {
-		rules.stream()
+		edits.stream()
 				.filter(r -> r.isValid(index, dataItem))
 				.forEach(r-> r.edit(index, dataItem));
 		return dataItem;

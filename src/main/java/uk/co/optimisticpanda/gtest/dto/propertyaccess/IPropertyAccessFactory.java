@@ -17,7 +17,7 @@ package uk.co.optimisticpanda.gtest.dto.propertyaccess;
 
 import uk.co.optimisticpanda.gtest.dto.TestUtilsContext;
 import uk.co.optimisticpanda.gtest.dto.condition.ICondition;
-import uk.co.optimisticpanda.gtest.dto.edit.IEdit;
+import uk.co.optimisticpanda.gtest.dto.edit.Editor;
 import uk.co.optimisticpanda.gtest.dto.propertyaccess.ognl.OgnlPropertyAccessFactory;
 import uk.co.optimisticpanda.gtest.dto.propertyaccess.rflc.ReflectionPropertyAccessFactory;
 
@@ -25,7 +25,7 @@ import uk.co.optimisticpanda.gtest.dto.propertyaccess.rflc.ReflectionPropertyAcc
  * <p>
  * A Factory that creates new {@link IPropertyAccess} instances.<br>
  * These are used by objects that extend {@link PropertyAccessSupport} such as
- * the built in {@link IEdit}s and {@link ICondition}es for introspection purposes.
+ * the built in {@link Editor}s and {@link ICondition}es for introspection purposes.
  * </p>
  * <p>
  * The factory instance that will be used by the classes that extend

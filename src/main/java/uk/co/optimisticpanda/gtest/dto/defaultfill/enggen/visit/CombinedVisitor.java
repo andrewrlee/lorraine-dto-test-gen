@@ -29,43 +29,11 @@ public class CombinedVisitor<D> implements IEngineVisitor<D> {
 
 	List<IEngineVisitor<D>> visitors;
 
-	/**
-	 * Create a new combined visitor
-	 */
-	public CombinedVisitor() {
-		this.visitors = new ArrayList<IEngineVisitor<D>>();
-	}
-
-	/**
-	 * Create a new combined visitor
-	 * 
-	 * @param visitor
-	 */
-	public CombinedVisitor(IEngineVisitor<D> visitor) {
-		this();
-		this.visitors.add(visitor);
-	}
-
+	@SafeVarargs
 	public CombinedVisitor(IEngineVisitor<D>... visitor) {
-		this();
-		this.visitors.addAll(Arrays.<IEngineVisitor<D>>asList(visitor));
+		this.visitors  = new ArrayList<IEngineVisitor<D>>(Arrays.<IEngineVisitor<D>>asList(visitor));
 	}
 
-	/**
-	 * Adds a new visitor
-	 * 
-	 * @param visitor
-	 * @return this for chaining
-	 */
-	public CombinedVisitor<D> add(IEngineVisitor<D> visitor) {
-		visitors.add(visitor);
-		return this;
-	}
-
-	/**
-	 * @see uk.co.optimisticpanda.gtest.dto.defaultfill.enggen.visit.IEngineVisitor#visit(int,
-	 *      java.lang.Object)
-	 */
 	@Override
 	public void visit(int index, D dto) {
 		visitors.forEach(v -> v.visit(index, dto));

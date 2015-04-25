@@ -1,18 +1,3 @@
-/*
- * Copyright 2009 Andy Lee.
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at
- * 
- * http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
- */
 package uk.co.optimisticpanda.gtest.dto.edit;
 
 import java.util.ArrayList;
@@ -20,22 +5,22 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * This edit encapsulates the effects of a collection of edits
+ * An editor that encapsulates the effects of a collection of edits
  * 
  * @param <D>
  *            the type of the dto being edited.
  * @author Andy Lee
  */
-public class CombinedEdit<D> implements IEdit<D> {
+public class CombinedEditor<D> implements Editor<D> {
 
-	private final List<IEdit<D>> edits;
+	private final List<Editor<D>> edits;
 
 	/**
 	 * Creates an edit that does not perform any editing but can be expanded at
 	 * a later time.
 	 */
-	public CombinedEdit() {
-		this(new ArrayList<IEdit<D>>());
+	public CombinedEditor() {
+		this(new ArrayList<Editor<D>>());
 	}
 
 	/**
@@ -44,24 +29,24 @@ public class CombinedEdit<D> implements IEdit<D> {
 	 * @param edit
 	 *            the edit to wrap
 	 */
-	public CombinedEdit(IEdit<D> edit) {
-		edits = new ArrayList<IEdit<D>>();
+	public CombinedEditor(Editor<D> edit) {
+		edits = new ArrayList<Editor<D>>();
 		if (edit != null) {
 			edits.add(edit);
 		}
 	}
 
 	/**
-	 * Creates a CombinedEdit from a list of {@link IEdit}s.
+	 * Creates a CombinedEdit from a list of {@link Editor}s.
 	 * 
 	 * @param edits
 	 *            a list of edits to be combined
 	 */
-	public CombinedEdit(List<IEdit<D>> edits) {
+	public CombinedEditor(List<Editor<D>> edits) {
 		if (edits != null) {
 			this.edits = edits;
 		} else {
-			this.edits = new ArrayList<IEdit<D>>();
+			this.edits = new ArrayList<Editor<D>>();
 		}
 	}
 
@@ -70,7 +55,7 @@ public class CombinedEdit<D> implements IEdit<D> {
 	 *            the edit to be included
 	 * @return this to allow chaining
 	 */
-	public CombinedEdit<D> addEdit(IEdit<D> edit) {
+	public CombinedEditor<D> addEdit(Editor<D> edit) {
 		edits.add(edit);
 		return this;
 	}
@@ -85,7 +70,7 @@ public class CombinedEdit<D> implements IEdit<D> {
 	 * */
 	@Override
 	public void edit(int index, D dataItem) {
-		for (IEdit<D> edit : edits) {
+		for (Editor<D> edit : edits) {
 			edit.edit(index, dataItem);
 		}
 	}
@@ -96,7 +81,7 @@ public class CombinedEdit<D> implements IEdit<D> {
 	 */
 	@Override
 	public String toString() {
-		Iterator<IEdit<D>> iterator = edits.iterator();
+		Iterator<Editor<D>> iterator = edits.iterator();
 
 		StringBuilder builder = new StringBuilder(iterator.next().toString());
 		while (iterator.hasNext()) {

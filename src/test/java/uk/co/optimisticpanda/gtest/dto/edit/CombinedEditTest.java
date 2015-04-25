@@ -33,10 +33,10 @@ public class CombinedEditTest extends TestCase{
     private TestDto2 testDto1;
     private TestDto2 testDto2;
     private TestDto2 testDto3;
-    private IEdit<TestDto2> nameValueEdit;
-    private IEdit<TestDto2> descriptionValueEdit;
-    private CombinedEdit<TestDto2> multipleEdit;
-	private CombinedEdit<TestDto2> multipleEditWithList;
+    private Editor<TestDto2> nameValueEdit;
+    private Editor<TestDto2> descriptionValueEdit;
+    private CombinedEditor<TestDto2> multipleEdit;
+	private CombinedEditor<TestDto2> multipleEditWithList;
 
     @Override
     protected void setUp() throws Exception {
@@ -45,14 +45,14 @@ public class CombinedEditTest extends TestCase{
         testDto1 = new TestDto2("name1", "description1");
         testDto2 = new TestDto2("name2", "description2");
         testDto3 = new TestDto2("name3", "description3");
-        nameValueEdit = new SetValueEdit<TestDto2>("name", EDITED_TEXT);
-        descriptionValueEdit = new SetValueEdit<TestDto2>("description", EDITED_TEXT);
-        multipleEdit = new CombinedEdit<TestDto2>(nameValueEdit).addEdit(descriptionValueEdit); 
+        nameValueEdit = new SetValueEditor<TestDto2>("name", EDITED_TEXT);
+        descriptionValueEdit = new SetValueEditor<TestDto2>("description", EDITED_TEXT);
+        multipleEdit = new CombinedEditor<TestDto2>(nameValueEdit).addEdit(descriptionValueEdit); 
 
-        List<IEdit<TestDto2>> list = new ArrayList<IEdit<TestDto2>>();
+        List<Editor<TestDto2>> list = new ArrayList<Editor<TestDto2>>();
         list.add(nameValueEdit);
         list.add(descriptionValueEdit);
-        multipleEditWithList = new CombinedEdit<TestDto2>(list); 
+        multipleEditWithList = new CombinedEditor<TestDto2>(list); 
 
     }
 
@@ -60,7 +60,7 @@ public class CombinedEditTest extends TestCase{
      * 
      */
     public void testEmptyCombinedEdit(){
-    	CombinedEdit<TestDto2> edit = new CombinedEdit<TestDto2>();
+    	CombinedEditor<TestDto2> edit = new CombinedEditor<TestDto2>();
     	edit.edit(0, testDto1);
     	assertThat(testDto1.getName()).isEqualTo("name1");
     	assertThat(testDto1.getDescription()).isEqualTo("description1");
@@ -87,8 +87,8 @@ public class CombinedEditTest extends TestCase{
      * 
      */
     public void testAddEditWhenNullPassedIntoConstructor(){
-    	List<IEdit<TestDto2>> list =null;
-        CombinedEdit<TestDto2> combinedEdit = new CombinedEdit<TestDto2>(list);
+    	List<Editor<TestDto2>> list =null;
+        CombinedEditor<TestDto2> combinedEdit = new CombinedEditor<TestDto2>(list);
         combinedEdit.addEdit(nameValueEdit);
     }
     

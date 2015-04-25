@@ -17,7 +17,7 @@ package uk.co.optimisticpanda.gtest.dto;
 
 import java.util.List;
 
-import uk.co.optimisticpanda.gtest.dto.rule.IRule;
+import uk.co.optimisticpanda.gtest.dto.rule.Edit;
 import uk.co.optimisticpanda.gtest.dto.util.FunctionUtils;
 import uk.co.optimisticpanda.gtest.dto.util.MapOfLists;
 
@@ -29,7 +29,7 @@ import uk.co.optimisticpanda.gtest.dto.util.MapOfLists;
  */
 public class MappedClassDataEditor implements IDataEditor<Object> {
 
-	MapOfLists<Class<?>, IRule<? extends Object>> map = new MapOfLists<Class<?>, IRule<? extends Object>>();
+	MapOfLists<Class<?>, Edit<? extends Object>> map = new MapOfLists<Class<?>, Edit<? extends Object>>();
 
 	/**
 	 * Create a new MappedClassDataEditor
@@ -60,9 +60,9 @@ public class MappedClassDataEditor implements IDataEditor<Object> {
 	 */
 	@SuppressWarnings("unchecked")
 	public Object edit(int index, Object dataItem) {
-		List<IRule<? extends Object>> rules = getRules(dataItem);
+		List<Edit<? extends Object>> rules = getEdits(dataItem);
 		rules.stream()
-			.map(r -> ((IRule<Object>) r))
+			.map(r -> ((Edit<Object>) r))
 			.filter(r -> r.isValid(index, dataItem))
 			.forEach(r-> r.edit(index, dataItem));
 		return dataItem;
@@ -76,7 +76,7 @@ public class MappedClassDataEditor implements IDataEditor<Object> {
 	 *            the dto that the returned rules will be applicable for.
 	 * @return The applicable rules for this dto.
 	 * */
-	protected List<IRule<? extends Object>> getRules(Object dataItem) {
+	protected List<Edit<? extends Object>> getEdits(Object dataItem) {
 		return map.get(dataItem.getClass());
 	}
 
@@ -85,10 +85,10 @@ public class MappedClassDataEditor implements IDataEditor<Object> {
 	 *            the type of the data item this rule will be stored against.
 	 * @param clazz
 	 *            the clazz of the dto.
-	 * @param rule
+	 * @param edit
 	 *            the rule to store against this type of dto.
 	 */
-	public <D> void addRuleForClass(Class<D> clazz, IRule<D> rule) {
-		map.putA(clazz, rule);
+	public <D> void addEditForClass(Class<D> clazz, Edit<D> edit) {
+		map.putA(clazz, edit);
 	}
 }

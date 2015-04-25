@@ -15,10 +15,9 @@
  */
 package uk.co.optimisticpanda.gtest.dto.condition;
 
-import uk.co.optimisticpanda.gtest.dto.condition.IndexCondition;
-
-import junit.framework.TestCase;
 import static org.assertj.core.api.Assertions.assertThat;
+import static uk.co.optimisticpanda.gtest.dto.condition.Conditions.index;
+import junit.framework.TestCase;
 /**
  * @author Andy Lee
  *
@@ -34,11 +33,11 @@ public class IndexConditionTest extends TestCase {
     /**
      * @throws Exception
      */
-    @SuppressWarnings("boxing")
+    @SuppressWarnings({ "boxing", "null" })
 	public void testIndexIsNull() throws Exception {
         Integer nullIndex = null;
         try {
-            new IndexCondition(nullIndex);
+        	index().is(nullIndex);
             fail("Should not not throw an exception");
         } catch (NullPointerException e) {
             // do nothing
@@ -49,12 +48,12 @@ public class IndexConditionTest extends TestCase {
      * @throws Exception
      */
     public void testIndexPrimVsClass() throws Exception {
-        IndexCondition classIndexCondition = new IndexCondition(111);
+        ICondition classIndexCondition = index().is(111);
         assertThat(classIndexCondition.isValid(110, null)).isFalse();
         assertThat(classIndexCondition.isValid(111, null)).isTrue();
         assertThat(classIndexCondition.isValid(111, null)).isTrue();
 
-        IndexCondition primIndexCondition = new IndexCondition(111);
+        ICondition primIndexCondition = index().is(111);
         assertThat(primIndexCondition.isValid(110, null)).isFalse();
         assertThat(primIndexCondition.isValid(111, null)).isTrue();
         assertThat(primIndexCondition.isValid(111, null)).isTrue();
@@ -65,12 +64,12 @@ public class IndexConditionTest extends TestCase {
      * @throws Exception
      */
     public void testIndexPrimVsClassAboveCache() throws Exception {
-        IndexCondition classIndexCondition = new IndexCondition(567);
+        ICondition classIndexCondition = index().is(567);
         assertThat(classIndexCondition.isValid(566, null)).isFalse();
         assertThat(classIndexCondition.isValid(567, null)).isTrue();
         assertThat(classIndexCondition.isValid(567, null)).isTrue();
 
-        IndexCondition primIndexCondition = new IndexCondition(567);
+        ICondition primIndexCondition = index().is(567);
         assertThat(primIndexCondition.isValid(566, null)).isFalse();
         assertThat(primIndexCondition.isValid(567, null)).isTrue();
         assertThat(primIndexCondition.isValid(567, null)).isTrue();

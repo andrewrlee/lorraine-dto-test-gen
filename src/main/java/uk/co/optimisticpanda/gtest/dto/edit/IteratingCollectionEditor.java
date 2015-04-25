@@ -28,7 +28,7 @@ import uk.co.optimisticpanda.gtest.dto.propertyaccess.IPropertyAccessFactory;
  *            The type of the dtos to be edited.
  * @author Andy Lee
  */
-public class IteratingCollectionEdit<D> extends AbstractEdit<D> {
+public class IteratingCollectionEditor<D> extends AbstractEditor<D> {
 
 	private final CycleBehaviour cycleBehavior;
 	private final List<?> values;
@@ -54,7 +54,7 @@ public class IteratingCollectionEdit<D> extends AbstractEdit<D> {
 	}
 
 	/**
-	 * Create an {@link IEdit} that will, each time edit is called, set a
+	 * Create an {@link Editor} that will, each time edit is called, set a
 	 * specified property on the current dto to the next available value from a
 	 * list.
 	 * 
@@ -75,7 +75,7 @@ public class IteratingCollectionEdit<D> extends AbstractEdit<D> {
 	 *            The behaviour that this edit will exhibit after all values
 	 *            have been used.
 	 */
-	public IteratingCollectionEdit(Object context, List<?> values, CycleBehaviour cycleBehavior) {
+	public IteratingCollectionEditor(Object context, List<?> values, CycleBehaviour cycleBehavior) {
 		super(context);
 		this.values = values;
 		this.cycleBehavior = cycleBehavior;
@@ -83,7 +83,7 @@ public class IteratingCollectionEdit<D> extends AbstractEdit<D> {
 	}
 
 	/**
-	 * @see uk.co.optimisticpanda.gtest.dto.edit.IEdit#edit(int,
+	 * @see uk.co.optimisticpanda.gtest.dto.edit.Editor#edit(int,
 	 *      java.lang.Object)
 	 */
 	@Override

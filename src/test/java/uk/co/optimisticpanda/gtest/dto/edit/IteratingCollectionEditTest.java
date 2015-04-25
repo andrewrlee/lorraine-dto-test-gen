@@ -22,8 +22,8 @@ import java.util.List;
 import ognl.ExpressionSyntaxException;
 import ognl.OgnlException;
 import uk.co.optimisticpanda.gtest.dto.RuleUtils;
-import uk.co.optimisticpanda.gtest.dto.edit.IteratingCollectionEdit;
-import uk.co.optimisticpanda.gtest.dto.edit.IteratingCollectionEdit.CycleBehaviour;
+import uk.co.optimisticpanda.gtest.dto.edit.IteratingCollectionEditor;
+import uk.co.optimisticpanda.gtest.dto.edit.IteratingCollectionEditor.CycleBehaviour;
 import uk.co.optimisticpanda.gtest.dto.test.utils.TestDto1;
 
 import junit.framework.TestCase;
@@ -52,14 +52,14 @@ public class IteratingCollectionEditTest extends TestCase {
      */
 	public void testExceptionHandling() {
 		try {
-			new IteratingCollectionEdit<TestDto1>("", Collections.EMPTY_LIST, CycleBehaviour.CYCLE);
+			new IteratingCollectionEditor<TestDto1>("", Collections.EMPTY_LIST, CycleBehaviour.CYCLE);
 			fail("Should fail");
 		} catch (RuntimeException e) {
 			assertThat(e.getCause().getClass()).isEqualTo(ExpressionSyntaxException.class);
 		}
 
 		try {
-			IteratingCollectionEdit<TestDto1> empty = new IteratingCollectionEdit<TestDto1>("name", Collections.EMPTY_LIST,
+			IteratingCollectionEditor<TestDto1> empty = new IteratingCollectionEditor<TestDto1>("name", Collections.EMPTY_LIST,
 					CycleBehaviour.THROW_EXCEPTION);
 			empty.edit(-1, list.get(0));
 			fail("Should fail");
@@ -68,12 +68,12 @@ public class IteratingCollectionEditTest extends TestCase {
 		}
 
 		// Same as above but CycleBehavior says don't fail.
-		IteratingCollectionEdit<TestDto1> empty = new IteratingCollectionEdit<TestDto1>("name", Collections.EMPTY_LIST,
+		IteratingCollectionEditor<TestDto1> empty = new IteratingCollectionEditor<TestDto1>("name", Collections.EMPTY_LIST,
 				CycleBehaviour.LEAVE_UNTOUCHED);
 		empty.edit(-1, list.get(0));
 
 		try {
-			IteratingCollectionEdit<TestDto1> nullItemInCollection = new IteratingCollectionEdit<TestDto1>("name", Arrays.asList("NEW VALUE"),
+			IteratingCollectionEditor<TestDto1> nullItemInCollection = new IteratingCollectionEditor<TestDto1>("name", Arrays.asList("NEW VALUE"),
 					CycleBehaviour.THROW_EXCEPTION);
 			nullItemInCollection.edit(-1, null);
 			fail("Should fail");
@@ -88,7 +88,7 @@ public class IteratingCollectionEditTest extends TestCase {
 	public void testBasicExample() {
 		List<String> values = Arrays.asList("newValue1", "newValue2", "newValue3");
 		RuleUtils utils = new RuleUtils();
-		IEdit<TestDto1> edit = utils.iterate("name", values, CycleBehaviour.CYCLE);
+		Editor<TestDto1> edit = utils.iterate("name", values, CycleBehaviour.CYCLE);
 		checkFirst3Calls(edit, "newValue1", "newValue2", "newValue3");
 		checkSecond3Calls(edit, "newValue1", "newValue2", "newValue3");
 	}
@@ -98,7 +98,7 @@ public class IteratingCollectionEditTest extends TestCase {
      */
 	public void testCycleBehaviorLeaveUntouched() {
 		List<String> values = Arrays.asList("newValue1", "newValue2");
-		IteratingCollectionEdit<TestDto1> edit = new IteratingCollectionEdit<TestDto1>("name", values, CycleBehaviour.LEAVE_UNTOUCHED);
+		IteratingCollectionEditor<TestDto1> edit = new IteratingCollectionEditor<TestDto1>("name", values, CycleBehaviour.LEAVE_UNTOUCHED);
 		checkFirst3Calls(edit, "newValue1", "newValue2", "name 3");
 		checkSecond3Calls(edit, "name 4", "name 5", "name 6");
 	}
@@ -108,7 +108,7 @@ public class IteratingCollectionEditTest extends TestCase {
      */
 	public void testCycleBehaviorNullFill() {
 		List<String> values = Arrays.asList("newValue1", "newValue2");
-		IteratingCollectionEdit<TestDto1> edit = new IteratingCollectionEdit<TestDto1>("name", values, CycleBehaviour.NULL_FILL);
+		IteratingCollectionEditor<TestDto1> edit = new IteratingCollectionEditor<TestDto1>("name", values, CycleBehaviour.NULL_FILL);
 		checkFirst3Calls(edit, "newValue1", "newValue2", null);
 		checkSecond3Calls(edit, null, null, null);
 	}
@@ -118,7 +118,7 @@ public class IteratingCollectionEditTest extends TestCase {
      */
 	public void testCycleBehaviorThrowException() {
 		List<String> values = Arrays.asList("newValue1", "newValue2");
-		IteratingCollectionEdit<TestDto1> edit = new IteratingCollectionEdit<TestDto1>("name", values, CycleBehaviour.THROW_EXCEPTION);
+		IteratingCollectionEditor<TestDto1> edit = new IteratingCollectionEditor<TestDto1>("name", values, CycleBehaviour.THROW_EXCEPTION);
 		try {
 			checkFirst3Calls(edit, "newValue1", "newValue2", "Will throw an exception so this value not used");
 			fail("Should fail");
@@ -127,7 +127,7 @@ public class IteratingCollectionEditTest extends TestCase {
 		}
 	}
 
-	private void checkFirst3Calls(IEdit<TestDto1> edit, String expected1, String expected2, String expected3) {
+	private void checkFirst3Calls(Editor<TestDto1> edit, String expected1, String expected2, String expected3) {
 		edit.edit(-1, list.get(0));
 		assertThat(list.get(0).getName()).isEqualTo(expected1);
 		edit.edit(-1, list.get(1));
@@ -136,7 +136,7 @@ public class IteratingCollectionEditTest extends TestCase {
 		assertThat(list.get(2).getName()).isEqualTo(expected3);
 	}
 
-	private void checkSecond3Calls(IEdit<TestDto1> edit, String expected1, String expected2, String expected3) {
+	private void checkSecond3Calls(Editor<TestDto1> edit, String expected1, String expected2, String expected3) {
 		edit.edit(-1, list.get(3));
 		assertThat(list.get(3).getName()).isEqualTo(expected1);
 		edit.edit(-1, list.get(4));

@@ -15,25 +15,26 @@
  */
 package uk.co.optimisticpanda.gtest.dto.edit;
 
+import uk.co.optimisticpanda.gtest.dto.propertyaccess.IPropertyAccessFactory;
+import uk.co.optimisticpanda.gtest.dto.propertyaccess.PropertyAccessSupport;
+
 /**
- * A change to occur to a dto. This is seperate from whether the change should
- * take place.
+ * This is a base class that {@link Editor}s can extend to provide property
+ * access support.
  * 
- * @author Andy Lee
  * @param <D>
- *            The type of the dto being edited.
- * 
+ *            The type of object that will be edited.
+ * @author Andy Lee
  */
-public interface IEdit<D> {
+public abstract class AbstractEditor<D> extends PropertyAccessSupport implements Editor<D> {
 
 	/**
-	 * Apply the effects of the edit.
-	 * 
-	 * @param index
-	 *            The index of the item to be edited
-	 * @param dataItem
-	 *            The dto to be edited
+	 * @param context
+	 *            The context to be passed to the
+	 *            {@link IPropertyAccessFactory#createPropertyAccess(Object)}
 	 */
-	public void edit(int index, D dataItem);
+	public AbstractEditor(Object context) {
+		super(context);
+	}
 
 }

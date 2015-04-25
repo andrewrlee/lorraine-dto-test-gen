@@ -17,9 +17,8 @@ package uk.co.optimisticpanda.gtest.dto;
 
 import java.util.List;
 
-import uk.co.optimisticpanda.gtest.dto.condition.EvenOddCondition;
-import uk.co.optimisticpanda.gtest.dto.edit.IncrementingNameEdit;
-import uk.co.optimisticpanda.gtest.dto.rule.IRule;
+import uk.co.optimisticpanda.gtest.dto.edit.IncrementingNameEditor;
+import uk.co.optimisticpanda.gtest.dto.rule.Edit;
 
 /**
  * An editor that applies one or more rules to a list of dtos.
@@ -42,10 +41,10 @@ public interface IDataEditor<D> {
 	 * Apply one or more rules with a user specified index.
 	 * 
 	 * @param index
-	 *            This is used by some {@link IRule }s to distinguish between
+	 *            This is used by some {@link Edit }s to distinguish between
 	 *            different dtos in the same list. For instance, rules which
 	 *            contain {@link EvenOddCondition#ODD} will fire if the index is
-	 *            odd and {@link IncrementingNameEdit} will append the index to
+	 *            odd and {@link IncrementingNameEditor} will append the index to
 	 *            the end of a predefined base string.
 	 * @param dataItem
 	 *            the dto to apply the rule(s) to.

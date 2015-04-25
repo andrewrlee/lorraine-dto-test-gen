@@ -15,25 +15,25 @@
  */
 package uk.co.optimisticpanda.gtest.dto.rulebuilder.impl;
 
-import uk.co.optimisticpanda.gtest.dto.edit.CombinedEdit;
-import uk.co.optimisticpanda.gtest.dto.edit.IEdit;
+import uk.co.optimisticpanda.gtest.dto.edit.CombinedEditor;
+import uk.co.optimisticpanda.gtest.dto.edit.Editor;
 
 class EditBuilder<D> {
 
-	private final CombinedEdit<D> edit;
+	private final CombinedEditor<D> edit;
 
-	public EditBuilder(IEdit<D> edit ) {
+	public EditBuilder(Editor<D> edit ) {
 		if(edit == null){
 			throw new IllegalArgumentException("Edit must not be null");
 		}
-		this.edit = new CombinedEdit<D>(edit);
+		this.edit = new CombinedEditor<D>(edit);
 	}
 
-	public void and(IEdit<D> andEdit){
+	public void and(Editor<D> andEdit){
 		this.edit.addEdit(andEdit);
 	}
 
-	public IEdit<D> build(){
+	public Editor<D> build(){
 		return this.edit;
 	}
 }

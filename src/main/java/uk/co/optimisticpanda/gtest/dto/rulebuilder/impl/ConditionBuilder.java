@@ -17,14 +17,8 @@ package uk.co.optimisticpanda.gtest.dto.rulebuilder.impl;
 
 import static uk.co.optimisticpanda.gtest.dto.condition.CombinedCondition.BoolOp.AND;
 import static uk.co.optimisticpanda.gtest.dto.condition.CombinedCondition.BoolOp.OR;
-
-import java.util.Objects;
-
 import uk.co.optimisticpanda.gtest.dto.condition.CombinedCondition;
 import uk.co.optimisticpanda.gtest.dto.condition.ICondition;
-import uk.co.optimisticpanda.gtest.dto.condition.NotCondition;
-import uk.co.optimisticpanda.gtest.dto.rulebuilder.fluent.IWhereClauseBuilder;
-
 
 class ConditionBuilder<D> {
 	private ICondition condition;
@@ -36,40 +30,15 @@ class ConditionBuilder<D> {
 		this.condition = condition;
 	}
 
-	public void and(ICondition andCondition) {
-		this.condition = new CombinedCondition(AND, this.condition, andCondition);
+	public void and(ICondition condition) {
+		this.condition = new CombinedCondition(AND, this.condition, condition);
 	}
 
-	public void or(ICondition orCondition) {
-		this.condition = new CombinedCondition(OR, this.condition, orCondition);
-	}
-
-	public void andNot(ICondition andNotCondition) {
-		this.condition = new CombinedCondition(AND, this.condition, new NotCondition(andNotCondition));
-	}
-
-	public void orNot(ICondition orCondition) {
-		this.condition = new CombinedCondition(OR, this.condition, new NotCondition(orCondition));
-	}
-
-	public void and(IWhereClauseBuilder<D> builder) {
-		this.and(builder.getCondition());
-	}
-
-	public void or(IWhereClauseBuilder<D> builder) {
-		this.or(builder.getCondition());
-	}
-
-	public void andNot(IWhereClauseBuilder<D> builder) {
-		this.andNot(builder.getCondition());
-	}
-
-	public void orNot(IWhereClauseBuilder<D> builder) {
-		this.orNot(builder.getCondition());
+	public void or(ICondition condition) {
+		this.condition = new CombinedCondition(OR, this.condition, condition);
 	}
 
 	public ICondition build() {
 		return condition;
 	}
-
 }

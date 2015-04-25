@@ -17,7 +17,7 @@ package uk.co.optimisticpanda.gtest.dto.edit;
 
 import java.util.Date;
 
-import uk.co.optimisticpanda.gtest.dto.edit.SetValueEdit;
+import uk.co.optimisticpanda.gtest.dto.edit.SetValueEditor;
 import uk.co.optimisticpanda.gtest.dto.test.utils.DetailedTestDto;
 
 
@@ -44,7 +44,7 @@ public class SetValueEditTest extends TestCase {
      * 
      */
     public void testPublicFieldWithGetterEquals(){
-        SetValueEdit<DetailedTestDto> valueEdit = new SetValueEdit<DetailedTestDto>("name", "newValue");
+        SetValueEditor<DetailedTestDto> valueEdit = new SetValueEditor<DetailedTestDto>("name", "newValue");
         valueEdit.edit(1, testDto1);
         assertThat(testDto1.getName()).isEqualTo("newValue");
 

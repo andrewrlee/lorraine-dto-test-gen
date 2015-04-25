@@ -24,9 +24,9 @@ import java.util.List;
  * @param <D>
  *            The type of the dto that is applicable for the rule
  */
-public class CombinedRule<D> implements IRule<D> {
+public class CombinedEdit<D> implements Edit<D> {
 
-	private List<IRule<D>> list = new ArrayList<IRule<D>>();
+	private List<Edit<D>> list = new ArrayList<Edit<D>>();
 
 	/**
 	 * Add an edit rule
@@ -36,13 +36,13 @@ public class CombinedRule<D> implements IRule<D> {
 	 *            this case being one that can be used to edit this type of dto.
 	 * @return this to allow chaining
 	 */
-	public CombinedRule<D> addEditRule(IRule<D> editRule) {
+	public CombinedEdit<D> addEdit(Edit<D> editRule) {
 		list.add(editRule);
 		return this;
 	}
 
 	/**
-	 * @see uk.co.optimisticpanda.gtest.dto.rule.IRule#edit(int,
+	 * @see uk.co.optimisticpanda.gtest.dto.rule.Edit#edit(int,
 	 *      java.lang.Object)
 	 */
 	@Override

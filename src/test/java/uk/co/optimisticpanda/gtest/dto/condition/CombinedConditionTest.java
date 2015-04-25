@@ -17,12 +17,9 @@ package uk.co.optimisticpanda.gtest.dto.condition;
 import static org.assertj.core.api.Assertions.assertThat;
 import static uk.co.optimisticpanda.gtest.dto.condition.CombinedCondition.BoolOp.AND;
 import static uk.co.optimisticpanda.gtest.dto.condition.CombinedCondition.BoolOp.OR;
+import junit.framework.TestCase;
 
 import org.assertj.core.api.AbstractBooleanAssert;
-import org.assertj.core.api.BooleanAssert;
-
-import junit.framework.TestCase;
-import uk.co.optimisticpanda.gtest.dto.condition.CombinedCondition.BoolOp;
 
 /**
  * @author Andy Lee
@@ -36,8 +33,8 @@ public class CombinedConditionTest extends TestCase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        trueCondition = AlwaysCondition.INSTANCE;
-        falseCondition = new NotCondition(AlwaysCondition.INSTANCE);
+        trueCondition = AlwaysCondition.ALWAYS;
+        falseCondition = new NotCondition(AlwaysCondition.ALWAYS);
     }
 
     /**

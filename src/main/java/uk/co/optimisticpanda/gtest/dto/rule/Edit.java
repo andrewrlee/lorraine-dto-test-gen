@@ -19,11 +19,9 @@ package uk.co.optimisticpanda.gtest.dto.rule;
  * An interface that encapsulates what change should occur and when it
  * under what conditions the change should occur.
  * 
- * @param <D>
- *            the type of the dto that this rule is applicable for.
  * @author Andy Lee
  */
-public interface IRule<D> {
+public interface Edit<D> {
     
     /**
      * The change that should occur to the passed in data item.

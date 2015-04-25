@@ -14,27 +14,23 @@
  * the License.
  */
 package uk.co.optimisticpanda.gtest.dto;
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.IntStream.range;
+import static uk.co.optimisticpanda.gtest.dto.condition.Conditions.index;
+import static uk.co.optimisticpanda.gtest.dto.condition.Conditions.not;
+import static uk.co.optimisticpanda.gtest.dto.condition.Conditions.valueOf;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import junit.framework.TestCase;
-
-import uk.co.optimisticpanda.gtest.dto.IDataEditor;
-import uk.co.optimisticpanda.gtest.dto.RuleUtils;
-import uk.co.optimisticpanda.gtest.dto.SimpleDataEditor;
-import uk.co.optimisticpanda.gtest.dto.TestUtilsContext;
-import uk.co.optimisticpanda.gtest.dto.rule.IRule;
-import uk.co.optimisticpanda.gtest.dto.rulebuilder.impl.RuleFactory;
-
+import uk.co.optimisticpanda.gtest.dto.rule.Edit;
+import uk.co.optimisticpanda.gtest.dto.rulebuilder.impl.Edits;
 /**
  * @author Andy Lee A class showing basic usage
  */
 public class ExampleTest extends TestCase {
 
-	/**
-	 */
 	public void testExample() {
 
 		// Configure the TestUtilsContext to use a PropertySupportFactory
@@ -45,52 +41,45 @@ public class ExampleTest extends TestCase {
 		RuleUtils utils = new RuleUtils();
 
 		// Rules are created from a rule factory and need an edit to start.
-		RuleFactory.startRule(utils.increment("name", "sample-"));
+		Edits.doThis(utils.increment("name", "sample-"));
 
 		// Each subsequent chained method call return interfaces that only
 		// allows the writer to call methods in the correct order.
-		RuleFactory.startRule(utils.increment("name", "sample-")) // 
-				.and(utils.set("date", new Date(System.currentTimeMillis())));
+		Edits.doThis(utils.increment("name", "sample-")) // 
+				.andThen(utils.set("date", new Date(System.currentTimeMillis())));
 
 		// --------------------------------------------------------------------
-		// Define some rules.
-		IRule<SampleDto> rule1 = RuleFactory.startRule(utils.<SampleDto>increment("name", "sample-")) //
-				.and(utils.set("date", new Date(System.currentTimeMillis()))) //
-				.where(utils.index(3)) //
-				.orNot(utils.odd()) //
+		// Define some edits.
+		Edit<SampleDto> edit1 = Edits.doThis(utils.<SampleDto>increment("name", "sample-")) //
+				.andThen(utils.set("date", new Date(System.currentTimeMillis()))) //
+				.where(index().is(3)) //
+				.or(not(index().isOdd())) //
 				.build();
 
-		IRule<SampleDto> rule2 = RuleFactory.startRule(utils.<SampleDto>set("name", "CHANGED")) //
-				.where(utils.eq("name", "sample-3")) //
+		Edit<SampleDto> edit2 = Edits.doThis(utils.<SampleDto>set("name", "CHANGED")) //
+				.where(valueOf("name").is("sample-3")) //
 				.build();
 
-		System.out.println("RULE1:" + rule1);
-		System.out.println("RULE2:" + rule2);
+		System.out.println("Edit1:\t" + edit1);
+		System.out.println("Edit2:\t" + edit2);
 
 		// Add the rules to a data editor
 		IDataEditor<SampleDto> editor = new SimpleDataEditor<SampleDto>() //
-				.addRule(rule1) //
-				.addRule(rule2); //
+				.addEdit(edit1) //
+				.addEdit(edit2); //
 
 		// Perform the actual editing
-		List<SampleDto> list = new ArrayList<SampleDto>();
-		for (int i = 0; i < 5; i++) {
-			SampleDto dto = new SampleDto();
-			editor.edit(i, dto);
-			list.add(dto);
-		}
+		List<SampleDto> dtos = range(0, 5)
+			.mapToObj(i -> editor.edit(i, new SampleDto()))
+			.collect(toList());
 
 		// See the output
-		list.forEach(System.out::println);
+		dtos.forEach(System.out::println);
 	}
 
 	static class SampleDto {
 		private String name;
 		private Date date;
-
-		public SampleDto() {
-			// empty block
-		}
 
 		@Override
 		public String toString() {

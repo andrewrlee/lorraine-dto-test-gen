@@ -15,7 +15,7 @@
  */
 package uk.co.optimisticpanda.gtest.dto.rulebuilder.fluent;
 
-import uk.co.optimisticpanda.gtest.dto.rule.IRule;
+import uk.co.optimisticpanda.gtest.dto.rule.Edit;
 
 /**
  * An interface used by the fluent builder.
@@ -31,7 +31,7 @@ public interface IAddWhereOrEndBuilder<D> extends IAddWhereBuilder<D> {
 	 * 
 	 * @return the created rule
 	 */
-	IRule<D> build();
+	Edit<D> build();
 
 	/**
 	 * set the label. multiple calls overwrites the currently set label.

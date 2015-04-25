@@ -21,10 +21,10 @@ import java.util.Arrays;
 
 import junit.framework.TestCase;
 import uk.co.optimisticpanda.gtest.dto.condition.AlwaysCondition;
-import uk.co.optimisticpanda.gtest.dto.edit.IEdit;
-import uk.co.optimisticpanda.gtest.dto.edit.SetValueEdit;
-import uk.co.optimisticpanda.gtest.dto.rule.BaseRule;
-import uk.co.optimisticpanda.gtest.dto.rule.IRule;
+import uk.co.optimisticpanda.gtest.dto.edit.Editor;
+import uk.co.optimisticpanda.gtest.dto.edit.SetValueEditor;
+import uk.co.optimisticpanda.gtest.dto.rule.BaseEdit;
+import uk.co.optimisticpanda.gtest.dto.rule.Edit;
 import uk.co.optimisticpanda.gtest.dto.test.utils.TestDto1;
 import uk.co.optimisticpanda.gtest.dto.test.utils.TestDto2;
 
@@ -53,15 +53,15 @@ public class MappedClassDataEditorTest extends TestCase{
      * 
      */
     public void testMappedClassDataEditor(){
-        IEdit<TestDto1> editForDto1 = new SetValueEdit<TestDto1>("name",CHANGE_FOR_DTO1);
-        IEdit<TestDto2> editForDto2 = new SetValueEdit<TestDto2>("name",CHANGE_FOR_DTO2);
+        Editor<TestDto1> editForDto1 = new SetValueEditor<TestDto1>("name",CHANGE_FOR_DTO1);
+        Editor<TestDto2> editForDto2 = new SetValueEditor<TestDto2>("name",CHANGE_FOR_DTO2);
         
-        IRule<TestDto1> rule1 = new BaseRule<TestDto1>(editForDto1, AlwaysCondition.INSTANCE);
-        IRule<TestDto2> rule2 = new BaseRule<TestDto2>(editForDto2, AlwaysCondition.INSTANCE);
+        Edit<TestDto1> rule1 = new BaseEdit<TestDto1>(editForDto1, AlwaysCondition.ALWAYS);
+        Edit<TestDto2> rule2 = new BaseEdit<TestDto2>(editForDto2, AlwaysCondition.ALWAYS);
 
         MappedClassDataEditor editor = new MappedClassDataEditor();
-        editor.addRuleForClass(TestDto1.class ,rule1);
-        editor.addRuleForClass(TestDto2.class ,rule2);
+        editor.addEditForClass(TestDto1.class, rule1);
+        editor.addEditForClass(TestDto2.class, rule2);
         
         TestDto1 dto1 = new TestDto1("name");
         TestDto2 dto2 = new TestDto2("name", "description");

@@ -51,7 +51,7 @@ public class TestUtilsContextTest extends TestCase {
 	public void testUseOgnl() throws Exception {
 		TestUtilsContext.clearContext();
 		TestUtilsContext.useOgnl();
-		assertThat(TestUtilsContext.getOgnlContext()).isNotNull();
+		assertThat((Object) TestUtilsContext.getOgnlContext()).isNotNull();
 		assertThat(TestUtilsContext.getPropertyAccessFactory()).isNotNull();
 		assertThat(TestUtilsContext.getPropertyAccessFactory() instanceof OgnlPropertyAccessFactory).isTrue();
 	}
@@ -62,7 +62,7 @@ public class TestUtilsContextTest extends TestCase {
 	public void testUseReflection() throws Exception {
 		TestUtilsContext.clearContext();
 		TestUtilsContext.useReflection();
-		assertThat(TestUtilsContext.getOgnlContext()).isNull();
+		assertThat((Object)TestUtilsContext.getOgnlContext()).isNull();
 		assertThat(TestUtilsContext.getPropertyAccessFactory()).isNotNull();
 		assertThat(TestUtilsContext.getPropertyAccessFactory() instanceof ReflectionPropertyAccessFactory).isTrue();
 	}

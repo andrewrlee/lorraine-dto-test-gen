@@ -15,15 +15,15 @@
  */
 package uk.co.optimisticpanda.gtest.dto.rulebuilder.fluent;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import junit.framework.TestCase;
 import uk.co.optimisticpanda.gtest.dto.TestUtilsContext;
 import uk.co.optimisticpanda.gtest.dto.condition.AlwaysCondition;
-import uk.co.optimisticpanda.gtest.dto.edit.IncrementingNameEdit;
-import uk.co.optimisticpanda.gtest.dto.edit.SetValueEdit;
-import uk.co.optimisticpanda.gtest.dto.rule.IRule;
-import uk.co.optimisticpanda.gtest.dto.rulebuilder.impl.RuleFactory;
+import uk.co.optimisticpanda.gtest.dto.edit.IncrementingNameEditor;
+import uk.co.optimisticpanda.gtest.dto.edit.SetValueEditor;
+import uk.co.optimisticpanda.gtest.dto.rule.Edit;
+import uk.co.optimisticpanda.gtest.dto.rulebuilder.impl.Edits;
 import uk.co.optimisticpanda.gtest.dto.test.utils.TestDto2;
-import junit.framework.TestCase;
-import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * @author Andy Lee
@@ -41,10 +41,10 @@ public class FluentBuilderTest extends TestCase {
 	 * @throws Exception
 	 */
 	public void testFlexibleBuilder() throws Exception {
-		IRule<TestDto2> editRule = RuleFactory.startRule(
-						new IncrementingNameEdit<TestDto2>("name", "nameValue-"))
-				.and(   new SetValueEdit<TestDto2>("description", "unset value"))
-				.where( AlwaysCondition.INSTANCE)
+		Edit<TestDto2> editRule = Edits.doThis(
+						new IncrementingNameEditor<TestDto2>("name", "nameValue-"))
+				.andThen(   new SetValueEditor<TestDto2>("description", "unset value"))
+				.where( AlwaysCondition.ALWAYS)
 				.build();
 		TestDto2 testDto = new TestDto2();
 		editRule.edit(0, testDto);

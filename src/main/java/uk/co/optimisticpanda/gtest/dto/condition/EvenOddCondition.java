@@ -20,7 +20,7 @@ package uk.co.optimisticpanda.gtest.dto.condition;
  * 
  * @author Andy Lee
  */
-public enum EvenOddCondition implements ICondition {
+enum EvenOddCondition implements ICondition {
 	/**
 	 * This matches on indexes that are even
 	 */

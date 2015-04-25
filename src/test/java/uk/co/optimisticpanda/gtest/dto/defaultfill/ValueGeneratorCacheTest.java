@@ -22,11 +22,10 @@ import java.lang.reflect.Field;
 import java.util.function.Supplier;
 
 import junit.framework.TestCase;
-import uk.co.optimisticpanda.gtest.dto.defaultfill.defaultgens.DefaultValueGeneratorCache;
 import uk.co.optimisticpanda.gtest.dto.test.utils.DetailedTestDtoComposite;
 import uk.co.optimisticpanda.gtest.dto.test.utils.TestDto1;
 import uk.co.optimisticpanda.gtest.dto.test.utils.TestDto2;
-import uk.co.optimisticpanda.gtest.dto.util.Suppliers;
+import uk.co.optimisticpanda.gtest.dto.util.FunctionUtils.Suppliers;
 
 /**
  * @author Andy Lee
@@ -34,7 +33,7 @@ import uk.co.optimisticpanda.gtest.dto.util.Suppliers;
  */
 public class ValueGeneratorCacheTest extends TestCase {
 
-	private ValueGeneratorCache valueGeneratorCache;
+	private ValueGenerator valueGeneratorCache;
 	private Supplier<Object> generator1;
 	private Supplier<Object> generator2;
 	private Supplier<Object> generator3;
@@ -43,7 +42,7 @@ public class ValueGeneratorCacheTest extends TestCase {
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
-		valueGeneratorCache = new DefaultValueGeneratorCache();
+		valueGeneratorCache = new DefaultValueGenerator();
 
 		generator1 = Suppliers.of("1");
 		generator2 = Suppliers.of("2");
@@ -90,7 +89,7 @@ public class ValueGeneratorCacheTest extends TestCase {
 	 */
 	public void testClearCache() throws Exception {
 		valueGeneratorCache.clear();
-		ValueGeneratorCacheImpl cache = (ValueGeneratorCacheImpl) valueGeneratorCache;
+		ValueGenerator cache = (ValueGenerator) valueGeneratorCache;
 		assertThat(cache.classAndPropertyNameAndTypeCache.isEmpty()).isTrue();
 		assertThat(cache.propertyDepthCache.isEmpty()).isTrue();
 		assertThat(cache.propertyNameAndTypeCache.isEmpty()).isTrue();

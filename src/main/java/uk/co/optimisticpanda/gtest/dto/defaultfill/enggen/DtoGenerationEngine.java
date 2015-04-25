@@ -1,18 +1,3 @@
-/*
- * Copyright 2009 Andy Lee.
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at
- * 
- * http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
- */
 package uk.co.optimisticpanda.gtest.dto.defaultfill.enggen;
 
 import java.util.List;
@@ -34,7 +19,6 @@ import uk.co.optimisticpanda.gtest.dto.defaultfill.insgen.InstanceGenerator;
 public class DtoGenerationEngine<D> {
 
 	private final InstanceGenerator<D> generator;
-	private final Class<D> clazz;
 
 	/**
 	 * Create a new Dto Generation Engine.
@@ -42,8 +26,7 @@ public class DtoGenerationEngine<D> {
 	 * @param clazz
 	 * @param generator
 	 */
-	public DtoGenerationEngine(Class<D> clazz, InstanceGenerator<D> generator) {
-		this.clazz = clazz;
+	public DtoGenerationEngine(InstanceGenerator<D> generator) {
 		this.generator = generator;
 	}
 
@@ -76,9 +59,8 @@ public class DtoGenerationEngine<D> {
 	 * @return a list of generated dtos
 	 */
 	public List<D> collectAndVisit(IEngineVisitor<D> visitor, int numberToCreate) {
-		ListVisitor<D> listVisitor = new ListVisitor<D>(clazz);
-		CombinedVisitor<D> combinedVisitor = new CombinedVisitor<D>(visitor)//
-				.add(listVisitor); //
+		ListVisitor<D> listVisitor = new ListVisitor<D>();
+		CombinedVisitor<D> combinedVisitor = new CombinedVisitor<D>(visitor, listVisitor);
 		generate(combinedVisitor, numberToCreate);
 		return listVisitor.getDtos();
 	}

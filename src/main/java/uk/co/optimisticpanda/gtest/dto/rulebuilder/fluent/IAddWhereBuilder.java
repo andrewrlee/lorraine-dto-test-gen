@@ -36,46 +36,6 @@ public interface IAddWhereBuilder<D> {
 	 * @param condition
 	 * @return this to allow chaining
 	 */
-	IAddWhereOrEndBuilder<D> andNot(ICondition condition);
-
-	/**
-	 * @param condition
-	 * @return this to allow chaining
-	 */
 	IAddWhereOrEndBuilder<D> or(ICondition condition);
-
-	/**
-	 * @param condition
-	 * @return this to allow chaining
-	 */
-	IAddWhereOrEndBuilder<D> orNot(ICondition condition);
-
-	/**
-	 * @param builder
-	 *            an IWhereClauseBuilder that has been built up separately
-	 * @return this to allow chaining
-	 */
-	IAddWhereOrEndBuilder<D> and(IWhereClauseBuilder<D> builder);
-
-	/**
-	 * @param builder
-	 *            an IWhereClauseBuilder that has been built up separately
-	 * @return this to allow chaining
-	 */
-	IAddWhereOrEndBuilder<D> andNot(IWhereClauseBuilder<D> builder);
-
-	/**
-	 * @param builder
-	 *            an IWhereClauseBuilder that has been built up separately
-	 * @return this to allow chaining
-	 */
-	IAddWhereOrEndBuilder<D> or(IWhereClauseBuilder<D> builder);
-
-	/**
-	 * @param builder
-	 *            an IWhereClauseBuilder that has been built up separately
-	 * @return this to allow chaining
-	 */
-	IAddWhereOrEndBuilder<D> orNot(IWhereClauseBuilder<D> builder);
 
 }

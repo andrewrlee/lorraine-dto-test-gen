@@ -16,31 +16,33 @@
 package uk.co.optimisticpanda.gtest.dto.rulebuilder.impl;
 
 import uk.co.optimisticpanda.gtest.dto.condition.ICondition;
-import uk.co.optimisticpanda.gtest.dto.edit.IEdit;
-import uk.co.optimisticpanda.gtest.dto.rule.BaseRule;
-import uk.co.optimisticpanda.gtest.dto.rule.IRule;
-import uk.co.optimisticpanda.gtest.dto.rule.LabeledRule;
+import uk.co.optimisticpanda.gtest.dto.edit.Editor;
+import uk.co.optimisticpanda.gtest.dto.rule.BaseEdit;
+import uk.co.optimisticpanda.gtest.dto.rule.Edit;
+import uk.co.optimisticpanda.gtest.dto.rule.LabeledEdit;
 import uk.co.optimisticpanda.gtest.dto.rulebuilder.fluent.IAddEditOrWhereBuilder;
 import uk.co.optimisticpanda.gtest.dto.rulebuilder.fluent.IAddWhereBuilder;
 import uk.co.optimisticpanda.gtest.dto.rulebuilder.fluent.IAddWhereOrEndBuilder;
-import uk.co.optimisticpanda.gtest.dto.rulebuilder.fluent.IWhereClauseBuilder;
 
-
-class RuleBuilderImpl<D> implements IAddEditOrWhereBuilder<D>,
+public class Edits<D> implements IAddEditOrWhereBuilder<D>,
 		IAddWhereOrEndBuilder<D> {
 
 	private EditBuilder<D> editBuilder;
 	private ConditionBuilder<D> whereBuilder;
 	private String label;
 	
-	public RuleBuilderImpl(IEdit<D> edit) {
+	public static <D> Edits<D> doThis(Editor<D> edit){
+		return new Edits<D>(edit);
+	} 
+	
+	private Edits(Editor<D> edit) {
 		editBuilder = new EditBuilder<D>(edit);
 	}
 
 	/** {@link IAddEditOrWhereBuilder} Methods*/
 
 	@Override
-	public IAddEditOrWhereBuilder<D> and(IEdit<D> edit) {
+	public IAddEditOrWhereBuilder<D> andThen(Editor<D> edit) {
 		editBuilder.and(edit);
 		return this;
 	}
@@ -60,44 +62,8 @@ class RuleBuilderImpl<D> implements IAddEditOrWhereBuilder<D>,
 	}
 
 	@Override
-	public IAddWhereOrEndBuilder<D> and(IWhereClauseBuilder<D> builder) {
-		whereBuilder.and(builder);
-		return this;
-	}
-
-	@Override
-	public IAddWhereOrEndBuilder<D> andNot(ICondition condition) {
-		whereBuilder.andNot(condition);
-		return this;
-	}
-
-	@Override
-	public IAddWhereOrEndBuilder<D> andNot(IWhereClauseBuilder<D> builder) {
-		this.whereBuilder.andNot(builder);
-		return this;
-	}
-
-	@Override
 	public IAddWhereOrEndBuilder<D> or(ICondition condition) {
 		this.whereBuilder.or(condition);
-		return this;
-	}
-
-	@Override
-	public IAddWhereOrEndBuilder<D> or(IWhereClauseBuilder<D> builder) {
-		this.whereBuilder.or(builder);
-		return this;
-	}
-
-	@Override
-	public IAddWhereOrEndBuilder<D> orNot(ICondition condition) {
-		this.whereBuilder.orNot(condition);
-		return this;
-	}
-
-	@Override
-	public IAddWhereOrEndBuilder<D> orNot(IWhereClauseBuilder<D> builder) {
-		this.whereBuilder.orNot(builder);
 		return this;
 	}
 
@@ -110,10 +76,10 @@ class RuleBuilderImpl<D> implements IAddEditOrWhereBuilder<D>,
 	}
 
 	@Override
-	public IRule<D> build() {
-		BaseRule<D> rule = new BaseRule<D>(editBuilder.build(), whereBuilder.build());
+	public Edit<D> build() {
+		BaseEdit<D> rule = new BaseEdit<D>(editBuilder.build(), whereBuilder.build());
 		if(this.label != null){
-			rule = new LabeledRule<D>(this.label, rule);
+			rule = new LabeledEdit<D>(this.label, rule);
 		}
 		return rule;
 	}

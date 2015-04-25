@@ -23,6 +23,7 @@ package uk.co.optimisticpanda.gtest.dto.defaultfill.insgen;
  * 
  * @author Andy Lee
  */
+@SuppressWarnings("serial")
 public class InstanceGeneratorException extends RuntimeException {
 
 	/**

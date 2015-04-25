@@ -28,36 +28,18 @@ import java.util.List;
 public class ListVisitor<D> implements IEngineVisitor<D> {
 
 	private List<D> dtos;
-	private final Class<D> clazz;
 
-	/**
-	 * @param clazz
-	 */
-	public ListVisitor(Class<D> clazz) {
-		this.clazz = clazz;
-		this.dtos = new ArrayList<D>();
+	public ListVisitor() {
+		this.dtos = new ArrayList<>();
 	}
 
-	/**
-	 * @see uk.co.optimisticpanda.gtest.dto.defaultfill.enggen.visit.IEngineVisitor#visit(int, Object)
-	 */
 	@Override
 	public void visit(int index, D dto) {
 		dtos.add(dto);
 	}
 
-	/**
-	 * @return the collected dtos
-	 */
 	public List<D> getDtos() {
 		return Collections.unmodifiableList(dtos);
-	}
-
-	/**
-	 * @return the type of dtos this list has collected
-	 */
-	public Class<D> getClazz() {
-		return clazz;
 	}
 
 }

@@ -19,43 +19,42 @@ import uk.co.optimisticpanda.gtest.dto.propertyaccess.IPropertyAccess;
 import uk.co.optimisticpanda.gtest.dto.propertyaccess.IPropertyAccessFactory;
 
 /**
- * An Edit which ensures that each dto in a collection has a different string
- * value. It does this by simply appending the passed in index to a base name.
+ * An Edit which sets a property on a dto to a specific value
  * 
- * @author Andy Lee
  * @param <D>
- *            The type of the dto that will be edited
+ *            The type of the dto to edit
  */
-public class IncrementingNameEdit<D> extends AbstractEdit<D> {
+public class SetValueEditor<D> extends AbstractEditor<D> {
 
-	private final String baseNameValue;
+	private final Object value;
 
 	/**
-	 * Create an {@link IEdit} that will append the current index to a basename
-	 * and set a specified property on the dto.
+	 * Create a new IEdit for setting a specified property to a value.
 	 * 
 	 * The specified property is accessed via an {@link IPropertyAccess} which
 	 * is created by passing in the context object to the currently configured
 	 * {@link IPropertyAccessFactory}.
 	 * 
 	 * @param context
-	 *            An object used for specifying which property to edit. 
-	 *            <p><i>This
-	 *            context is passed to the {@link IPropertyAccessFactory}
-	 *            </i></p>
-	 * @param baseNameValue
-	 *            the value that will be used as the base text.
+	 *            An object used for specifying which property to edit.
+	 *            <p>
+	 *            <i>This context is passed to the
+	 *            {@link IPropertyAccessFactory} </i>
+	 *            </p>
+	 * @param value
+	 *            the value to set the specified property to.
 	 */
-	public IncrementingNameEdit(Object context, String baseNameValue) {
+	public SetValueEditor(Object context, Object value) {
 		super(context);
-		this.baseNameValue = baseNameValue;
+		this.value = value;
 	}
 
 	/**
-	 *  see {@link IEdit#edit(int, Object)}
+	 * @see uk.co.optimisticpanda.gtest.dto.edit.Editor#edit(int,
+	 *      java.lang.Object)
 	 */
 	public void edit(int index, Object dataItem) {
-		setValue(dataItem, baseNameValue + index);
+		setValue(dataItem, value);
 	}
 
 	/**
@@ -64,6 +63,6 @@ public class IncrementingNameEdit<D> extends AbstractEdit<D> {
 	 */
 	@Override
 	public String toString() {
-		return "INCREMENT [" + getContext() + " to '" + baseNameValue + "'+i]";
+		return "SET ['" + getContext() + "' to '" + value + "']";
 	}
 }

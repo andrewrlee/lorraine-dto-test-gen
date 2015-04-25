@@ -15,10 +15,10 @@
  */
 package uk.co.optimisticpanda.gtest.dto.rule;
 
-import uk.co.optimisticpanda.gtest.dto.condition.EvenOddCondition;
-import uk.co.optimisticpanda.gtest.dto.edit.IEdit;
-import uk.co.optimisticpanda.gtest.dto.edit.IncrementingNameEdit;
-import uk.co.optimisticpanda.gtest.dto.rule.BaseRule;
+import static uk.co.optimisticpanda.gtest.dto.condition.Conditions.*;
+import uk.co.optimisticpanda.gtest.dto.edit.Editor;
+import uk.co.optimisticpanda.gtest.dto.edit.IncrementingNameEditor;
+import uk.co.optimisticpanda.gtest.dto.rule.BaseEdit;
 import uk.co.optimisticpanda.gtest.dto.test.utils.TestDto1;
 import junit.framework.TestCase;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -29,13 +29,13 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public class BaseRuleTest extends TestCase{
 
-    private BaseRule<TestDto1> rule;
+    private BaseEdit<TestDto1> rule;
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        IEdit<TestDto1> edit = new IncrementingNameEdit<TestDto1>("name", "basename-");
-        rule = new BaseRule<TestDto1>(edit, EvenOddCondition.EVEN);
+        Editor<TestDto1> edit = new IncrementingNameEditor<TestDto1>("name", "basename-");
+        rule = new BaseEdit<TestDto1>(edit, index().isEven());
     }
 
     /**

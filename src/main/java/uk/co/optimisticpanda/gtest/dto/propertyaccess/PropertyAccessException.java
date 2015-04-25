@@ -22,6 +22,7 @@ package uk.co.optimisticpanda.gtest.dto.propertyaccess;
  * 
  * @author Andy Lee
  */
+@SuppressWarnings("serial")
 public class PropertyAccessException extends RuntimeException {
 
 	/**

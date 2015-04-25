@@ -18,11 +18,10 @@ package uk.co.optimisticpanda.gtest.dto;
 import java.util.List;
 
 import junit.framework.TestCase;
-import uk.co.optimisticpanda.gtest.dto.defaultfill.ValueGeneratorCache;
-import uk.co.optimisticpanda.gtest.dto.defaultfill.defaultgens.DefaultValueGeneratorCache;
+import uk.co.optimisticpanda.gtest.dto.defaultfill.DefaultValueGenerator;
+import uk.co.optimisticpanda.gtest.dto.defaultfill.ValueGenerator;
 import uk.co.optimisticpanda.gtest.dto.defaultfill.enggen.DtoGenerationEngine;
 import uk.co.optimisticpanda.gtest.dto.defaultfill.insgen.InstanceGenerator;
-import uk.co.optimisticpanda.gtest.dto.defaultfill.insgen.InstanceGeneratorBuilder;
 import uk.co.optimisticpanda.gtest.dto.test.utils.TestDto3;
 
 /**
@@ -31,11 +30,6 @@ import uk.co.optimisticpanda.gtest.dto.test.utils.TestDto3;
  */
 public class ExampleTest2 extends TestCase {
 
-	@Override
-	protected void setUp() throws Exception {
-		super.setUp();
-	}
-	
 	/**
 	 * @throws Exception
 	 */
@@ -43,11 +37,11 @@ public class ExampleTest2 extends TestCase {
 		//Register the utils context to use ognl for introspection
 		TestUtilsContext.useOgnl();
 		
-		//Build the generator (which is responsible for creating new dtos of a specific type).
-		InstanceGenerator<TestDto3> generator = InstanceGeneratorBuilder.create(TestDto3.class).build();
+		//Build the intance generator (which is responsible for creating new dtos of a specific type).
+		InstanceGenerator<TestDto3> generator = InstanceGenerator.create(TestDto3.class);
 		
 		//Create a generation engine that is responsible for producing the dtos and applying visitors to them.
-		DtoGenerationEngine<TestDto3> engine = new DtoGenerationEngine<TestDto3>(TestDto3.class, generator);
+		DtoGenerationEngine<TestDto3> engine = new DtoGenerationEngine<>(generator);
 		
 		//Create and return 5 dtos
 		List<TestDto3> dtos = engine.collect(5);
@@ -66,18 +60,18 @@ public class ExampleTest2 extends TestCase {
 		//Register the utils context to use ognl for introspection
 		TestUtilsContext.useOgnl();
 		
-		//Create a custom value generator cache
-		ValueGeneratorCache cache = new DefaultValueGeneratorCache(); //
+		//Create a value generator cache
+		ValueGenerator cache = new DefaultValueGenerator(); //
 		
 		//register the string generator against properties of type string called name.
 		//Note you can register generators against different criteria (See ValueGeneratorCache.java) 
 		cache.registerAPropertyNameAndTypeGenerator("name", String.class, () -> "DEFAULT_EXAMPLE_NAME");
 		
 		//Build the generator with the custom cache.
-		InstanceGenerator<TestDto3> generator = new InstanceGeneratorBuilder<TestDto3>(TestDto3.class, cache).build();
+		InstanceGenerator<TestDto3> generator = InstanceGenerator.create(TestDto3.class, cache);
 		
 		//Create a generation engine that is responsible for producing the dtos and applying visitors to them.
-		DtoGenerationEngine<TestDto3> engine = new DtoGenerationEngine<TestDto3>(TestDto3.class, generator);
+		DtoGenerationEngine<TestDto3> engine = new DtoGenerationEngine<TestDto3>(generator);
 		
 		//Create and return 1 dto
 		List<TestDto3> dtos = engine.collect(1);

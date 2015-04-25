@@ -37,7 +37,6 @@ public class ValueEqualsCondition extends PropertyAccessSupport implements ICond
 	 * is created by passing in the context object to the currently configured
 	 * {@link IPropertyAccessFactory}.
 	 * </p>
-	 * 
 	 * @param context
 	 *            An object used for specifying which property to match.
 	 * 
@@ -46,7 +45,7 @@ public class ValueEqualsCondition extends PropertyAccessSupport implements ICond
 	 * @param valueToMatch
 	 *            the value to match on the dto.
 	 */
-	public ValueEqualsCondition(Object context, Object valueToMatch) {
+	ValueEqualsCondition(Object context, Object valueToMatch) {
 		super(context);
 		this.valueToBeMatched = valueToMatch;
 	}
@@ -70,4 +69,5 @@ public class ValueEqualsCondition extends PropertyAccessSupport implements ICond
 	public String toString() {
 		return "EQUALS ['" + getContext() + "' = '" + valueToBeMatched + "']";
 	}
+	
 }

@@ -25,13 +25,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class NullEditTest extends TestCase{
 
 	private TestDto2 testDto1;
-	private NullEdit<TestDto1> nullEdit;
+	private NullEditor<TestDto1> nullEdit;
 
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
 		testDto1 = new TestDto2("name1", "description1");
-		nullEdit = new NullEdit<TestDto1>("name");     
+		nullEdit = new NullEditor<TestDto1>("name");     
 	}
 
 	/**

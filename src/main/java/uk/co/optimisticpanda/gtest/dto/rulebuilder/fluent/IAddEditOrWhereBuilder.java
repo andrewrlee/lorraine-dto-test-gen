@@ -16,7 +16,7 @@
 package uk.co.optimisticpanda.gtest.dto.rulebuilder.fluent;
 
 import uk.co.optimisticpanda.gtest.dto.condition.ICondition;
-import uk.co.optimisticpanda.gtest.dto.edit.IEdit;
+import uk.co.optimisticpanda.gtest.dto.edit.Editor;
 
 /**
  * An interface used by the fluent builder. 
@@ -30,7 +30,7 @@ public interface IAddEditOrWhereBuilder<D> {
 	 * @param edit to add
 	 * @return this to allow chaining
 	 */
-	IAddEditOrWhereBuilder<D> and(IEdit<D> edit);
+	IAddEditOrWhereBuilder<D> andThen(Editor<D> edit);
 	
 	/**
 	 * @param condition base condition

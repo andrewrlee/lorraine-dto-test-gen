@@ -17,18 +17,13 @@ package uk.co.optimisticpanda.gtest.dto;
 
 import java.util.List;
 
-import uk.co.optimisticpanda.gtest.dto.condition.AlwaysCondition;
-import uk.co.optimisticpanda.gtest.dto.condition.EvenOddCondition;
 import uk.co.optimisticpanda.gtest.dto.condition.ICondition;
-import uk.co.optimisticpanda.gtest.dto.condition.IndexCondition;
-import uk.co.optimisticpanda.gtest.dto.condition.NotCondition;
 import uk.co.optimisticpanda.gtest.dto.condition.NthPlaceCondition;
-import uk.co.optimisticpanda.gtest.dto.condition.ValueEqualsCondition;
-import uk.co.optimisticpanda.gtest.dto.edit.IEdit;
-import uk.co.optimisticpanda.gtest.dto.edit.IncrementingNameEdit;
-import uk.co.optimisticpanda.gtest.dto.edit.IteratingCollectionEdit;
-import uk.co.optimisticpanda.gtest.dto.edit.SetValueEdit;
-import uk.co.optimisticpanda.gtest.dto.edit.IteratingCollectionEdit.CycleBehaviour;
+import uk.co.optimisticpanda.gtest.dto.edit.Editor;
+import uk.co.optimisticpanda.gtest.dto.edit.IncrementingNameEditor;
+import uk.co.optimisticpanda.gtest.dto.edit.IteratingCollectionEditor;
+import uk.co.optimisticpanda.gtest.dto.edit.IteratingCollectionEditor.CycleBehaviour;
+import uk.co.optimisticpanda.gtest.dto.edit.SetValueEditor;
 import uk.co.optimisticpanda.gtest.dto.propertyaccess.IPropertyAccessFactory;
 
 /**
@@ -48,62 +43,12 @@ public class RuleUtils {
 	public RuleUtils() {
 		//create new instance
 	}
-
-	/**
-	 * @return the {@link EvenOddCondition#EVEN} condition.
-	 */
-	public ICondition even() {
-		return EvenOddCondition.EVEN;
-	}
-
-	/**
-	 * @return the {@link EvenOddCondition#ODD} condition.
-	 */
-	public ICondition odd() {
-		return EvenOddCondition.ODD;
-	}
-
-	/**
-	 * @return the {@link AlwaysCondition}.
-	 */
-	public ICondition all() {
-		return AlwaysCondition.INSTANCE;
-	}
-
 	/**
 	 * @param n
 	 * @return a new {@link NthPlaceCondition} instance.
 	 */
 	public ICondition nth(int n) {
 		return new NthPlaceCondition(n);
-	}
-
-	/**
-	 * @param indexToMatchOn
-	 * @return a new {@link IndexCondition} instance.
-	 */
-	public ICondition index(int indexToMatchOn) {
-		return new IndexCondition(indexToMatchOn);
-	}
-
-	/**
-	 * @param condition
-	 *            the match to wrap
-	 * @return a new {@link NotCondition} instance.
-	 */
-	public ICondition not(ICondition condition) {
-		return new NotCondition(condition);
-	}
-
-	/**
-	 * @param context
-	 *            the context passed to the {@link IPropertyAccessFactory}
-	 * @param matchValue
-	 *            the value to match
-	 * @return a new {@link ValueEqualsCondition} instance.
-	 */
-	public ICondition eq(Object context, Object matchValue) {
-		return new ValueEqualsCondition(context, matchValue);
 	}
 
 	// EDITS
@@ -113,10 +58,10 @@ public class RuleUtils {
 	 *            the context passed to the {@link IPropertyAccessFactory}
 	 * @param baseNameValue
 	 *            the string label that will used as the prefix.
-	 * @return a new {@link IncrementingNameEdit} instance.
+	 * @return a new {@link IncrementingNameEditor} instance.
 	 */
-	public <D> IEdit<D> increment(Object context, String baseNameValue) {
-		return new IncrementingNameEdit<D>(context, baseNameValue);
+	public <D> Editor<D> increment(Object context, String baseNameValue) {
+		return new IncrementingNameEditor<D>(context, baseNameValue);
 	}
 
 	/**
@@ -127,10 +72,10 @@ public class RuleUtils {
 	 * @param cycleBehaviour
 	 *            a value of {@link CycleBehaviour} that determines how the edit
 	 *            will behave when reaches the end of its list of values
-	 * @return a new {@link IteratingCollectionEdit} instance.
+	 * @return a new {@link IteratingCollectionEditor} instance.
 	 */
-	public <D> IEdit<D> iterate(Object context, List<?> values, CycleBehaviour cycleBehaviour) {
-		return new IteratingCollectionEdit<D>(context, values, cycleBehaviour);
+	public <D> Editor<D> iterate(Object context, List<?> values, CycleBehaviour cycleBehaviour) {
+		return new IteratingCollectionEditor<D>(context, values, cycleBehaviour);
 	}
 
 	/**
@@ -140,9 +85,9 @@ public class RuleUtils {
 	 *            applicable for.
 	 * @param value
 	 *            the value to set
-	 * @return a new {@link SetValueEdit} instance.
+	 * @return a new {@link SetValueEditor} instance.
 	 */
-	public <D> IEdit<D> set(Object context, Object value) {
-		return new SetValueEdit<D>(context, value);
+	public <D> Editor<D> set(Object context, Object value) {
+		return new SetValueEditor<D>(context, value);
 	}
 }

@@ -25,7 +25,7 @@ public enum AlwaysCondition implements ICondition {
 	/**
 	 * The singleton instance
 	 */
-	INSTANCE;
+	ALWAYS;
 
 	/**
 	 * @see uk.co.optimisticpanda.gtest.dto.condition.ICondition#isValid(int,

@@ -15,11 +15,11 @@
  */
 package uk.co.optimisticpanda.gtest.dto.rule;
 
-import uk.co.optimisticpanda.gtest.dto.condition.EvenOddCondition;
-import uk.co.optimisticpanda.gtest.dto.edit.IEdit;
-import uk.co.optimisticpanda.gtest.dto.edit.IncrementingNameEdit;
-import uk.co.optimisticpanda.gtest.dto.rule.BaseRule;
-import uk.co.optimisticpanda.gtest.dto.rule.CombinedRule;
+import static uk.co.optimisticpanda.gtest.dto.condition.Conditions.*;
+import uk.co.optimisticpanda.gtest.dto.edit.Editor;
+import uk.co.optimisticpanda.gtest.dto.edit.IncrementingNameEditor;
+import uk.co.optimisticpanda.gtest.dto.rule.BaseEdit;
+import uk.co.optimisticpanda.gtest.dto.rule.CombinedEdit;
 import uk.co.optimisticpanda.gtest.dto.test.utils.TestDto1;
 
 
@@ -44,17 +44,17 @@ public class CombinedRuleTest extends TestCase{
      * @throws Exception
      */
     public void testCombinedEditRule() throws Exception {
-        IEdit<TestDto1> edit1 = new IncrementingNameEdit<TestDto1>("name", EVEN_BASE_NAME);
-        BaseRule<TestDto1> evenRule = new BaseRule<TestDto1>(edit1, EvenOddCondition.EVEN);
+        Editor<TestDto1> edit1 = new IncrementingNameEditor<TestDto1>("name", EVEN_BASE_NAME);
+        BaseEdit<TestDto1> evenRule = new BaseEdit<TestDto1>(edit1, index().isEven());
  
-        IEdit<TestDto1> edit2 = new IncrementingNameEdit<TestDto1>("name", ODD_BASE_NAME);
-        BaseRule<TestDto1> oddRule = new BaseRule<TestDto1>(edit2, EvenOddCondition.ODD);
+        Editor<TestDto1> edit2 = new IncrementingNameEditor<TestDto1>("name", ODD_BASE_NAME);
+        BaseEdit<TestDto1> oddRule = new BaseEdit<TestDto1>(edit2, index().isOdd());
         
         //create empty rule
-        CombinedRule<TestDto1> combinedRule = new CombinedRule<TestDto1>();
+        CombinedEdit<TestDto1> combinedRule = new CombinedEdit<TestDto1>();
         
         //Add first rule
-        combinedRule.addEditRule(oddRule);
+        combinedRule.addEdit(oddRule);
         
         TestDto1 dto1 = createTestDto();
         combinedRule.edit(1, dto1);
@@ -65,7 +65,7 @@ public class CombinedRuleTest extends TestCase{
         assertThat(dto2.getName() ).isEqualTo(UNCHANGED );
 
         //Add second rule
-        combinedRule.addEditRule(evenRule);
+        combinedRule.addEdit(evenRule);
         
         TestDto1 dto3 = createTestDto();
         combinedRule.edit(1, dto3);

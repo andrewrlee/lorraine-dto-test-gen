@@ -15,7 +15,7 @@
  */
 package uk.co.optimisticpanda.gtest.dto.edit;
 
-import uk.co.optimisticpanda.gtest.dto.edit.IncrementingNameEdit;
+import uk.co.optimisticpanda.gtest.dto.edit.IncrementingNameEditor;
 import uk.co.optimisticpanda.gtest.dto.test.utils.TestDto1;
 
 
@@ -27,13 +27,13 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public class IncrementingNameEditTest extends TestCase{
     
-    private IncrementingNameEdit<TestDto1> incrementingNameEdit;
+    private IncrementingNameEditor<TestDto1> incrementingNameEdit;
     
     
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        incrementingNameEdit = new IncrementingNameEdit<TestDto1>("name" , "myName-");
+        incrementingNameEdit = new IncrementingNameEditor<TestDto1>("name" , "myName-");
     }
 
     

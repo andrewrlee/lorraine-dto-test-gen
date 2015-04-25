@@ -16,22 +16,19 @@
 package uk.co.optimisticpanda.gtest.dto;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static uk.co.optimisticpanda.gtest.dto.condition.Conditions.index;
+import static uk.co.optimisticpanda.gtest.dto.condition.Conditions.valueOf;
 
 import java.util.Arrays;
 import java.util.List;
 
 import junit.framework.TestCase;
-import uk.co.optimisticpanda.gtest.dto.condition.EvenOddCondition;
-import uk.co.optimisticpanda.gtest.dto.condition.IndexCondition;
-import uk.co.optimisticpanda.gtest.dto.condition.ValueEqualsCondition;
-import uk.co.optimisticpanda.gtest.dto.edit.IEdit;
-import uk.co.optimisticpanda.gtest.dto.edit.IncrementingNameEdit;
-import uk.co.optimisticpanda.gtest.dto.edit.SetValueEdit;
-import uk.co.optimisticpanda.gtest.dto.rule.BaseRule;
-import uk.co.optimisticpanda.gtest.dto.rule.IRule;
+import uk.co.optimisticpanda.gtest.dto.edit.Editor;
+import uk.co.optimisticpanda.gtest.dto.edit.IncrementingNameEditor;
+import uk.co.optimisticpanda.gtest.dto.edit.SetValueEditor;
+import uk.co.optimisticpanda.gtest.dto.rule.BaseEdit;
+import uk.co.optimisticpanda.gtest.dto.rule.Edit;
 import uk.co.optimisticpanda.gtest.dto.test.utils.TestDto1;
-
-
 /**
  * The idea is that you would testHelper methods would always create varied sized lists of generic entities.
  * You would also pass in a TestDataEditor which would act like a callback to alter the list in some ways.
@@ -84,12 +81,12 @@ public class SimpleDataEditorTest extends TestCase {
      * @throws Exception
      */
     public void testTestDataEditorWithSimpleConfiguration() throws Exception {
-        IEdit<TestDto1> edit = new IncrementingNameEdit<>("name", "basename-");
-        IRule<TestDto1> rule = new BaseRule<>(edit, EvenOddCondition.EVEN);
+        Editor<TestDto1> editor = new IncrementingNameEditor<>("name", "basename-");
+        Edit<TestDto1> rule = new BaseEdit<>(editor, index().isEven());
         
-        SimpleDataEditor<TestDto1> editor = new SimpleDataEditor<>();
-        editor.addRule(rule);
-        editor.edit(list);
+        SimpleDataEditor<TestDto1> editoror = new SimpleDataEditor<>();
+        editoror.addEdit(rule);
+        editoror.edit(list);
 
         assertThat(list.get(0).getName()).isEqualTo("basename-0");
         assertThat(list.get(1).getName()).isEqualTo("1");
@@ -103,12 +100,12 @@ public class SimpleDataEditorTest extends TestCase {
      * @throws Exception
      */
     public void testTestDataEditorWithMultipleMatchers() throws Exception {
-        IEdit<TestDto1> edit = new IncrementingNameEdit<>("name", "basename-");
-        IRule<TestDto1> rule = new BaseRule<>(edit, EvenOddCondition.EVEN, new IndexCondition(5));
+        Editor<TestDto1> editor = new IncrementingNameEditor<>("name", "basename-");
+        Edit<TestDto1> edit = new BaseEdit<>(editor, index().isEven()).or(index().is(5));
 
-        SimpleDataEditor<TestDto1> editor = new SimpleDataEditor<>();
-        editor.addRule(rule);
-        editor.edit(list);
+        SimpleDataEditor<TestDto1> dataEditor = new SimpleDataEditor<>();
+        dataEditor.addEdit(edit);
+        dataEditor.edit(list);
 
         assertThat(list.get(0).getName()).isEqualTo("basename-0");
         assertThat(list.get(1).getName()).isEqualTo("1");
@@ -122,12 +119,12 @@ public class SimpleDataEditorTest extends TestCase {
      * @throws Exception
      */
     public void testTestDataEditorConfiguredToAlterSpecificElement() throws Exception {
-        IEdit<TestDto1> edit = new SetValueEdit<>("name", "CENSORED");
-        IRule<TestDto1> rule = new BaseRule<>(edit, new IndexCondition(4), new ValueEqualsCondition("name", "HELLO"));
+        Editor<TestDto1> editor = new SetValueEditor<>("name", "CENSORED");
+        Edit<TestDto1> rule = new BaseEdit<>(editor, index().is(4)).or(valueOf("name").is("HELLO"));
 
-        SimpleDataEditor<TestDto1> editor = new SimpleDataEditor<>();
-        editor.addRule(rule);
-        editor.edit(list);
+        SimpleDataEditor<TestDto1> editoror = new SimpleDataEditor<>();
+        editoror.addEdit(rule);
+        editoror.edit(list);
 
         assertThat(list.get(0).getName()).isEqualTo("0");
         assertThat(list.get(1).getName()).isEqualTo("1");
@@ -142,16 +139,16 @@ public class SimpleDataEditorTest extends TestCase {
      * @throws Exception
      */
     public void testTestDataEditorConfiguredToAlterSpecificElementOnSpecificElements() throws Exception {
-        IEdit<TestDto1> edit = new SetValueEdit<>("name", "CENSORED");
-        IRule<TestDto1> rule = new BaseRule<>(edit, new IndexCondition(4), new ValueEqualsCondition("name", "HELLO"));
+        Editor<TestDto1> editor = new SetValueEditor<>("name", "CENSORED");
+        Edit<TestDto1> rule = new BaseEdit<>(editor, index().is(4)).or(valueOf("name").is("HELLO"));
 
-        SimpleDataEditor<TestDto1> editor = new SimpleDataEditor<>();
-        editor.addRule(rule);
-        editor.edit(list);
+        SimpleDataEditor<TestDto1> dataEditor = new SimpleDataEditor<>();
+        dataEditor.addEdit(rule);
+        dataEditor.edit(list);
 
-        editor.edit(1, list.get(0));
+        dataEditor.edit(1, list.get(0));
         assertThat(list.get(0).getName()).isEqualTo("0");
-        editor.edit(4, list.get(0));
+        dataEditor.edit(4, list.get(0));
         assertThat(list.get(0).getName()).isEqualTo("CENSORED");
     }
 

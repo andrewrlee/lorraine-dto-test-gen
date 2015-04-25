@@ -16,17 +16,16 @@
 package uk.co.optimisticpanda.gtest.dto.defaultfill;
 
 import static uk.co.optimisticpanda.gtest.dto.util.FunctionUtils.NOT_COVERED;
-import static uk.co.optimisticpanda.gtest.dto.util.Suppliers.of;
+import static uk.co.optimisticpanda.gtest.dto.util.FunctionUtils.Suppliers.of;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.function.Supplier;
 
-import uk.co.optimisticpanda.gtest.dto.edit.IEdit;
+import uk.co.optimisticpanda.gtest.dto.edit.Editor;
 /**
- * This is used to store {@link IEdit}s used for filling newly created dtos with
+ * This is used to store {@link Editor}s used for filling newly created dtos with
  * default data
  * <p>
  * IEdits can be registered at different levels as they are looked up in the
@@ -42,7 +41,7 @@ import uk.co.optimisticpanda.gtest.dto.edit.IEdit;
  * 
  * @author Andy Lee
  * */
-public class ValueGeneratorCacheImpl implements ValueGeneratorCache {
+public class ValueGenerator {
 
 	protected final Map<String, Supplier<?>> propertyDepthCache;
 	protected final Map<ClassPropertyNameKey, Supplier<?>> classAndPropertyNameAndTypeCache;
@@ -52,13 +51,14 @@ public class ValueGeneratorCacheImpl implements ValueGeneratorCache {
 	/**
 	 * A default constructor that initialises all the caches
 	 * */
-	public ValueGeneratorCacheImpl() {
+	public ValueGenerator() {
 		propertyDepthCache = new HashMap<String, Supplier<?>>();
 		classAndPropertyNameAndTypeCache = new HashMap<ClassPropertyNameKey, Supplier<?>>();
 		propertyNameAndTypeCache = new HashMap<PropertyNameAndPropertyTypeKey, Supplier<?>>();
 		typeCache = new HashMap<String, Supplier<?>>();
 	}
-
+	
+	
 	/**
 	 * Register a generator for properties based on an ognl or el type path from the
 	 * root dto.
@@ -138,7 +138,6 @@ public class ValueGeneratorCacheImpl implements ValueGeneratorCache {
 	/** 
 	 * Register a generator against a single type 
 	 */
-	@Override
 	public void registerATypeGenerator(Class<?> propertyType, Supplier<?> valueGenerator) {
 		registerATypeGenerator(RegisterTypeMode.SINGLE_TYPE, propertyType, valueGenerator);
 	}
