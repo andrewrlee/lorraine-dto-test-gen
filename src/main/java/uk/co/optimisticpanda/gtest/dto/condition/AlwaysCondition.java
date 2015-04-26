@@ -20,7 +20,7 @@ package uk.co.optimisticpanda.gtest.dto.condition;
  * 
  * @author Andy Lee
  */
-public enum AlwaysCondition implements ICondition {
+enum AlwaysCondition implements Condition {
 
 	/**
 	 * The singleton instance
@@ -28,7 +28,7 @@ public enum AlwaysCondition implements ICondition {
 	ALWAYS;
 
 	/**
-	 * @see uk.co.optimisticpanda.gtest.dto.condition.ICondition#isValid(int,
+	 * @see uk.co.optimisticpanda.gtest.dto.condition.Condition#isValid(int,
 	 *      java.lang.Object)
 	 */
 	public boolean isValid(int index, Object dataItem) {
@@ -36,7 +36,7 @@ public enum AlwaysCondition implements ICondition {
 	}
 
 	/**
-	 * A human readable representation of this {@link ICondition}.
+	 * A human readable representation of this {@link Condition}.
 	 */
 	@Override
 	public String toString() {

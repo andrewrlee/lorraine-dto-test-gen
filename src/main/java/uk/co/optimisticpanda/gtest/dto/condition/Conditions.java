@@ -1,13 +1,12 @@
 package uk.co.optimisticpanda.gtest.dto.condition;
 
 public class Conditions {
-
 	
 	public static IndexConditionBuilder index(){
 		return new IndexConditionBuilder();
 	}
 
-	public static ICondition not(ICondition condition){
+	public static Condition not(Condition condition){
 		return new NotCondition(condition);
 	}
 	
@@ -15,18 +14,22 @@ public class Conditions {
 		return new ValueEqualsBuilder(context);
 	}
 
-	public static ICondition always(){
+	public static Condition always(){
 		return AlwaysCondition.ALWAYS;
 	}
 	
+	public static Condition everyNth(int n) {
+		return new NthPlaceCondition(n);
+	}
+	
 	public static class IndexConditionBuilder{
-		public ICondition is(int indexToMatchOn){
+		public Condition is(int indexToMatchOn){
 			return new IndexCondition(indexToMatchOn);
 		}
-		public ICondition isOdd(){
+		public Condition isOdd(){
 			return EvenOddCondition.ODD;
 		}
-		public ICondition isEven(){
+		public Condition isEven(){
 			return EvenOddCondition.EVEN;
 		}
 	}

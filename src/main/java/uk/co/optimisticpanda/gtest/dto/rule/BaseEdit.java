@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import uk.co.optimisticpanda.gtest.dto.condition.ICondition;
+import uk.co.optimisticpanda.gtest.dto.condition.Condition;
 import uk.co.optimisticpanda.gtest.dto.edit.Editor;
 
 /**
@@ -18,8 +18,8 @@ import uk.co.optimisticpanda.gtest.dto.edit.Editor;
  */
 public class BaseEdit<D> implements Edit<D> {
 
-	protected final List<ICondition> conditions;
-	protected final Editor<D> edit;
+	protected final List<Condition> conditions;
+	protected final Editor edit;
 
 	/**
 	 * @param edit
@@ -28,9 +28,9 @@ public class BaseEdit<D> implements Edit<D> {
 	 *            a list of conditions for which this rule will fire if any are
 	 *            true.
 	 */
-	public BaseEdit(Editor<D> edit, ICondition condition) {
+	public BaseEdit(Editor edit, Condition condition) {
 		this.edit = edit;
-		this.conditions = new ArrayList<ICondition>();
+		this.conditions = new ArrayList<Condition>();
 		this.conditions.add(condition);
 	}
 
@@ -41,12 +41,12 @@ public class BaseEdit<D> implements Edit<D> {
 	 *            a list of conditions for which this rule will fire if any are
 	 *            true.
 	 */
-	protected BaseEdit(Editor<D> edit, List<ICondition> conditions) {
+	protected BaseEdit(Editor edit, List<Condition> conditions) {
 		this.edit = edit;
 		this.conditions = conditions;
 	}
 	
-	public BaseEdit<D> or(ICondition condition){
+	public BaseEdit<D> or(Condition condition){
 		conditions.add(condition);
 		return this;
 	}
@@ -57,12 +57,12 @@ public class BaseEdit<D> implements Edit<D> {
 	 * @see uk.co.optimisticpanda.gtest.dto.rule.Edit#edit(int,
 	 *      java.lang.Object)
 	 */
-	public void edit(int index, D dataItem) {
+	public void edit(int index, Object dataItem) {
 		edit.edit(index, dataItem);
 	}
 
 	public boolean isValid(int index, D dataItem) {
-		for (ICondition condition : conditions) {
+		for (Condition condition : conditions) {
 			if (condition.isValid(index, dataItem)) {
 				return true;
 			}
@@ -75,7 +75,7 @@ public class BaseEdit<D> implements Edit<D> {
 	 */
 	@Override
 	public String toString() {
-		Iterator<ICondition> iterator = conditions.iterator();
+		Iterator<Condition> iterator = conditions.iterator();
 		StringBuilder builder = new StringBuilder(edit + " WHERE " + iterator.next());
 		while (iterator.hasNext()) {
 			builder.append(" AND " + iterator.next());

@@ -7,13 +7,13 @@ package uk.co.optimisticpanda.gtest.dto.edit;
  *            The type of the dtos to be edited.
  * @author Andy Lee
  */
-public class NullEditor<D> extends SetValueEditor<D> {
+class NullEditor extends SetValueEditor {
 	
 	/**
 	 * Create an edit that always inserts null.
 	 * @param context
 	 */
-	public NullEditor(Object context) {
+	NullEditor(Object context) {
 		super(context, null);
 	}
 

@@ -19,7 +19,7 @@ import static java.util.stream.IntStream.range;
 import static uk.co.optimisticpanda.gtest.dto.condition.Conditions.index;
 import static uk.co.optimisticpanda.gtest.dto.condition.Conditions.not;
 import static uk.co.optimisticpanda.gtest.dto.condition.Conditions.valueOf;
-
+import static uk.co.optimisticpanda.gtest.dto.edit.Editors.*;
 import java.util.Date;
 import java.util.List;
 
@@ -37,36 +37,34 @@ public class ExampleTest extends TestCase {
 		// This is used in introspection.
 		TestUtilsContext.useOgnl();
 
-		// RuleUtils provide easy access to built in edit and conditions
-		RuleUtils utils = new RuleUtils();
-
-		// Rules are created from a rule factory and need an edit to start.
-		Edits.doThis(utils.increment("name", "sample-"));
+		// Rules are created from the `Edits`factory and need an editor to start.
+		Edits.doThis(incrementEach("name").withBase("sample-"));
 
 		// Each subsequent chained method call return interfaces that only
 		// allows the writer to call methods in the correct order.
-		Edits.doThis(utils.increment("name", "sample-")) // 
-				.andThen(utils.set("date", new Date(System.currentTimeMillis())));
+		Edits.doThis(
+				incrementEach("name").withBase("sample-").and(
+						changeValueOf("date").to(new Date(System.currentTimeMillis()))));
 
 		// --------------------------------------------------------------------
 		// Define some edits.
-		Edit<SampleDto> edit1 = Edits.doThis(utils.<SampleDto>increment("name", "sample-")) //
-				.andThen(utils.set("date", new Date(System.currentTimeMillis()))) //
-				.where(index().is(3)) //
-				.or(not(index().isOdd())) //
-				.build();
+		Edit<SampleDto> edit1 = 
+				Edits.doThis(
+						 incrementEach("name").withBase("sample-") //
+						 	.and(changeValueOf("date").to(new Date(System.currentTimeMillis())))) //
+					 .where(index().is(3).or(not(index().isOdd()))) //
+				.forTheType(SampleDto.class);
 
-		Edit<SampleDto> edit2 = Edits.doThis(utils.<SampleDto>set("name", "CHANGED")) //
+		Edit<SampleDto> edit2 = Edits.doThis(changeValueOf("name").to("CHANGED")) //
 				.where(valueOf("name").is("sample-3")) //
-				.build();
+				.forTheType(SampleDto.class);
 
 		System.out.println("Edit1:\t" + edit1);
 		System.out.println("Edit2:\t" + edit2);
 
 		// Add the rules to a data editor
-		IDataEditor<SampleDto> editor = new SimpleDataEditor<SampleDto>() //
-				.addEdit(edit1) //
-				.addEdit(edit2); //
+		SimpleDataEditor<SampleDto> editor = SimpleDataEditor.create(); 
+		editor.add(edit1).add(edit2);
 
 		// Perform the actual editing
 		List<SampleDto> dtos = range(0, 5)

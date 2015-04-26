@@ -9,7 +9,7 @@ package uk.co.optimisticpanda.gtest.dto.edit;
  *            The type of the dto being edited.
  * 
  */
-public interface Editor<D> {
+public interface Editor {
 
 	/**
 	 * Apply the effects of the edit.
@@ -19,6 +19,9 @@ public interface Editor<D> {
 	 * @param dataItem
 	 *            The dto to be edited
 	 */
-	public void edit(int index, D dataItem);
-
+	void edit(int index, Object dataItem);
+	
+	default Editor and(Editor editor){
+		return new CombinedEditor(this, editor);
+	}
 }

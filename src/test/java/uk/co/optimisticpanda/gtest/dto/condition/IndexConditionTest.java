@@ -48,12 +48,12 @@ public class IndexConditionTest extends TestCase {
      * @throws Exception
      */
     public void testIndexPrimVsClass() throws Exception {
-        ICondition classIndexCondition = index().is(111);
+        Condition classIndexCondition = index().is(111);
         assertThat(classIndexCondition.isValid(110, null)).isFalse();
         assertThat(classIndexCondition.isValid(111, null)).isTrue();
         assertThat(classIndexCondition.isValid(111, null)).isTrue();
 
-        ICondition primIndexCondition = index().is(111);
+        Condition primIndexCondition = index().is(111);
         assertThat(primIndexCondition.isValid(110, null)).isFalse();
         assertThat(primIndexCondition.isValid(111, null)).isTrue();
         assertThat(primIndexCondition.isValid(111, null)).isTrue();
@@ -64,12 +64,12 @@ public class IndexConditionTest extends TestCase {
      * @throws Exception
      */
     public void testIndexPrimVsClassAboveCache() throws Exception {
-        ICondition classIndexCondition = index().is(567);
+        Condition classIndexCondition = index().is(567);
         assertThat(classIndexCondition.isValid(566, null)).isFalse();
         assertThat(classIndexCondition.isValid(567, null)).isTrue();
         assertThat(classIndexCondition.isValid(567, null)).isTrue();
 
-        ICondition primIndexCondition = index().is(567);
+        Condition primIndexCondition = index().is(567);
         assertThat(primIndexCondition.isValid(566, null)).isFalse();
         assertThat(primIndexCondition.isValid(567, null)).isTrue();
         assertThat(primIndexCondition.isValid(567, null)).isTrue();

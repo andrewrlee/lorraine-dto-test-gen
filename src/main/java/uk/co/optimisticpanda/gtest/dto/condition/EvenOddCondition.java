@@ -20,7 +20,7 @@ package uk.co.optimisticpanda.gtest.dto.condition;
  * 
  * @author Andy Lee
  */
-enum EvenOddCondition implements ICondition {
+enum EvenOddCondition implements Condition {
 	/**
 	 * This matches on indexes that are even
 	 */
@@ -31,7 +31,7 @@ enum EvenOddCondition implements ICondition {
 	ODD;
 
 	/**
-	 * @see uk.co.optimisticpanda.gtest.dto.condition.ICondition#isValid(int,
+	 * @see uk.co.optimisticpanda.gtest.dto.condition.Condition#isValid(int,
 	 *      java.lang.Object)
 	 */
 	public boolean isValid(int index, Object dataItem) {
@@ -46,7 +46,7 @@ enum EvenOddCondition implements ICondition {
 	}
 
 	/**
-	 * A human readable representation of this {@link ICondition}.
+	 * A human readable representation of this {@link Condition}.
 	 */
 	@Override
 	public String toString() {

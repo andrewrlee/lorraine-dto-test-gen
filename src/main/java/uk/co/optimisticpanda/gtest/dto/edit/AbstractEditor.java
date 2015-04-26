@@ -26,7 +26,7 @@ import uk.co.optimisticpanda.gtest.dto.propertyaccess.PropertyAccessSupport;
  *            The type of object that will be edited.
  * @author Andy Lee
  */
-public abstract class AbstractEditor<D> extends PropertyAccessSupport implements Editor<D> {
+public abstract class AbstractEditor extends PropertyAccessSupport implements Editor {
 
 	/**
 	 * @param context

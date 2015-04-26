@@ -24,7 +24,7 @@ import uk.co.optimisticpanda.gtest.dto.propertyaccess.IPropertyAccessFactory;
  * @param <D>
  *            The type of the dto to edit
  */
-public class SetValueEditor<D> extends AbstractEditor<D> {
+class SetValueEditor extends AbstractEditor {
 
 	private final Object value;
 
@@ -44,15 +44,11 @@ public class SetValueEditor<D> extends AbstractEditor<D> {
 	 * @param value
 	 *            the value to set the specified property to.
 	 */
-	public SetValueEditor(Object context, Object value) {
+	SetValueEditor(Object context, Object value) {
 		super(context);
 		this.value = value;
 	}
 
-	/**
-	 * @see uk.co.optimisticpanda.gtest.dto.edit.Editor#edit(int,
-	 *      java.lang.Object)
-	 */
 	public void edit(int index, Object dataItem) {
 		setValue(dataItem, value);
 	}

@@ -18,14 +18,13 @@ package uk.co.optimisticpanda.gtest.dto;
 import static org.assertj.core.api.Assertions.assertThat;
 import static uk.co.optimisticpanda.gtest.dto.condition.Conditions.index;
 import static uk.co.optimisticpanda.gtest.dto.condition.Conditions.valueOf;
+import static uk.co.optimisticpanda.gtest.dto.edit.Editors.*;
 
 import java.util.Arrays;
 import java.util.List;
 
 import junit.framework.TestCase;
 import uk.co.optimisticpanda.gtest.dto.edit.Editor;
-import uk.co.optimisticpanda.gtest.dto.edit.IncrementingNameEditor;
-import uk.co.optimisticpanda.gtest.dto.edit.SetValueEditor;
 import uk.co.optimisticpanda.gtest.dto.rule.BaseEdit;
 import uk.co.optimisticpanda.gtest.dto.rule.Edit;
 import uk.co.optimisticpanda.gtest.dto.test.utils.TestDto1;
@@ -65,7 +64,7 @@ public class SimpleDataEditorTest extends TestCase {
      * @throws Exception
      */
     public void testTestDataEditorWithNoConfiguration() throws Exception {
-        SimpleDataEditor<TestDto1> testDto = new SimpleDataEditor<>();
+        SimpleDataEditor<TestDto1> testDto = SimpleDataEditor.create();
 
         testDto.edit(list);
 
@@ -81,11 +80,11 @@ public class SimpleDataEditorTest extends TestCase {
      * @throws Exception
      */
     public void testTestDataEditorWithSimpleConfiguration() throws Exception {
-        Editor<TestDto1> editor = new IncrementingNameEditor<>("name", "basename-");
+        Editor editor = incrementEach("name").withBase("basename-");
         Edit<TestDto1> rule = new BaseEdit<>(editor, index().isEven());
         
-        SimpleDataEditor<TestDto1> editoror = new SimpleDataEditor<>();
-        editoror.addEdit(rule);
+        SimpleDataEditor<TestDto1> editoror = SimpleDataEditor.create();
+        editoror.add(rule);
         editoror.edit(list);
 
         assertThat(list.get(0).getName()).isEqualTo("basename-0");
@@ -100,11 +99,11 @@ public class SimpleDataEditorTest extends TestCase {
      * @throws Exception
      */
     public void testTestDataEditorWithMultipleMatchers() throws Exception {
-        Editor<TestDto1> editor = new IncrementingNameEditor<>("name", "basename-");
-        Edit<TestDto1> edit = new BaseEdit<>(editor, index().isEven()).or(index().is(5));
+        Editor editor = incrementEach("name").withBase("basename-");
+        Edit<TestDto1> edit = new BaseEdit<TestDto1>(editor, index().isEven()).or(index().is(5));
 
-        SimpleDataEditor<TestDto1> dataEditor = new SimpleDataEditor<>();
-        dataEditor.addEdit(edit);
+        SimpleDataEditor<TestDto1> dataEditor = SimpleDataEditor.create();
+        dataEditor.add(edit);
         dataEditor.edit(list);
 
         assertThat(list.get(0).getName()).isEqualTo("basename-0");
@@ -119,11 +118,11 @@ public class SimpleDataEditorTest extends TestCase {
      * @throws Exception
      */
     public void testTestDataEditorConfiguredToAlterSpecificElement() throws Exception {
-        Editor<TestDto1> editor = new SetValueEditor<>("name", "CENSORED");
-        Edit<TestDto1> rule = new BaseEdit<>(editor, index().is(4)).or(valueOf("name").is("HELLO"));
+        Editor editor = changeValueOf("name").to("CENSORED");
+        Edit<TestDto1> rule = new BaseEdit<TestDto1>(editor, index().is(4)).or(valueOf("name").is("HELLO"));
 
-        SimpleDataEditor<TestDto1> editoror = new SimpleDataEditor<>();
-        editoror.addEdit(rule);
+        SimpleDataEditor<TestDto1> editoror = SimpleDataEditor.create();
+        editoror.add(rule);
         editoror.edit(list);
 
         assertThat(list.get(0).getName()).isEqualTo("0");
@@ -139,11 +138,11 @@ public class SimpleDataEditorTest extends TestCase {
      * @throws Exception
      */
     public void testTestDataEditorConfiguredToAlterSpecificElementOnSpecificElements() throws Exception {
-        Editor<TestDto1> editor = new SetValueEditor<>("name", "CENSORED");
-        Edit<TestDto1> rule = new BaseEdit<>(editor, index().is(4)).or(valueOf("name").is("HELLO"));
+        Editor editor = changeValueOf("name").to("CENSORED");
+        Edit<TestDto1> rule = new BaseEdit<TestDto1>(editor, index().is(4)).or(valueOf("name").is("HELLO"));
 
-        SimpleDataEditor<TestDto1> dataEditor = new SimpleDataEditor<>();
-        dataEditor.addEdit(rule);
+        SimpleDataEditor<TestDto1> dataEditor = SimpleDataEditor.create();
+        dataEditor.add(rule);
         dataEditor.edit(list);
 
         dataEditor.edit(1, list.get(0));

@@ -15,7 +15,7 @@
  */
 package uk.co.optimisticpanda.gtest.dto.rulebuilder.fluent;
 
-import uk.co.optimisticpanda.gtest.dto.condition.ICondition;
+import uk.co.optimisticpanda.gtest.dto.rule.Edit;
 
 /**
  * An interface used by the fluent builder.
@@ -24,18 +24,22 @@ import uk.co.optimisticpanda.gtest.dto.condition.ICondition;
  *            Type that we are building a rule for.
  * @author Andy Lee
  */
-public interface IAddWhereBuilder<D> {
+public interface IEndBuilder {
 
 	/**
-	 * @param condition
-	 * @return this to allow chaining
+	 * build the rule
+	 * 
+	 * @return the created rule
 	 */
-	IAddWhereOrEndBuilder<D> and(ICondition condition);
+	<D> Edit<D> forTheType(Class<D> clazz);
 
 	/**
-	 * @param condition
-	 * @return this to allow chaining
+	 * set the label. multiple calls overwrites the currently set label.
+	 * 
+	 * @param label
+	 *            the label which describes this rule
+	 * @return this to allow chaining.
 	 */
-	IAddWhereOrEndBuilder<D> or(ICondition condition);
+	IEndBuilder setLabel(String label);
 
 }

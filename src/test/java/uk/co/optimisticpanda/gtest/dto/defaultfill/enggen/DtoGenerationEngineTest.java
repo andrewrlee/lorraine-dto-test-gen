@@ -17,6 +17,7 @@ package uk.co.optimisticpanda.gtest.dto.defaultfill.enggen;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static uk.co.optimisticpanda.gtest.dto.condition.Conditions.always;
+import static uk.co.optimisticpanda.gtest.dto.edit.Editors.*;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -25,7 +26,6 @@ import java.util.function.Supplier;
 
 import junit.framework.TestCase;
 import uk.co.optimisticpanda.gtest.dto.IDataEditor;
-import uk.co.optimisticpanda.gtest.dto.RuleUtils;
 import uk.co.optimisticpanda.gtest.dto.SimpleDataEditor;
 import uk.co.optimisticpanda.gtest.dto.TestUtilsContext;
 import uk.co.optimisticpanda.gtest.dto.defaultfill.DefaultValueGenerator;
@@ -146,10 +146,9 @@ public class DtoGenerationEngineTest extends TestCase {
 	}
 	
 	private IDataEditor<TestDto3> getEditor(final String baseName) {
-		RuleUtils utils = new RuleUtils();
-		Edit<TestDto3> rule = Edits.doThis(//
-				utils.<TestDto3>increment("name", baseName))//
-				.where(always()).build();
-		return new SimpleDataEditor<TestDto3>().addEdit(rule);
+		Edit<TestDto3> edit = Edits.doThis(//
+				incrementEach("name").withBase(baseName))//
+				.where(always()).forTheType(TestDto3.class);
+		return SimpleDataEditor.<TestDto3>create().add(edit);
 	}
 }

@@ -1,6 +1,7 @@
 package uk.co.optimisticpanda.gtest.dto.edit;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -11,53 +12,19 @@ import java.util.List;
  *            the type of the dto being edited.
  * @author Andy Lee
  */
-public class CombinedEditor<D> implements Editor<D> {
+class CombinedEditor implements Editor {
 
-	private final List<Editor<D>> edits;
+	private final List<Editor> edits;
 
 	/**
 	 * Creates an edit that does not perform any editing but can be expanded at
 	 * a later time.
 	 */
-	public CombinedEditor() {
-		this(new ArrayList<Editor<D>>());
-	}
-
-	/**
-	 * Wraps an edit providing it with combined edit functionality.
-	 * 
-	 * @param edit
-	 *            the edit to wrap
-	 */
-	public CombinedEditor(Editor<D> edit) {
-		edits = new ArrayList<Editor<D>>();
-		if (edit != null) {
-			edits.add(edit);
-		}
-	}
-
-	/**
-	 * Creates a CombinedEdit from a list of {@link Editor}s.
-	 * 
-	 * @param edits
-	 *            a list of edits to be combined
-	 */
-	public CombinedEditor(List<Editor<D>> edits) {
-		if (edits != null) {
-			this.edits = edits;
-		} else {
-			this.edits = new ArrayList<Editor<D>>();
-		}
-	}
-
-	/**
-	 * @param edit
-	 *            the edit to be included
-	 * @return this to allow chaining
-	 */
-	public CombinedEditor<D> addEdit(Editor<D> edit) {
-		edits.add(edit);
-		return this;
+	CombinedEditor(Editor editor1, Editor editor2, Editor... others) {
+		this.edits = new ArrayList<Editor>();
+		edits.add(editor1);
+		edits.add(editor2);
+		edits.addAll(Arrays.asList(others));
 	}
 
 	/**
@@ -69,8 +36,8 @@ public class CombinedEditor<D> implements Editor<D> {
 	 *            the dto to be edited.
 	 * */
 	@Override
-	public void edit(int index, D dataItem) {
-		for (Editor<D> edit : edits) {
+	public void edit(int index, Object dataItem) {
+		for (Editor edit : edits) {
 			edit.edit(index, dataItem);
 		}
 	}
@@ -81,7 +48,7 @@ public class CombinedEditor<D> implements Editor<D> {
 	 */
 	@Override
 	public String toString() {
-		Iterator<Editor<D>> iterator = edits.iterator();
+		Iterator<Editor> iterator = edits.iterator();
 
 		StringBuilder builder = new StringBuilder(iterator.next().toString());
 		while (iterator.hasNext()) {

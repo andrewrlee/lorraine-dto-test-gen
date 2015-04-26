@@ -16,31 +16,24 @@
 package uk.co.optimisticpanda.gtest.dto;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static uk.co.optimisticpanda.gtest.dto.condition.Conditions.always;
 
 import java.util.Arrays;
 
 import junit.framework.TestCase;
-import uk.co.optimisticpanda.gtest.dto.condition.AlwaysCondition;
 import uk.co.optimisticpanda.gtest.dto.edit.Editor;
-import uk.co.optimisticpanda.gtest.dto.edit.SetValueEditor;
 import uk.co.optimisticpanda.gtest.dto.rule.BaseEdit;
 import uk.co.optimisticpanda.gtest.dto.rule.Edit;
 import uk.co.optimisticpanda.gtest.dto.test.utils.TestDto1;
 import uk.co.optimisticpanda.gtest.dto.test.utils.TestDto2;
-
+import static uk.co.optimisticpanda.gtest.dto.edit.Editors.*;
 /**
  * @author Andy Lee
  *
  */
 public class MappedClassDataEditorTest extends TestCase{
 
-    /**
-     * 
-     */
     public static final String CHANGE_FOR_DTO1 = "DTO1";
-    /**
-     * 
-     */
     public static final String CHANGE_FOR_DTO2 = "DTO2";
     
     @Override
@@ -49,15 +42,12 @@ public class MappedClassDataEditorTest extends TestCase{
         TestUtilsContext.useOgnl();
     }
 
-    /**
-     * 
-     */
     public void testMappedClassDataEditor(){
-        Editor<TestDto1> editForDto1 = new SetValueEditor<TestDto1>("name",CHANGE_FOR_DTO1);
-        Editor<TestDto2> editForDto2 = new SetValueEditor<TestDto2>("name",CHANGE_FOR_DTO2);
+        Editor editForDto1 = changeValueOf("name").to(CHANGE_FOR_DTO1);
+        Editor editForDto2 = changeValueOf("name").to(CHANGE_FOR_DTO2);
         
-        Edit<TestDto1> rule1 = new BaseEdit<TestDto1>(editForDto1, AlwaysCondition.ALWAYS);
-        Edit<TestDto2> rule2 = new BaseEdit<TestDto2>(editForDto2, AlwaysCondition.ALWAYS);
+        Edit<TestDto1> rule1 = new BaseEdit<TestDto1>(editForDto1, always());
+        Edit<TestDto2> rule2 = new BaseEdit<TestDto2>(editForDto2, always());
 
         MappedClassDataEditor editor = new MappedClassDataEditor();
         editor.addEditForClass(TestDto1.class, rule1);

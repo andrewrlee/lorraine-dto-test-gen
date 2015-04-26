@@ -16,8 +16,6 @@
 package uk.co.optimisticpanda.gtest.dto;
 
 import java.util.List;
-
-import uk.co.optimisticpanda.gtest.dto.edit.IncrementingNameEditor;
 import uk.co.optimisticpanda.gtest.dto.rule.Edit;
 
 /**

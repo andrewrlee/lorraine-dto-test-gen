@@ -21,23 +21,23 @@ import java.util.List;
 
 /**
  * This condition wraps multiple conditions and returns the combined effects of its
- * {@link ICondition#isValid(int, Object)} methods.
+ * {@link Condition#isValid(int, Object)} methods.
  * <p>
  * This Condition is configured by the use of {@link BoolOp} to determine whether
- * all {@link ICondition}s need to be valid or just one for this CombinedCondition to
+ * all {@link Condition}s need to be valid or just one for this CombinedCondition to
  * be valid.
  * </p>
  * 
  * @author Andy Lee
  */
-public class CombinedCondition implements ICondition {
+class CombinedCondition implements Condition {
 
 	/**
 	 * An enum that is used to determine how the effects of the conditions are
 	 * combined.
 	 * 
 	 */
-	public enum BoolOp {
+	enum BoolOp {
 		/**
 		 * Used in configuration to specify that all conditions must return true
 		 * for the {@link CombinedCondition} to return true.
@@ -54,11 +54,11 @@ public class CombinedCondition implements ICondition {
 		}
 	}
 
-	private final List<ICondition> conditions;
+	private final List<Condition> conditions;
 	private final BoolOp operation;
 
 	/**
-	 * Create a {@link CombinedCondition} from a variable number of {@link ICondition}es
+	 * Create a {@link CombinedCondition} from a variable number of {@link Condition}es
 	 * 
 	 * @param operation
 	 *            see {@link BoolOp}.
@@ -66,19 +66,19 @@ public class CombinedCondition implements ICondition {
 	 *            A variable number of conditions that are to be wrapped in this
 	 *            CombinedCondition.
 	 */
-	public CombinedCondition(BoolOp operation, ICondition... condition) {
+	CombinedCondition(BoolOp operation, Condition... condition) {
 		this.operation = operation;
 		this.conditions = Arrays.asList(condition);
 	}
 
 	/**
-	 * @see uk.co.optimisticpanda.gtest.dto.condition.ICondition#isValid(int,
+	 * @see uk.co.optimisticpanda.gtest.dto.condition.Condition#isValid(int,
 	 *      java.lang.Object)
 	 */
 	@Override
 	public <D> boolean isValid(int index, D dataItem) {
 		boolean result = operation.getDefaultResultValue();
-		for (ICondition condition : conditions) {
+		for (Condition condition : conditions) {
 			switch (operation) {
 			case AND:
 				result &= condition.isValid(index, dataItem);
@@ -94,11 +94,11 @@ public class CombinedCondition implements ICondition {
 	}
 
 	/**
-	 * A human readable representation of this {@link ICondition}.
+	 * A human readable representation of this {@link Condition}.
 	 */
 	@Override
 	public String toString() {
-		Iterator<ICondition> iterator = conditions.iterator();
+		Iterator<Condition> iterator = conditions.iterator();
 		StringBuilder builder = new StringBuilder("(" + iterator.next() + ") ");
 		while (iterator.hasNext()) {
 			builder.append(operation + " (" + iterator.next() + ") ");

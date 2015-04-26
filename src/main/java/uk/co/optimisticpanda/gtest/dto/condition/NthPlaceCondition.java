@@ -19,19 +19,19 @@ package uk.co.optimisticpanda.gtest.dto.condition;
  * A condition that returns true on every nth item.
  * @author Andy Lee
  */
-public class NthPlaceCondition implements ICondition{
+class NthPlaceCondition implements Condition{
     private final int n;
 
     /**
      * Creates a new condition for every nth data item.
      * @param n 
      */
-    public NthPlaceCondition(int n){
+    NthPlaceCondition(int n){
         this.n = n;
     }
     
     /**
-     * @see uk.co.optimisticpanda.gtest.dto.condition.ICondition#isValid(int, java.lang.Object)
+     * @see uk.co.optimisticpanda.gtest.dto.condition.Condition#isValid(int, java.lang.Object)
      */
     @Override
     public <D> boolean isValid(int index, D dataItem) {
@@ -39,7 +39,7 @@ public class NthPlaceCondition implements ICondition{
     }
     
     /**
-	 * A human readable representation of this {@link ICondition}.
+	 * A human readable representation of this {@link Condition}.
 	 */
 	@Override
     public String toString() {

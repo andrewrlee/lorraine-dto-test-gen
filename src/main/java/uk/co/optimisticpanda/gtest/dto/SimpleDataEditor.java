@@ -18,6 +18,7 @@ package uk.co.optimisticpanda.gtest.dto;
 import static uk.co.optimisticpanda.gtest.dto.util.FunctionUtils.indexed;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import uk.co.optimisticpanda.gtest.dto.rule.Edit;
@@ -35,29 +36,23 @@ public class SimpleDataEditor<D> implements IDataEditor<D> {
 
 	private final List<Edit<D>> edits;
 
-	
-	public static <D> SimpleDataEditor<D> create(Class<D> rootClassToGenerate){
-		return new SimpleDataEditor<D>();
-	}
 	/**
 	 * Create a new SimpleDataEditor with no rules.
 	 */
-	public SimpleDataEditor() {
-		edits = new ArrayList<Edit<D>>();
+	@SafeVarargs
+	private SimpleDataEditor(Edit<D>... edits) {
+		this.edits = new ArrayList<Edit<D>>(Arrays.<Edit<D>>asList(edits));
 	}
 
-	/**
-	 * Add a new Rule
-	 * 
-	 * @param rule
-	 *            the rule to add.
-	 * @return the current {@link SimpleDataEditor} to allow chaining.
-	 */
-	public SimpleDataEditor<D> addEdit(Edit<D> rule) {
-		edits.add(rule);
+	public static <D> SimpleDataEditor<D> create(){
+		return new SimpleDataEditor<D>();
+	}
+	
+	public SimpleDataEditor<D> add(Edit<D> edit) {
+		this.edits.add(edit);
 		return this;
 	}
-
+	
 	/**
 	 * see {@link IDataEditor#edit(List)}
 	 * 

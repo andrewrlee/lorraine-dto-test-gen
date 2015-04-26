@@ -15,7 +15,7 @@
  */
 package uk.co.optimisticpanda.gtest.dto.rule;
 
-import uk.co.optimisticpanda.gtest.dto.condition.ICondition;
+import uk.co.optimisticpanda.gtest.dto.condition.Condition;
 import uk.co.optimisticpanda.gtest.dto.edit.Editor;
 
 
@@ -34,7 +34,7 @@ public class LabeledEdit<D> extends BaseEdit<D>{
 	 * @param edit the edit that occurs when the rule fires 
 	 * @param conditions the conditions that determine if the rule should fire
 	 */
-	private LabeledEdit(String label, Editor<D> edit, ICondition condition) {
+	private LabeledEdit(String label, Editor edit, Condition condition) {
 		super(edit, condition);
 		this.label = label;
 	}
@@ -47,6 +47,7 @@ public class LabeledEdit<D> extends BaseEdit<D>{
 	public LabeledEdit(String label, BaseEdit<D> edit){
 		super(edit.edit, edit.conditions);
 		this.label = label;
+		
 	}
 
 	/**

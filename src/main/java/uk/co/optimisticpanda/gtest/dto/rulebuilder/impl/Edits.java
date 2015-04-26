@@ -15,69 +15,54 @@
  */
 package uk.co.optimisticpanda.gtest.dto.rulebuilder.impl;
 
-import uk.co.optimisticpanda.gtest.dto.condition.ICondition;
+import uk.co.optimisticpanda.gtest.dto.condition.Condition;
+import uk.co.optimisticpanda.gtest.dto.condition.Conditions;
 import uk.co.optimisticpanda.gtest.dto.edit.Editor;
 import uk.co.optimisticpanda.gtest.dto.rule.BaseEdit;
 import uk.co.optimisticpanda.gtest.dto.rule.Edit;
 import uk.co.optimisticpanda.gtest.dto.rule.LabeledEdit;
-import uk.co.optimisticpanda.gtest.dto.rulebuilder.fluent.IAddEditOrWhereBuilder;
-import uk.co.optimisticpanda.gtest.dto.rulebuilder.fluent.IAddWhereBuilder;
-import uk.co.optimisticpanda.gtest.dto.rulebuilder.fluent.IAddWhereOrEndBuilder;
+import uk.co.optimisticpanda.gtest.dto.rulebuilder.fluent.IEndBuilder;
+import uk.co.optimisticpanda.gtest.dto.rulebuilder.fluent.IWhereBuilder;
 
-public class Edits<D> implements IAddEditOrWhereBuilder<D>,
-		IAddWhereOrEndBuilder<D> {
+public class Edits implements IWhereBuilder, IEndBuilder {
 
-	private EditBuilder<D> editBuilder;
-	private ConditionBuilder<D> whereBuilder;
+	private Editor editor;
+	private Condition condition;
 	private String label;
 	
-	public static <D> Edits<D> doThis(Editor<D> edit){
-		return new Edits<D>(edit);
+	public static Edits doThis(Editor editor){
+		return new Edits(editor);
 	} 
 	
-	private Edits(Editor<D> edit) {
-		editBuilder = new EditBuilder<D>(edit);
+	private Edits(Editor editor) {
+		this.editor = editor;
 	}
 
-	/** {@link IAddEditOrWhereBuilder} Methods*/
-
-	@Override
-	public IAddEditOrWhereBuilder<D> andThen(Editor<D> edit) {
-		editBuilder.and(edit);
+	public Edits and(Editor otherEditor) {
+		this.editor = this.editor.and(otherEditor);
 		return this;
 	}
-
-	@Override
-	public IAddWhereOrEndBuilder<D> where(ICondition condition) {
-		this.whereBuilder = new ConditionBuilder<D>(condition);
-		return this;
-	}
-
-	/*** {@link IAddWhereBuilder} Methods*/
 	
 	@Override
-	public IAddWhereOrEndBuilder<D> and(ICondition condition) {
-		whereBuilder.and(condition);
+	public IEndBuilder where(Condition condition) {
+		this.condition = condition;
+		return this;
+	}
+	
+	public IEndBuilder inEveryCase() {
+		this.condition = Conditions.always();
 		return this;
 	}
 
 	@Override
-	public IAddWhereOrEndBuilder<D> or(ICondition condition) {
-		this.whereBuilder.or(condition);
-		return this;
-	}
-
-	/*** {@link IAddWhereOrEndBuilder} Methods*/
-
-	@Override
-	public IAddWhereOrEndBuilder<D> setLabel(String label) {
+	public IEndBuilder setLabel(String label) {
 		this.label = label;
 		return this;
 	}
 
 	@Override
-	public Edit<D> build() {
-		BaseEdit<D> rule = new BaseEdit<D>(editBuilder.build(), whereBuilder.build());
+	public <D> Edit<D> forTheType(Class<D> clazz) {
+		BaseEdit<D> rule = new BaseEdit<D>(editor, condition);
 		if(this.label != null){
 			rule = new LabeledEdit<D>(this.label, rule);
 		}

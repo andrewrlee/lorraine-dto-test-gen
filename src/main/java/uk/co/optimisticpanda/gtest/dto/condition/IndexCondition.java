@@ -5,7 +5,7 @@ package uk.co.optimisticpanda.gtest.dto.condition;
  * 
  * @author Andy Lee
  */
-public class IndexCondition implements ICondition {
+public class IndexCondition implements Condition {
 	private final int indexToMatchOn;
 
 	/**
@@ -18,7 +18,7 @@ public class IndexCondition implements ICondition {
 	}
 
 	/**
-	 * @see uk.co.optimisticpanda.gtest.dto.condition.ICondition#isValid(int,
+	 * @see uk.co.optimisticpanda.gtest.dto.condition.Condition#isValid(int,
 	 *      java.lang.Object)
 	 */
 	public boolean isValid(int index, Object dataItem) {
@@ -26,7 +26,7 @@ public class IndexCondition implements ICondition {
 	}
 
 	/**
-	 * A human readable representation of this {@link ICondition}.
+	 * A human readable representation of this {@link Condition}.
 	 */
 	@Override
 	public String toString() {

@@ -15,7 +15,7 @@
  */
 package uk.co.optimisticpanda.gtest.dto.rulebuilder.fluent;
 
-import uk.co.optimisticpanda.gtest.dto.condition.ICondition;
+import uk.co.optimisticpanda.gtest.dto.condition.Condition;
 
 /**
  * An interface used by the fluent builder.
@@ -30,16 +30,16 @@ public interface IWhereClauseBuilder<D> {
 	 * @param condition 
 	 * @return this to allow chaining
 	 */
-	IWhereClauseBuilder<D> and(ICondition condition);
+	IWhereClauseBuilder<D> and(Condition condition);
 
 	/**
 	 * @param condition
 	 * @return this to allow chaining
 	 */
-	IWhereClauseBuilder<D> or(ICondition condition);
+	IWhereClauseBuilder<D> or(Condition condition);
 
 	/**
-	 * @return the {@link ICondition} that has been built up.
+	 * @return the {@link Condition} that has been built up.
 	 */
-	ICondition getCondition();
+	Condition getCondition();
 }

@@ -13,32 +13,25 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package uk.co.optimisticpanda.gtest.dto.rulebuilder.impl;
+package uk.co.optimisticpanda.gtest.dto.condition;
 
 import static uk.co.optimisticpanda.gtest.dto.condition.CombinedCondition.BoolOp.AND;
 import static uk.co.optimisticpanda.gtest.dto.condition.CombinedCondition.BoolOp.OR;
-import uk.co.optimisticpanda.gtest.dto.condition.CombinedCondition;
-import uk.co.optimisticpanda.gtest.dto.condition.ICondition;
 
-class ConditionBuilder<D> {
-	private ICondition condition;
+/**
+ * A check to see if a rule should fire or not
+ * 
+ * @author Andy Lee
+ */
+public interface Condition {
 
-	public ConditionBuilder(ICondition condition) {
-		if(condition == null){
-			throw new IllegalArgumentException("Condition must not be null");
-		}
-		this.condition = condition;
+	<D> boolean isValid(int index, D dataItem);
+
+	default Condition and(Condition condition){
+		return new CombinedCondition(AND, this, condition);
 	}
-
-	public void and(ICondition condition) {
-		this.condition = new CombinedCondition(AND, this.condition, condition);
-	}
-
-	public void or(ICondition condition) {
-		this.condition = new CombinedCondition(OR, this.condition, condition);
-	}
-
-	public ICondition build() {
-		return condition;
+	
+	default Condition or(Condition condition){
+		return new CombinedCondition(OR, this, condition);
 	}
 }

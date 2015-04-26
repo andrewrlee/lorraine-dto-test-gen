@@ -25,7 +25,7 @@ import uk.co.optimisticpanda.gtest.dto.propertyaccess.PropertyAccessSupport;
  * 
  * @author Andy Lee
  */
-public class ValueEqualsCondition extends PropertyAccessSupport implements ICondition {
+class ValueEqualsCondition extends PropertyAccessSupport implements Condition {
 
 	private final Object valueToBeMatched;
 
@@ -51,7 +51,7 @@ public class ValueEqualsCondition extends PropertyAccessSupport implements ICond
 	}
 
 	/**
-	 * @see uk.co.optimisticpanda.gtest.dto.condition.ICondition#isValid(int,
+	 * @see uk.co.optimisticpanda.gtest.dto.condition.Condition#isValid(int,
 	 *      java.lang.Object)
 	 */
 	public <D> boolean isValid(int index, D dataItem) {
@@ -63,7 +63,7 @@ public class ValueEqualsCondition extends PropertyAccessSupport implements ICond
 	}
 
 	/**
-	 * A human readable representation of this {@link ICondition}.
+	 * A human readable representation of this {@link Condition}.
 	 */
 	@Override
 	public String toString() {

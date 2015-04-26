@@ -59,7 +59,7 @@ public class CombinedConditionTest extends TestCase {
         check(OR,  trueCondition, trueCondition, falseCondition).isTrue();
     }
 
-    private AbstractBooleanAssert<?> check(CombinedCondition.BoolOp opp, ICondition... conditions) {
+    private AbstractBooleanAssert<?> check(CombinedCondition.BoolOp opp, Condition... conditions) {
         CombinedCondition condition = new CombinedCondition(opp, conditions);
         return assertThat(condition.isValid(-1, null));
     }

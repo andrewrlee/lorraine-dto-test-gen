@@ -20,34 +20,33 @@ There are many built in conditionals and edits and provision has been made to al
 Rules are built using fluent interfaces:
 
 ```java
-//Configure the TestUtilsContext to use a PropertySupportFactory
-//This is used in introspection.
+// Configure the TestUtilsContext to use a PropertySupportFactory
+// This is used in introspection.
 TestUtilsContext.useOgnl();
 
-//RuleUtils provide easy access to built in edit and conditions
-RuleUtils<SampleDto> utils = new RuleUtils<SampleDto>();
+// Rules are created from the `Edits`factory and need an editor to start.
+Edits.doThis(incrementEach("name").withBase("sample-"));
 
-//Rules are created from a rule factory and need an edit to start. 
-RuleFactory.startRule( utils.increment("name", "sample-"));
-
-//Each subsequent chained method call return interfaces that only allows the writer to //call methods in the correct order.
-
-RuleFactory.startRule( utils.increment("name", "sample-"))  
-                                .and( utils.set("date", new Date(System.currentTimeMillis())));
+// Each subsequent chained method call return interfaces that only
+// allows the writer to call methods in the correct order.
+Edits.doThis(
+		incrementEach("name").withBase("sample-").and(
+				changeValueOf("date").to(new Date(System.currentTimeMillis()))));
 ```
 
 This means that Rules can only be created when in a correct state
 
 ```java
-IRule<SampleDto> rule1 = RuleFactory.startRule( utils.increment("name", "sample-")) 
-                                .and( utils.set("date", new Date(System.currentTimeMillis()))) 
-                                .where( utils.index(3)) 
-                                .orNot( utils.odd()) 
-                                .build();
+Edit<SampleDto> edit1 = Edits.doThis(
+								incrementEach("name").withBase("sample-") //
+								 	.and(changeValueOf("date").to(new Date(System.currentTimeMillis())))) //
+							 	.where(index().is(3).or(not(index().isOdd()))) //
+								.forTheType(SampleDto.class);
 
-IRule<SampleDto> rule2 = RuleFactory.startRule( utils.set("name", "CHANGED"))
-                                .where( utils.eq("name", "sample-3")) 
-                                .build();
+Edit<SampleDto> edit2 = Edits.doThis(
+								changeValueOf("name").to("CHANGED")) //
+								.where(valueOf("name").is("sample-3")) //
+								.forTheType(SampleDto.class);
 ```
 
 Rules have helpful toString() methods that provide a readable representation of what they represent:
@@ -66,20 +65,17 @@ Results in:
 Rules are added to a data editor:
 
 ```java
-IDataEditor<SampleDto> editor = new SimpleDataEditor<SampleDto>() 
-                                .addRule(rule1) 
-                                .addRule(rule2);
+// Add the rules to a data editor
+SimpleDataEditor<SampleDto> editor = SimpleDataEditor.create(); 
+editor.add(edit1).add(edit2);
 ```
 
 This can then be used in loops:
 
 ```java
-List<SampleDto> list = new ArrayList<SampleDto>();
-for (int i = 0; i < 5; i++) {
-  SampleDto dto = new SampleDto();
-  editor.edit(i, dto);
-  list.add(dto);
-}
+List<SampleDto> dtos = range(0, 5)
+						.mapToObj(i -> editor.edit(i, new SampleDto()))
+						.collect(toList());
 ```
 
 Assuming a class like:
@@ -89,9 +85,6 @@ public class SampleDto {
   private String name;
   private Date date;
 
-  public SampleDto() {
-  }
-
   @Override
   public String toString() {
     return "name:" + name + "\tdate:" + date;
@@ -99,15 +92,13 @@ public class SampleDto {
 }
 ```
 
-A loop like this...
+this...
 
 ```java
-for (SampleDto sampleDto : list) {
-    System.out.println(sampleDto)
-}
+dtos.forEach(System.out::println);
 ```
 
-...would print this:
+...would print the following:
 
 ```
  name:sample-0          date:Tue Nov 03 21:44:56 GMT+00:00 2009
@@ -123,17 +114,17 @@ Use of a default value generator cache when creating dtos:
 ```java
 //Register the utils context to use ognl for introspection
 TestUtilsContext.useOgnl();
-                
-//Build the generator (which is responsible for creating new dtos of a specific type).
-InstanceGenerator<TestDto3> generator = InstanceGeneratorBuilder.create(TestDto3.class).build();
-                
+
+//Build the intance generator (which is responsible for creating new dtos of a specific type).
+InstanceGenerator<TestDto3> generator = InstanceGenerator.create(TestDto3.class);
+
 //Create a generation engine that is responsible for producing the dtos and applying visitors to them.
-DtoGenerationEngine<TestDto3> engine = new DtoGenerationEngine<TestDto3>(TestDto3.class, generator);
-                
+DtoGenerationEngine<TestDto3> engine = new DtoGenerationEngine<>(generator);
+
 //Create and return 5 dtos
 List<TestDto3> dtos = engine.collect(5);
 assertEquals(5, dtos.size());
-                
+
 //When no ValueGeneratorCache is specified then a default cache will be used.
 //This provides default values for primitive types, in the case of strings the value "DEFAULT"
 assertEquals("DEFAULT", dtos.get(0).getName());
@@ -145,30 +136,26 @@ Use of a custom value generator when generating dtos:
 ```java
 //Register the utils context to use ognl for introspection
 TestUtilsContext.useOgnl();
-                
-//Create a custom value generator cache
-ValueGeneratorCache cache = new DefaultValueGeneratorCache(); //
-                
-//Create a valueGenerator that generates strings
-IValueGenerator<String> stringGenerator = ValueGeneratorFactory.createStringGenerator("DEFAULT_EXAMPLE_NAME");
-                
+	
+//Create a value generator cache
+ValueGenerator cache = new DefaultValueGenerator(); //
+
 //register the string generator against properties of type string called name.
 //Note you can register generators against different criteria (See ValueGeneratorCache.java) 
-cache.registerAPropertyNameAndTypeGenerator("name", String.class, stringGenerator);
-                
+cache.registerAPropertyNameAndTypeGenerator("name", String.class, () -> "DEFAULT_EXAMPLE_NAME");
+		
 //Build the generator with the custom cache.
-InstanceGenerator<TestDto3> generator = InstanceGeneratorBuilder.create(TestDto3.class, cache).build();
-                
+InstanceGenerator<TestDto3> generator = InstanceGenerator.create(TestDto3.class, cache);
+		
 //Create a generation engine that is responsible for producing the dtos and applying visitors to them.
-DtoGenerationEngine<TestDto3> engine = new DtoGenerationEngine<TestDto3>(TestDto3.class, generator);
-                
+DtoGenerationEngine<TestDto3> engine = new DtoGenerationEngine<TestDto3>(generator);
+		
 //Create and return 1 dto
 List<TestDto3> dtos = engine.collect(1);
 assertEquals(1, dtos.size());
-                
+		
 //Name has been set to the non-default value
 assertEquals("DEFAULT_EXAMPLE_NAME", dtos.get(0).getName());
 //Description is still set to the default value
 assertEquals("DEFAULT", dtos.get(0).getDescription());
 ```
-

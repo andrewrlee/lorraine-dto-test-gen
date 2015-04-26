@@ -15,6 +15,7 @@
  */
 package uk.co.optimisticpanda.gtest.dto.edit;
 
+import java.util.Arrays;
 import java.util.List;
 
 import uk.co.optimisticpanda.gtest.dto.propertyaccess.IPropertyAccess;
@@ -28,7 +29,7 @@ import uk.co.optimisticpanda.gtest.dto.propertyaccess.IPropertyAccessFactory;
  *            The type of the dtos to be edited.
  * @author Andy Lee
  */
-public class IteratingCollectionEditor<D> extends AbstractEditor<D> {
+public class IteratingCollectionEditor extends AbstractEditor {
 
 	private final CycleBehaviour cycleBehavior;
 	private final List<?> values;
@@ -75,13 +76,20 @@ public class IteratingCollectionEditor<D> extends AbstractEditor<D> {
 	 *            The behaviour that this edit will exhibit after all values
 	 *            have been used.
 	 */
-	public IteratingCollectionEditor(Object context, List<?> values, CycleBehaviour cycleBehavior) {
+	IteratingCollectionEditor(Object context, List<?> values, CycleBehaviour cycleBehavior) {
 		super(context);
 		this.values = values;
 		this.cycleBehavior = cycleBehavior;
 		this.valuesIndex = START_VALUE;
 	}
 
+	IteratingCollectionEditor(Object context, CycleBehaviour cycleBehavior, Object... values) {
+		super(context);
+		this.values = Arrays.asList(values);
+		this.cycleBehavior = cycleBehavior;
+		this.valuesIndex = START_VALUE;
+	}
+	
 	/**
 	 * @see uk.co.optimisticpanda.gtest.dto.edit.Editor#edit(int,
 	 *      java.lang.Object)

@@ -23,10 +23,8 @@ import uk.co.optimisticpanda.gtest.dto.propertyaccess.IPropertyAccessFactory;
  * value. It does this by simply appending the passed in index to a base name.
  * 
  * @author Andy Lee
- * @param <D>
- *            The type of the dto that will be edited
  */
-public class IncrementingNameEditor<D> extends AbstractEditor<D> {
+class IncrementingNameEditor extends AbstractEditor {
 
 	private final String baseNameValue;
 
@@ -46,15 +44,12 @@ public class IncrementingNameEditor<D> extends AbstractEditor<D> {
 	 * @param baseNameValue
 	 *            the value that will be used as the base text.
 	 */
-	public IncrementingNameEditor(Object context, String baseNameValue) {
+	IncrementingNameEditor(Object context, String baseNameValue) {
 		super(context);
 		this.baseNameValue = baseNameValue;
 	}
 
-	/**
-	 *  see {@link Editor#edit(int, Object)}
-	 */
-	public void edit(int index, D dataItem) {
+	public void edit(int index, Object dataItem) {
 		setValue(dataItem, baseNameValue + index);
 	}
 

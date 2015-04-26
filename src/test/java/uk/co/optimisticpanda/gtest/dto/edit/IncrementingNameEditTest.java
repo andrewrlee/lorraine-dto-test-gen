@@ -27,13 +27,13 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public class IncrementingNameEditTest extends TestCase{
     
-    private IncrementingNameEditor<TestDto1> incrementingNameEdit;
+    private IncrementingNameEditor incrementingNameEdit;
     
     
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        incrementingNameEdit = new IncrementingNameEditor<TestDto1>("name" , "myName-");
+        incrementingNameEdit = new IncrementingNameEditor("name" , "myName-");
     }
 
     

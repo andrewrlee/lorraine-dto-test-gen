@@ -44,7 +44,7 @@ public class SetValueEditTest extends TestCase {
      * 
      */
     public void testPublicFieldWithGetterEquals(){
-        SetValueEditor<DetailedTestDto> valueEdit = new SetValueEditor<DetailedTestDto>("name", "newValue");
+        SetValueEditor valueEdit = new SetValueEditor("name", "newValue");
         valueEdit.edit(1, testDto1);
         assertThat(testDto1.getName()).isEqualTo("newValue");
 
